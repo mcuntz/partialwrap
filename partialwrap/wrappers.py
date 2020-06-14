@@ -43,12 +43,12 @@ History:
 * Make one `exe_wrapper`, passing bounds, mask, etc. via kwarg dictionary to parameterwriter; distinguish iterable and array_like parameter types, Jan 2020, Matthias Cuntz
 * Replaced kwarg.pop mechanism because it removed the keywords from subsequent function calls, Feb 2020, Matthias Cuntz
 * Change from ValueError to TypeError if function given to exe wrappers, Feb 2020, Matthias Cuntz
-* Changed `func_` to `function_`, objective to output, and renamed module name to wrappers, May 2020, Matthias Cuntz
+* Renamed func to function in calling names, objective to output, and renamed module name to wrappers, May 2020, Matthias Cuntz
 * Add arguments for outputreader, its handling of pid, and the ability to have multiple output files, Jun 2020, Matthias Cuntz
 * Correct removal of list of parameterfiles and/or outputfiles, Jun 2020, Matthias Cuntz
 * Added ability to keep produced parameterfiles and outputfiles, Jun 2020, Matthias Cuntz
 * Pass pid just before keyword arguments to parameterwriter and outputreader, Jun 2020, Matthias Cuntz
-* Use exe_wrapper in exe_mask_wrapper, Jun 2020, Matthias Cuntz
+* Use `exe_wrapper` in `exe_mask_wrapper`, Jun 2020, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 
@@ -246,7 +246,7 @@ def exe_wrapper(func,
                                        - rm also list of parameterfiles and outputfiles
                                        - keekparameterfile, keepoutputfile
               Matthias Cuntz, Jun 2020 - pass pid just before keyword arguments to parameterwriter and outputreader
-              Matthias Cuntz, Jun 2020 - called from exe_mask_wrapper
+              Matthias Cuntz, Jun 2020 - called from `exe_mask_wrapper`
     """
     shell   = kwarg['shell']   if 'shell'   in kwarg else False
     debug   = kwarg['debug']   if 'debug'   in kwarg else False
@@ -311,7 +311,7 @@ def exe_mask_wrapper(func, x0, mask,
 
         `xx[mask] = x`
 
-    and calls exe_wrapper with `xx`.
+    and calls `exe_wrapper` with `xx`.
 
     See `exe_wrapper` for details.
     """
@@ -357,7 +357,7 @@ def function_wrapper(func, arg, kwarg, x):
     -------
     Written,  Matthias Cuntz, Nov 2016
     Modified, Matthias Cuntz, Nov 2019 - Sphinx docstring
-    Matthias Cuntz, May 2020 - renamed `func\_` to `function\_`
+    Matthias Cuntz, May 2020 - renamed func to function in name
     """
     return func(x, *arg, **kwarg)
 
@@ -404,8 +404,8 @@ def function_mask_wrapper(func, x0, mask, arg, kwarg, x):
     -------
     Written,  Matthias Cuntz, Nov 2016
     Modified, Matthias Cuntz, Nov 2019 - Sphinx docstring
-              Matthias Cuntz, Jan 2020 - distinguish iterable and array_like parameter types
-              Matthias Cuntz, May 2020 - renamed `func_` to `function_`
+              Matthias Cuntz, Jan 2020 - distinguish iterable and `array_like` parameter types
+              Matthias Cuntz, May 2020 - renamed func to function in name
     """
     xx       = np.copy(x0)
     xx[mask] = x
