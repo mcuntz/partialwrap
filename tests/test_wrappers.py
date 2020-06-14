@@ -27,8 +27,8 @@ class TestWrappers(unittest.TestCase):
     def setUp(self):
         import numpy as np
         # seed for reproducible results
-        self.seed = 1234
-        # np.random.seed(seed=self.seed)
+        seed = 1234
+        np.random.seed(seed=seed)
 
 
     # function_wrapper
@@ -37,8 +37,6 @@ class TestWrappers(unittest.TestCase):
         import numpy as np
         import scipy.optimize as opt
         from partialwrap import function_wrapper
-
-        np.random.seed(seed=self.seed)
 
         ndim   = 5
         xmin   = -5.12
@@ -57,8 +55,6 @@ class TestWrappers(unittest.TestCase):
         import numpy as np
         import scipy.optimize as opt
         from partialwrap import function_mask_wrapper
-
-        np.random.seed(seed=self.seed)
 
         xmin   = -5.12
         xmax   =  5.12
@@ -80,8 +76,6 @@ class TestWrappers(unittest.TestCase):
         import numpy as np
         import scipy.optimize as opt
         from partialwrap import exe_wrapper, standard_parameter_writer, standard_output_reader
-
-        np.random.seed(seed=self.seed)
 
         rastrigin_exe  = ['python3', 'tests/rastrigin1.py']
         ndim           = 2
@@ -111,8 +105,6 @@ class TestWrappers(unittest.TestCase):
         import scipy.optimize as opt
         from partialwrap import exe_wrapper, standard_parameter_writer, standard_output_reader
 
-        np.random.seed(seed=self.seed)
-
         rastrigin_exe  = ['python3', 'tests/rastrigin1.py']
         ndim           = 2
         xmin           = -5.12
@@ -136,8 +128,6 @@ class TestWrappers(unittest.TestCase):
         import numpy as np
         import scipy.optimize as opt
         from partialwrap import exe_wrapper, standard_parameter_writer, standard_output_reader
-
-        np.random.seed(seed=self.seed)
 
         rastrigin_exe  = 'python3 tests/rastrigin1.py'
         ndim           = 2
@@ -163,8 +153,6 @@ class TestWrappers(unittest.TestCase):
         import scipy.optimize as opt
         from partialwrap import exe_wrapper, standard_parameter_writer, standard_output_reader
 
-        np.random.seed(seed=self.seed)
-
         rastrigin_exe  = 'python3 tests/rastrigin1.py'
         ndim           = 2
         xmin           = -5.12
@@ -189,8 +177,6 @@ class TestWrappers(unittest.TestCase):
         import numpy as np
         import scipy.optimize as opt
         from partialwrap import exe_wrapper, sub_params_names, standard_output_reader
-
-        np.random.seed(seed=self.seed)
 
         parameterfile  = 'params.txt'
         ff = open(parameterfile, 'w')
@@ -229,8 +215,6 @@ class TestWrappers(unittest.TestCase):
         import scipy.optimize as opt
         from partialwrap import exe_wrapper, sub_params_names, standard_output_reader
 
-        np.random.seed(seed=self.seed)
-
         parameterfile  = 'params.txt'
         ff = open(parameterfile, 'w')
         print('# File: params.txt', file=ff)
@@ -268,8 +252,6 @@ class TestWrappers(unittest.TestCase):
         import numpy as np
         import scipy.optimize as opt
         from partialwrap import exe_wrapper, sub_params_names, standard_output_reader
-
-        np.random.seed(seed=self.seed)
 
         parameterfile1  = 'params1.txt'
         ff = open(parameterfile1, 'w')
@@ -314,8 +296,6 @@ class TestWrappers(unittest.TestCase):
         import scipy.optimize as opt
         from partialwrap import exe_mask_wrapper, standard_parameter_writer, standard_output_reader
 
-        np.random.seed(seed=self.seed)
-
         rastrigin_exe  = ['python3', 'tests/rastrigin1.py']
         xmin           = -5.12
         xmax           =  5.12
@@ -340,8 +320,6 @@ class TestWrappers(unittest.TestCase):
         import numpy as np
         import scipy.optimize as opt
         from partialwrap import exe_mask_wrapper, sub_params_names, standard_output_reader
-
-        np.random.seed(seed=self.seed)
 
         parameterfile  = 'params.txt'
         ff = open(parameterfile, 'w')
