@@ -82,7 +82,7 @@ In this case, one can use Python's :func:`functools.partial` function:
    # search minimum
    res = opt.differential_evolution(partial_rastrigin, [(xmin,xmax),]*ndim)
 
-Figuratively, :func:`~functools.partial` passes :math:`a` and :math:`b` already during definition
+Figuratively speaking, :func:`~functools.partial` passes :math:`a` and :math:`b` already during definition
 to the function `call_func_arg_kwarg`. :func:`~scipy.optimize.minimize` can then simply call it as
 `partial_rastrigin(x)`, which finalizes the call to `rastrigin(x, a, b=b)`.
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from __future__ import division, absolute_import, print_function
 """
 Purpose
 =======
@@ -18,6 +17,8 @@ Subpackages
     std_io
     version
 """
+from __future__ import division, absolute_import, print_function
+
 from .version import __version__, __author__
 
 # Function wrappers to be used with partial from functools

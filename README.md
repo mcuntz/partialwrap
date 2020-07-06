@@ -113,7 +113,7 @@ case:
     res = opt.minimize(partial_rastrigin, x0, method='BFGS')
 ```
 
-Figuratively, `partial` passes `a` and `b` to the function `call_func_arg_kwarg`
+Figuratively speaking, `partial` passes `a` and `b` to the function `call_func_arg_kwarg`
 already during definition. `minimize` can then simply calls it as
 `partial_rastrigin(x)`, which finalizes the call to `rastrigin(x, a, b=b)`.
 

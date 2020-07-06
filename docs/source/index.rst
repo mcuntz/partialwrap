@@ -104,7 +104,7 @@ Python's :mod:`functools` in this case:
 
     res = opt.minimize(partial_rastrigin, x0, method='BFGS')
 
-Figuratively, :func:`~functools.partial` passes :math:`a` and :math:`b` to the function `call_func_arg_kwarg`
+Figuratively speaking, :func:`~functools.partial` passes :math:`a` and :math:`b` to the function `call_func_arg_kwarg`
 already during definition. :func:`~scipy.optimize.minimize` can then simply call it as
 `partial_rastrigin(x)`, which finalizes the call to `rastrigin(x, a, b=b)`.
 

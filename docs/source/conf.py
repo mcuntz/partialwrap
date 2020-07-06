@@ -254,6 +254,7 @@ intersphinx_mapping = {
     "matplotlib": ("https://matplotlib.org/",                      None),
     "cython":     ("https://cython.readthedocs.io/en/latest/",     None),
     "Sphinx":     ("https://www.sphinx-doc.org/en/master/",        None),
+    "Pandas":     ("https://pandas.pydata.org/docs/",              None),
     "schwimmbad": ("https://schwimmbad.readthedocs.io/en/latest/", None),
     "mpi4py":     ("https://mpi4py.readthedocs.io/en/latest/",     None),
     "emcee":      ("https://emcee.readthedocs.io/en/latest/",      None),
