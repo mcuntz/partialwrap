@@ -19,4 +19,4 @@ Released under the MIT License; see LICENSE file for details.
 """
 
 __author__  = "Matthias Cuntz"
-__version__ = "1.0.1"
+__version__ = "1.1"
