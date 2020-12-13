@@ -13,6 +13,7 @@ Released under the MIT License; see LICENSE file for details.
 * Written Mar 2020 by Matthias Cuntz (mc (at) macu (dot) de)
 * v1.0, initial PyPI commit, Jun 2020, Matthias Cuntz
 * v1.0.1, trigger zenodo, Jun 2020, Matthias Cuntz
+* v1.1, make flake8 compliant, Dec 2020, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 """

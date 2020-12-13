@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
-Module with wrappers to partialise functions so that they can be called simply as func(x).
+Module with wrappers to partialise functions so that they can be called simply
+as func(x).
 
 .. code-block:: python
 
@@ -19,7 +20,8 @@ Module with wrappers to partialise functions so that they can be called simply a
 External executables will be passed to `subprocess.check_output(func)`.
 `func` can then be a string (e.g. './prog -arg') if `shell=True`
 or a list (e.g. ['./prog', '-arg']) if `shell=False` (default).
-Programs without arguments, pipes, etc. can simply be strings with `shell=True` or `False`.
+Programs without arguments, pipes, etc. can simply be strings with
+`shell=True` or `False`.
 
 This module was written by Matthias Cuntz while at Institut National de
 Recherche pour l'Agriculture, l'Alimentation et l'Environnement (INRAE), Nancy,
@@ -34,21 +36,35 @@ History:
 * Written Nov 2016 by Matthias Cuntz (mc (at) macu (dot) de)
 * Added x0 and mask to wrapper of external programs, Jan 2018, Matthias Cuntz
 * Added that `pid` is passed to parameterwriter,
-  and check parameterwriter (getargspec) for number or args, Feb 2018, Matthias Cuntz
+  and check parameterwriter (getargspec) for number or args, Feb 2018,
+  Matthias Cuntz
 * Removed check of number of parameters of parameterwriter (getargspec) but add
-  separate wrappers for separate parmeterwriters with different number or arguments, Feb 2018, Matthias Cuntz
-* Added `plotfile` and made docstring sphinx compatible option, Jan 2018, Matthias Cuntz
+  separate wrappers for separate parmeterwriters with different number
+  or arguments, Feb 2018, Matthias Cuntz
+* Added `plotfile` and made docstring sphinx compatible option, Jan 2018,
+  Matthias Cuntz
 * Changed to Sphinx docstring and numpydoc, Nov 2019, Matthias Cuntz
-* Remove that `exe_wrappers` support also Python functions. User should use function_wrappers, Nov 2019, Matthias Cuntz
-* Make one `exe_wrapper`, passing bounds, mask, etc. via kwarg dictionary to parameterwriter; distinguish iterable and array_like parameter types, Jan 2020, Matthias Cuntz
-* Replaced kwarg.pop mechanism because it removed the keywords from subsequent function calls, Feb 2020, Matthias Cuntz
-* Change from ValueError to TypeError if function given to exe wrappers, Feb 2020, Matthias Cuntz
-* Renamed func to function in calling names, objective to output, and renamed module name to wrappers, May 2020, Matthias Cuntz
-* Add arguments for outputreader, its handling of pid, and the ability to have multiple output files, Jun 2020, Matthias Cuntz
-* Correct removal of list of parameterfiles and/or outputfiles, Jun 2020, Matthias Cuntz
-* Added ability to keep produced parameterfiles and outputfiles, Jun 2020, Matthias Cuntz
-* Pass pid just before keyword arguments to parameterwriter and outputreader, Jun 2020, Matthias Cuntz
+* Remove that `exe_wrappers` support also Python functions. User should use
+  function_wrappers, Nov 2019, Matthias Cuntz
+* Make one `exe_wrapper`, passing bounds, mask, etc. via kwarg dictionary to
+  parameterwriter; distinguish iterable and array_like parameter types,
+  Jan 2020, Matthias Cuntz
+* Replaced kwarg.pop mechanism because it removed the keywords from subsequent
+  function calls, Feb 2020, Matthias Cuntz
+* Change from ValueError to TypeError if function given to exe wrappers,
+  Feb 2020, Matthias Cuntz
+* Renamed func to function in calling names, objective to output, and renamed
+  module name to wrappers, May 2020, Matthias Cuntz
+* Add arguments for outputreader, its handling of pid, and the ability to have
+  multiple output files, Jun 2020, Matthias Cuntz
+* Correct removal of list of parameterfiles and/or outputfiles, Jun 2020,
+  Matthias Cuntz
+* Added ability to keep produced parameterfiles and outputfiles, Jun 2020,
+  Matthias Cuntz
+* Pass pid just before keyword arguments to parameterwriter and outputreader,
+  Jun 2020, Matthias Cuntz
 * Use `exe_wrapper` in `exe_mask_wrapper`, Jun 2020, Matthias Cuntz
+* Make flake8 compliant, Dec 2020, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 
@@ -102,11 +118,11 @@ def _tolist(arg):
 
 
 def exe_wrapper(func,
-                parameterfile, parameterwriter, outputfile, outputreader, kwarg,
-                x):
+                parameterfile, parameterwriter, outputfile, outputreader,
+                kwarg, x):
     """
-    Wrapper function for external programs using a `parameterwriter` and `outputreader`
-    with the interfaces:
+    Wrapper function for external programs using a `parameterwriter` and
+    `outputreader` with the interfaces:
 
         `parameterwriter(parameterfile, x, *pargs, **pkwargs)`
 
@@ -118,9 +134,10 @@ def exe_wrapper(func,
 
         `outputreader(outputfile, *oargs, pid=pid, **okwargs)`
 
-    Examples of `parameterwriter` with `pid==True` are :any:`standard_parameter_writer`
-    or :any:`sub_params_ja`.
-    Examples of `outputreader` with or without `pid` is :any:`standard_output_reader`.
+    Examples of `parameterwriter` with `pid==True` are
+    :any:`standard_parameter_writer` or :any:`sub_params_ja`.
+    Examples of `outputreader` with or without `pid` is
+    :any:`standard_output_reader`.
 
     To be used with :any:`functools.partial`:
 
@@ -138,7 +155,8 @@ def exe_wrapper(func,
 
         `parameterwriter(parameterfile, x, *pargs, **pkwargs)`
 
-        `err = subprocess.check_output(func, stderr=subprocess.STDOUT, shell=shell)`
+        `err = subprocess.check_output(
+             func, stderr=subprocess.STDOUT, shell=shell)`
 
         `obj = outputreader(outputfile, *oargs, **okwargs)`
 
@@ -146,13 +164,16 @@ def exe_wrapper(func,
 
         `parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)`
 
-        `err = subprocess.check_output(func, stderr=subprocess.STDOUT, shell=shell)`
+        `err = subprocess.check_output(
+            func, stderr=subprocess.STDOUT, shell=shell)`
 
         `obj = outputreader(outputfile, *oargs, pid=pid, **okwargs)`
 
     Note if `pid==True`, it is assumed that `parameterwriter` produces
-    files in the form `parameterfile+'.'+processid`, which will be removed after the function call.
-    Also only files in the form `outputfile+'.'+processid` will be removed automatically.
+    files in the form `parameterfile+'.'+processid`, which will be removed
+    after the function call.
+    Also only files in the form `outputfile+'.'+processid` will be removed
+    automatically.
 
     Parameters
     ----------
@@ -170,9 +191,11 @@ def exe_wrapper(func,
             `parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)`
 
     outputfile : string or iterable
-        Filename(s) of file(s) with output values written by the external executable `func`
+        Filename(s) of file(s) with output values written by the external
+        executable `func`
     outputreader : callable
-        Python function for reading and processing output value(s) from `outputfile`, called as:
+        Python function for reading and processing output value(s) from
+        `outputfile`, called as:
 
             `outputreader(ouputfile, x, *oargs, **okwargs)`
 
@@ -181,7 +204,8 @@ def exe_wrapper(func,
             `outputreader(ouputfile, x, *oargs, pid=pid, **okwargs)`
 
     kwarg : dict
-        Dictionary with keyword arguments for `exe_wrapper`. Possible arguments are:
+        Dictionary with keyword arguments for `exe_wrapper`. Possible
+        arguments are:
 
             **shell** (bool)
 
@@ -193,7 +217,8 @@ def exe_wrapper(func,
 
             **pid** (bool)
 
-                If True, append '.RandomNumber' to `parameterfile` and `outputfile` for parallel calls of `func`
+                If True, append '.RandomNumber' to `parameterfile` and
+                `outputfile` for parallel calls of `func`
 
             **pargs** (iterable)
 
@@ -205,7 +230,8 @@ def exe_wrapper(func,
 
             **keepparameterfile** (bool)
 
-                If True, `parameterfile` produced with `parameterwriter` will not be deleted after function call.
+                If True, `parameterfile` produced with `parameterwriter` will
+                not be deleted after function call.
 
             **oargs** (iterable)
 
@@ -217,35 +243,43 @@ def exe_wrapper(func,
 
             **keepoutputfile** (bool)
 
-                If True, `outputfile` produced by `func` will not be deleted after function call.
+                If True, `outputfile` produced by `func` will not be deleted
+                after function call.
 
     Returns
     -------
     float
-        Output value calculated by the external executable `func` or via the `outputreader`
+        Output value calculated by the external executable `func` or via
+        the `outputreader`
 
 
     History
     -------
     Written,  Matthias Cuntz, Mar 2018
-    Modified, Matthias Cuntz, Dec 2019 - rm Python function -> use `function_wrapper`
+    Modified, Matthias Cuntz, Dec 2019 - rm Python function
+                                         -> use `function_wrapper`
                                        - Sphinx docstring
               Matthias Cuntz, Jan 2020 - renamed to `exe_wrapper`
                                        - shell, debug in kwarg dictionary
                                        - remove parameterfile if it exists
                                        - pid switch in kwarg dictionary
-                                       - pargs, pkwargs for passing bounds, mask, etc. to parameterwriter
+                                       - pargs, pkwargs for passing bounds,
+                                         mask, etc. to parameterwriter
                                          replacing other `exe_wrappers`
-                                       - distinguish iterable and `array_like` parameter types
-              Matthias Cuntz, Feb 2020 - replaced kwarg.pop because ir removed keywords from subsequent calls
+                                       - distinguish iterable and `array_like`
+                                         parameter types
+              Matthias Cuntz, Feb 2020 - replaced kwarg.pop because it removed
+                                         keywords from subsequent calls
                                        - ValueError -> TypeError
               Matthias Cuntz, May 2020 - renamed objective to output
               Matthias Cuntz, Jun 2020 - added arguments to outputreader
                                        - changed use of pid with outputfile
                                        - outputfile can be list of files
-                                       - rm also list of parameterfiles and outputfiles
+                                       - rm also list of parameterfiles and
+                                         outputfiles
                                        - keekparameterfile, keepoutputfile
-              Matthias Cuntz, Jun 2020 - pass pid just before keyword arguments to parameterwriter and outputreader
+              Matthias Cuntz, Jun 2020 - pass pid just before keyword arguments
+                                         to parameterwriter and outputreader
               Matthias Cuntz, Jun 2020 - called from `exe_mask_wrapper`
     """
     shell   = kwarg['shell']   if 'shell'   in kwarg else False
@@ -253,17 +287,21 @@ def exe_wrapper(func,
     pid     = kwarg['pid']     if 'pid'     in kwarg else False
     pargs   = kwarg['pargs']   if 'pargs'   in kwarg else []
     pkwargs = kwarg['pkwargs'] if 'pkwargs' in kwarg else {}
-    keepparameterfile = kwarg['keepparameterfile'] if 'keepparameterfile' in kwarg else False
+    keepparameterfile = (kwarg['keepparameterfile']
+                         if 'keepparameterfile' in kwarg else False)
     oargs   = kwarg['oargs']   if 'oargs'   in kwarg else []
     okwargs = kwarg['okwargs'] if 'okwargs' in kwarg else {}
-    keepoutputfile = kwarg['keepoutputfile'] if 'keepoutputfile' in kwarg else False
+    keepoutputfile = (kwarg['keepoutputfile']
+                      if 'keepoutputfile' in kwarg else False)
     # For multiprocess but not MPI: pid = mp.current_process()._identity[0]
-    # seed uses global variables so all processes will produce same random numbers
-    # use np.random.RandomState() for each processes for individual seeds in each process
+    # seed uses global variables so all processes will produce same random
+    # numbers
+    # -> use np.random.RandomState() for each processes for individual seeds in
+    # each process
     if pid:
         randst = np.random.RandomState()
         ipid   = str(randst.randint(2147483647))
-    if isinstance(func, (str,list)):
+    if isinstance(func, (str, list)):
         if pid:
             parameterwriter(parameterfile, x, *pargs, pid=ipid, **pkwargs)
             if isinstance(func, str):
@@ -271,37 +309,47 @@ def exe_wrapper(func,
             else:
                 func1 = func+[ipid]
             if debug:
-                err = subprocess.check_call(func1, stderr=subprocess.STDOUT, shell=shell)
+                err = subprocess.check_call(func1, stderr=subprocess.STDOUT,
+                                            shell=shell)
             else:
-                err = subprocess.check_output(func1, stderr=subprocess.STDOUT, shell=shell)
+                err = subprocess.check_output(func1, stderr=subprocess.STDOUT,
+                                              shell=shell)
             obj = outputreader(outputfile, *oargs, pid=ipid, **okwargs)
             if not keepparameterfile:
                 for ff in _tolist(parameterfile):
-                    if os.path.exists(ff+'.'+ipid): os.remove(ff+'.'+ipid)
+                    if os.path.exists(ff+'.'+ipid):
+                        os.remove(ff+'.'+ipid)
             if not keepoutputfile:
                 for ff in _tolist(outputfile):
-                    if os.path.exists(ff+'.'+ipid): os.remove(ff+'.'+ipid)
+                    if os.path.exists(ff+'.'+ipid):
+                        os.remove(ff+'.'+ipid)
         else:
             parameterwriter(parameterfile, x, *pargs, **pkwargs)
             if debug:
-                err = subprocess.check_call(func, stderr=subprocess.STDOUT, shell=shell)
+                err = subprocess.check_call(func, stderr=subprocess.STDOUT,
+                                            shell=shell)
             else:
-                err = subprocess.check_output(func, stderr=subprocess.STDOUT, shell=shell)
+                err = subprocess.check_output(func, stderr=subprocess.STDOUT,
+                                              shell=shell)
             obj = outputreader(outputfile, *oargs, **okwargs)
             if not keepparameterfile:
                 for ff in _tolist(parameterfile):
-                    if os.path.exists(ff): os.remove(ff)
+                    if os.path.exists(ff):
+                        os.remove(ff)
             if not keepoutputfile:
                 for ff in _tolist(outputfile):
-                    if os.path.exists(ff): os.remove(ff)
+                    if os.path.exists(ff):
+                        os.remove(ff)
         return obj
     else:
-        raise TypeError('func must be string or list of strings for subprocess. Use function_wrapper for Python functions.')
+        estr  = 'func must be string or list of strings for subprocess.'
+        estr += ' Use function_wrapper for Python functions.'
+        raise TypeError(estr)
 
 
 def exe_mask_wrapper(func, x0, mask,
-                     parameterfile, parameterwriter, outputfile, outputreader, kwarg,
-                     x):
+                     parameterfile, parameterwriter, outputfile, outputreader,
+                     kwarg, x):
     """
     Same as `exe_wrapper` incl./excl. parameters with mask.
 
@@ -318,8 +366,8 @@ def exe_mask_wrapper(func, x0, mask,
     xx = np.copy(x0)
     xx[mask] = x
     return exe_wrapper(func,
-                       parameterfile, parameterwriter, outputfile, outputreader, kwarg,
-                       xx)
+                       parameterfile, parameterwriter, outputfile,
+                       outputreader, kwarg, xx)
 
 
 # Python function wrappers
@@ -388,7 +436,8 @@ def function_mask_wrapper(func, x0, mask, arg, kwarg, x):
     x0 : array_like
         Fixed values of masked parameters
     mask : array_like
-        Mask to use `x0` values ('mask[i]=1') or use new parameters `x` ('mask[i]=0') in call of function
+        Mask to use `x0` values ('mask[i]=1') or use new parameters
+        `x` ('mask[i]=0') in call of function
     arg : iterable
         Arguments passed to `func`
     kwarg : dictionary
@@ -404,7 +453,8 @@ def function_mask_wrapper(func, x0, mask, arg, kwarg, x):
     -------
     Written,  Matthias Cuntz, Nov 2016
     Modified, Matthias Cuntz, Nov 2019 - Sphinx docstring
-              Matthias Cuntz, Jan 2020 - distinguish iterable and `array_like` parameter types
+              Matthias Cuntz, Jan 2020 - distinguish iterable and `array_like`
+                                         parameter types
               Matthias Cuntz, May 2020 - renamed func to function in name
     """
     xx       = np.copy(x0)

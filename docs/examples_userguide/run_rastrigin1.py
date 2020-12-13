@@ -3,7 +3,9 @@ import sys
 if len(sys.argv) > 1:
     pid = sys.argv[1]
 else:
-    raise IOError('This scripts needs a process identifier (pid) as command line argument.')
+    estr  = 'This scripts needs a process identifier (pid) as command line'
+    estr += ' argument.'
+    raise IOError(estr)
 
 import os
 import shutil

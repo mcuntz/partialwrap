@@ -8,8 +8,8 @@ from __future__ import division, absolute_import, print_function
 import os
 import codecs
 import re
+from setuptools import setup  # , find_packages
 
-from setuptools import setup, find_packages
 
 # find __version__
 
@@ -23,7 +23,8 @@ def _iread(*fparts):
 def _find_version(*file_paths):
     """Find version without importing module."""
     version_file = _iread(*file_paths)
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+    version_match = re.search(
+        r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
     if version_match:
         return version_match.group(1)
     raise RuntimeError("Unable to find version string.")
@@ -31,8 +32,10 @@ def _find_version(*file_paths):
 
 # setup
 
-package  = "partialwrap"
-doclines = "A small Python library providing wrappers for external executables and Python functions so that they can easily be partialised with Python's functools.partial"
+package   = "partialwrap"
+doclines  = "A small Python library providing wrappers for external"
+doclines += " executables and Python functions so that they can easily"
+doclines += " be partialised with Python's functools.partial"
 readme   = open("README.md").read()
 
 author = "Matthias Cuntz"

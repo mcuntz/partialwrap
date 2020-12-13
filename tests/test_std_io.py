@@ -11,6 +11,8 @@ import unittest
 
 # --------------------------------------------------------------------
 # std_io.py
+# Missing coverage:
+#     518: skip line.startswith('#') in standard_parameter_reader
 class TestStd_io(unittest.TestCase):
 
     def test_std_io_sub_ja(self):
@@ -94,17 +96,20 @@ class TestStd_io(unittest.TestCase):
         self.assertRaises(IOError, sub_params_ja, filename3, params)
 
         # clean up
-        if os.path.exists(filename1): os.remove(filename1)
-        if os.path.exists(filename2): os.remove(filename2)
-        if os.path.exists(filename1+'.'+str(pid)): os.remove(filename1+'.'+str(pid))
-        if os.path.exists(filename2+'.'+str(pid)): os.remove(filename2+'.'+str(pid))
-
+        if os.path.exists(filename1):
+            os.remove(filename1)
+        if os.path.exists(filename2):
+            os.remove(filename2)
+        if os.path.exists(filename1+'.'+str(pid)):
+            os.remove(filename1+'.'+str(pid))
+        if os.path.exists(filename2+'.'+str(pid)):
+            os.remove(filename2+'.'+str(pid))
 
     def test_std_io_sub_params_names(self):
         import os
         import numpy as np
-        from partialwrap import sub_params_names_ignorecase, sub_params_names_case
-        from partialwrap import sub_params_names
+        from partialwrap import sub_params_names_ignorecase
+        from partialwrap import sub_params_names_case, sub_params_names
 
         # ignore case
         filename1 = 'params11.txt'
@@ -152,10 +157,14 @@ class TestStd_io(unittest.TestCase):
                           'PARAM6 = 6.00000000000000e+00',
                           'param7 = 7.00000000000000e+00'])
 
-        if os.path.exists(filename1): os.remove(filename1)
-        if os.path.exists(filename2): os.remove(filename2)
-        if os.path.exists(filename1+'.'+str(pid)): os.remove(filename1+'.'+str(pid))
-        if os.path.exists(filename2+'.'+str(pid)): os.remove(filename2+'.'+str(pid))
+        if os.path.exists(filename1):
+            os.remove(filename1)
+        if os.path.exists(filename2):
+            os.remove(filename2)
+        if os.path.exists(filename1+'.'+str(pid)):
+            os.remove(filename1+'.'+str(pid))
+        if os.path.exists(filename2+'.'+str(pid)):
+            os.remove(filename2+'.'+str(pid))
 
         # wrapper for ignore case
         filename1 = 'params12.txt'
@@ -203,10 +212,14 @@ class TestStd_io(unittest.TestCase):
                           'PARAM6 = 6.00000000000000e+00',
                           'param7 = 7.00000000000000e+00'])
 
-        if os.path.exists(filename1): os.remove(filename1)
-        if os.path.exists(filename2): os.remove(filename2)
-        if os.path.exists(filename1+'.'+str(pid)): os.remove(filename1+'.'+str(pid))
-        if os.path.exists(filename2+'.'+str(pid)): os.remove(filename2+'.'+str(pid))
+        if os.path.exists(filename1):
+            os.remove(filename1)
+        if os.path.exists(filename2):
+            os.remove(filename2)
+        if os.path.exists(filename1+'.'+str(pid)):
+            os.remove(filename1+'.'+str(pid))
+        if os.path.exists(filename2+'.'+str(pid)):
+            os.remove(filename2+'.'+str(pid))
 
         # case sensitive
         filename1 = 'params13.txt'
@@ -231,7 +244,8 @@ class TestStd_io(unittest.TestCase):
         print('param7 = 5', file=ff)
         ff.close()
 
-        sub_params_names_case([filename1, filename2], params, names, pid)
+        sub_params_names_case(filename1, params, names, pid)
+        sub_params_names_case(filename2, params, names, pid)
 
         f = open(filename1+'.'+str(pid), 'r')
         lines1 = f.readlines()
@@ -278,19 +292,25 @@ class TestStd_io(unittest.TestCase):
                           'PARAM6  = 4',
                           'param7 = 7.00000000000000e+00'])
 
-        if os.path.exists(filename1): os.remove(filename1)
-        if os.path.exists(filename2): os.remove(filename2)
-        if os.path.exists(filename1+'.'+str(pid)): os.remove(filename1+'.'+str(pid))
-        if os.path.exists(filename2+'.'+str(pid)): os.remove(filename2+'.'+str(pid))
-
+        if os.path.exists(filename1):
+            os.remove(filename1)
+        if os.path.exists(filename2):
+            os.remove(filename2)
+        if os.path.exists(filename1+'.'+str(pid)):
+            os.remove(filename1+'.'+str(pid))
+        if os.path.exists(filename2+'.'+str(pid)):
+            os.remove(filename2+'.'+str(pid))
 
     def test_std_io_standard(self):
         import os
         import numpy as np
-        from partialwrap import standard_parameter_writer, standard_parameter_reader
-        from partialwrap import standard_parameter_writer_bounds_mask, standard_parameter_reader_bounds_mask
+        from partialwrap import standard_parameter_writer
+        from partialwrap import standard_parameter_reader
+        from partialwrap import standard_parameter_writer_bounds_mask
+        from partialwrap import standard_parameter_reader_bounds_mask
         from partialwrap import standard_output_reader
-        from partialwrap import standard_timeseries_reader, standard_time_series_reader
+        from partialwrap import standard_timeseries_reader
+        from partialwrap import standard_time_series_reader
 
         # standard_parameter_reader/writer without pid
         filename = 'params.txt'
@@ -301,7 +321,8 @@ class TestStd_io(unittest.TestCase):
 
         self.assertEqual(list(iparams), list(params))
 
-        if os.path.exists(filename): os.remove(filename)
+        if os.path.exists(filename):
+            os.remove(filename)
 
         # standard_parameter_writer with pid
         filename = 'params.txt'
@@ -313,7 +334,8 @@ class TestStd_io(unittest.TestCase):
 
         self.assertEqual(list(iparams), list(params))
 
-        if os.path.exists(filename+'.'+str(pid)): os.remove(filename+'.'+str(pid))
+        if os.path.exists(filename+'.'+str(pid)):
+            os.remove(filename+'.'+str(pid))
 
         # standard_parameter_reader/writer_bounds_mask
         filename = 'params.txt'
@@ -322,17 +344,21 @@ class TestStd_io(unittest.TestCase):
         pmin     = params - 1.
         pmax     = params + 1.
         mask     = np.ones(10, dtype=np.bool)
-        standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask, pid)
+        standard_parameter_writer_bounds_mask(filename, params, pmin, pmax,
+                                              mask, pid)
 
-        ids, iparams, ipmin, ipmax, imask = standard_parameter_reader_bounds_mask(filename, pid)
+        ids, iparams, ipmin, ipmax, imask = (
+            standard_parameter_reader_bounds_mask(filename, pid))
 
-        self.assertEqual(list(ids),     list([ str(i) for i in np.arange(10)+1 ]))
+        self.assertEqual(list(ids),     list([ str(i)
+                                               for i in np.arange(10)+1 ]))
         self.assertEqual(list(iparams), list(params))
         self.assertEqual(list(ipmin),   list(pmin))
         self.assertEqual(list(ipmax),   list(pmax))
         self.assertEqual(list(imask),   list(mask))
 
-        if os.path.exists(filename+'.'+str(pid)): os.remove(filename+'.'+str(pid))
+        if os.path.exists(filename+'.'+str(pid)):
+            os.remove(filename+'.'+str(pid))
 
         # standard_parameter_reader_bounds_mask - IOError
         filename = 'params.txt'
@@ -342,13 +368,16 @@ class TestStd_io(unittest.TestCase):
         mask     = np.ones(10, dtype=np.bool)
         ff = open(filename, 'w')
         for i in range(10):
-            dstr = '{:d} {:.14e} {:.14e} {:.14e}'.format(i+1, params[i], pmin[i], pmax[i])
+            dstr = '{:d} {:.14e} {:.14e} {:.14e}'.format(
+                i+1, params[i], pmin[i], pmax[i])
             print(dstr, file=ff)
         ff.close()
 
-        self.assertRaises(IOError, standard_parameter_reader_bounds_mask, filename)
+        self.assertRaises(IOError, standard_parameter_reader_bounds_mask,
+                          filename)
 
-        if os.path.exists(filename): os.remove(filename)
+        if os.path.exists(filename):
+            os.remove(filename)
 
         # standard_parameter_writer_bounds_mask - no pid
         filename = 'params.txt'
@@ -356,17 +385,21 @@ class TestStd_io(unittest.TestCase):
         pmin     = params - 1.
         pmax     = params + 1.
         mask     = np.ones(10, dtype=np.bool)
-        standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask)
+        standard_parameter_writer_bounds_mask(
+            filename, params, pmin, pmax, mask)
 
-        ids, iparams, ipmin, ipmax, imask = standard_parameter_reader_bounds_mask(filename)
+        ids, iparams, ipmin, ipmax, imask = (
+            standard_parameter_reader_bounds_mask(filename))
 
-        self.assertEqual(list(ids),     list([ str(i) for i in np.arange(10)+1 ]))
+        self.assertEqual(list(ids),     list([ str(i)
+                                               for i in np.arange(10)+1 ]))
         self.assertEqual(list(iparams), list(params))
         self.assertEqual(list(ipmin),   list(pmin))
         self.assertEqual(list(ipmax),   list(pmax))
         self.assertEqual(list(imask),   list(mask))
 
-        if os.path.exists(filename): os.remove(filename)
+        if os.path.exists(filename):
+            os.remove(filename)
 
         # standard_parameter_writer_bounds_mask - pid=None
         filename = 'params.txt'
@@ -375,17 +408,21 @@ class TestStd_io(unittest.TestCase):
         pmin     = params - 1.
         pmax     = params + 1.
         mask     = np.ones(10, dtype=np.bool)
-        standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask, pid)
+        standard_parameter_writer_bounds_mask(filename, params, pmin, pmax,
+                                              mask, pid)
 
-        ids, iparams, ipmin, ipmax, imask = standard_parameter_reader_bounds_mask(filename, pid)
+        ids, iparams, ipmin, ipmax, imask = (
+            standard_parameter_reader_bounds_mask(filename, pid))
 
-        self.assertEqual(list(ids),     list([ str(i) for i in np.arange(10)+1 ]))
+        self.assertEqual(list(ids),     list([ str(i)
+                                               for i in np.arange(10)+1 ]))
         self.assertEqual(list(iparams), list(params))
         self.assertEqual(list(ipmin),   list(pmin))
         self.assertEqual(list(ipmax),   list(pmax))
         self.assertEqual(list(imask),   list(mask))
 
-        if os.path.exists(filename): os.remove(filename)
+        if os.path.exists(filename):
+            os.remove(filename)
 
         # standard_output_reader
         filename = 'obj.txt'
@@ -397,7 +434,8 @@ class TestStd_io(unittest.TestCase):
         obj = standard_output_reader(filename)
         self.assertEqual(obj, 1234.)
 
-        if os.path.exists(filename): os.remove(filename)
+        if os.path.exists(filename):
+            os.remove(filename)
 
         # standard_output_reader, pid
         pid = 1234
@@ -410,7 +448,8 @@ class TestStd_io(unittest.TestCase):
         obj = standard_output_reader(filename, pid)
         self.assertEqual(obj, 1234.)
 
-        if os.path.exists(filename+'.'+str(pid)): os.remove(filename+'.'+str(pid))
+        if os.path.exists(filename+'.'+str(pid)):
+            os.remove(filename+'.'+str(pid))
 
         # standard_time_series_reader
         filename = 'ts.txt'
@@ -424,7 +463,8 @@ class TestStd_io(unittest.TestCase):
         ts = standard_time_series_reader(filename)
         self.assertEqual(list(ts), list(params))
 
-        if os.path.exists(filename): os.remove(filename)
+        if os.path.exists(filename):
+            os.remove(filename)
 
         # standard_timeseries_reader, pid
         pid = 1234
@@ -439,7 +479,8 @@ class TestStd_io(unittest.TestCase):
         ts = standard_timeseries_reader(filename, pid)
         self.assertEqual(list(ts), list(params))
 
-        if os.path.exists(filename+'.'+str(pid)): os.remove(filename+'.'+str(pid))
+        if os.path.exists(filename+'.'+str(pid)):
+            os.remove(filename+'.'+str(pid))
 
 
 if __name__ == "__main__":

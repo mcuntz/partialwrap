@@ -8,7 +8,8 @@ with open('params.txt', 'r') as fi:
     pdict = {}
     for line in fi:
         ll = line.split()
-        if (len(ll)==0) or ll[0].startswith('#'): continue
+        if (len(ll) == 0) or ll[0].startswith('#'):
+            continue
         pdict[ll[0]] = float(ll[2])
 x = np.array([ pdict[kk] for kk in sorted(pdict.keys()) ])
 
