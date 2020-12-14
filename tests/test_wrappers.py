@@ -38,7 +38,6 @@ class TestWrappers(unittest.TestCase):
     def test_function_wrapper(self):
         from functools import partial
         import numpy as np
-        import scipy.optimize as opt
         from partialwrap import function_wrapper
 
         ndim   = 5
@@ -48,17 +47,13 @@ class TestWrappers(unittest.TestCase):
         kwargs = {'b': 1.*np.pi}
         rastra = partial(function_wrapper, rastrigin, args, kwargs)
 
-        res = opt.differential_evolution(rastra, [(xmin, xmax), ]*ndim)
-
-        self.assertEqual(
-            '{:.4g} {:.4g} {:.4g} {:.4g} {:.4g}'.format(*res.x),
-            '4.613e-09 -4.968e-09 -2.657e-11 -8.87e-10 1.73e-09')
+        res = rastra(np.ones(ndim)*(xmin+0.5*(xmax-xmin)))
+        self.assertEqual('{:.4g}'.format(res), '0')
 
     # function_mask_wrapper
     def test_function_mask_wrapper(self):
         from functools import partial
         import numpy as np
-        import scipy.optimize as opt
         from partialwrap import function_mask_wrapper
 
         xmin   = -5.12
@@ -72,15 +67,12 @@ class TestWrappers(unittest.TestCase):
         rastra = partial(function_mask_wrapper, rastrigin, x0, mask, args,
                          kwargs)
 
-        res = opt.differential_evolution(rastra, [(xmin, xmax), ]*np.sum(mask))
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-4.055e-09 -5.176e-09')
+        res = rastra(np.ones(np.sum(mask))*(xmin+0.5*(xmax-xmin)))
+        self.assertEqual('{:.4g}'.format(res), '1.984e-06')
 
     # exe_wrapper, w/o kwarg
     def test_exe_wrapper(self):
         from functools import partial
-        import scipy.optimize as opt
         from partialwrap import exe_wrapper, standard_parameter_writer
         from partialwrap import standard_output_reader
 
@@ -95,21 +87,17 @@ class TestWrappers(unittest.TestCase):
                                  outputfile, standard_output_reader, {})
 
         x0  = [0.1, 0.2]
-        res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-8.23e-09 -8.113e-09')
+        res = rastrigin_wrap(x0)
+        self.assertEqual('{:.4g}'.format(res), '8.87')
 
         rastrigin_wrap = partial(exe_wrapper, rastrigin1,
                                  parameterfile, standard_parameter_writer,
                                  outputfile, standard_output_reader, {})
-        self.assertRaises(TypeError, opt.minimize, rastrigin_wrap, x0,
-                          method='BFGS')
+        self.assertRaises(TypeError, rastrigin_wrap, x0)
 
     # exe_wrapper, w/o kwarg, pid
     def test_exe_wrapper_pid(self):
         from functools import partial
-        import scipy.optimize as opt
         from partialwrap import exe_wrapper, standard_parameter_writer
         from partialwrap import standard_output_reader
 
@@ -125,15 +113,12 @@ class TestWrappers(unittest.TestCase):
                                  {'pid': True})
 
         x0  = [0.1, 0.2]
-        res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-8.23e-09 -8.113e-09')
+        res = rastrigin_wrap(x0)
+        self.assertEqual('{:.4g}'.format(res), '8.87')
 
     # exe_wrapper, shell, debug
     def test_exe_wrapper_shell_debug(self):
         from functools import partial
-        import scipy.optimize as opt
         from partialwrap import exe_wrapper, standard_parameter_writer
         from partialwrap import standard_output_reader
 
@@ -149,15 +134,12 @@ class TestWrappers(unittest.TestCase):
                                  {'shell': True, 'debug': True})
 
         x0  = [0.1, 0.2]
-        res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-8.23e-09 -8.113e-09')
+        res = rastrigin_wrap(x0)
+        self.assertEqual('{:.4g}'.format(res), '8.87')
 
     # exe_wrapper, shell, debug, pid
     def test_exe_wrapper_shell_debug_pid(self):
         from functools import partial
-        import scipy.optimize as opt
         from partialwrap import exe_wrapper, standard_parameter_writer
         from partialwrap import standard_output_reader
 
@@ -173,16 +155,13 @@ class TestWrappers(unittest.TestCase):
                                  {'shell': True, 'debug': True, 'pid': True})
 
         x0  = [0.1, 0.2]
-        res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-8.23e-09 -8.113e-09')
+        res = rastrigin_wrap(x0)
+        self.assertEqual('{:.4g}'.format(res), '8.87')
 
     # exe_wrapper, pargs, keepparameterfile
     def test_exe_wrapper_pargs_keepparameterfile(self):
         import os
         from functools import partial
-        import scipy.optimize as opt
         from partialwrap import exe_wrapper, sub_params_names
         from partialwrap import standard_output_reader
 
@@ -205,10 +184,8 @@ class TestWrappers(unittest.TestCase):
                                  outputfile, standard_output_reader,
                                  {'pargs': [names], 'keepparameterfile': True})
 
-        res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-8.23e-09 -8.113e-09')
+        res = rastrigin_wrap(x0)
+        self.assertEqual('{:.4g}'.format(res), '8.87')
         self.assertTrue(os.path.exists(parameterfile))
         self.assertFalse(os.path.exists(outputfile))
 
@@ -220,7 +197,6 @@ class TestWrappers(unittest.TestCase):
     def test_exe_wrapper_pargs_keepparameterfile_keepoutputfile(self):
         import os
         from functools import partial
-        import scipy.optimize as opt
         from partialwrap import exe_wrapper, sub_params_names
         from partialwrap import standard_output_reader
 
@@ -244,10 +220,8 @@ class TestWrappers(unittest.TestCase):
                                  {'pargs': [names], 'keepparameterfile': True,
                                   'keepoutputfile': True})
 
-        res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-8.23e-09 -8.113e-09')
+        res = rastrigin_wrap(x0)
+        self.assertEqual('{:.4g}'.format(res), '8.87')
         self.assertTrue(os.path.exists(parameterfile))
         self.assertTrue(os.path.exists(outputfile))
 
@@ -261,7 +235,6 @@ class TestWrappers(unittest.TestCase):
     def test_exe_wrapper_parameterfiles(self):
         import os
         from functools import partial
-        import scipy.optimize as opt
         from partialwrap import exe_wrapper, sub_params_names
         from partialwrap import standard_output_reader
 
@@ -289,10 +262,8 @@ class TestWrappers(unittest.TestCase):
                                  outputfile, standard_output_reader,
                                  {'pargs': [names], 'keepparameterfile': True})
 
-        res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-8.23e-09 -8.113e-09')
+        res = rastrigin_wrap(x0)
+        self.assertEqual('{:.4g}'.format(res), '8.87')
         self.assertTrue(os.path.exists(parameterfile1))
         self.assertTrue(os.path.exists(parameterfile2))
         self.assertFalse(os.path.exists(outputfile))
@@ -307,7 +278,6 @@ class TestWrappers(unittest.TestCase):
     def test_exe_mask_wrapper(self):
         from functools import partial
         import numpy as np
-        import scipy.optimize as opt
         from partialwrap import exe_mask_wrapper, standard_parameter_writer
         from partialwrap import standard_output_reader
 
@@ -324,17 +294,14 @@ class TestWrappers(unittest.TestCase):
                                  parameterfile, standard_parameter_writer,
                                  outputfile, standard_output_reader, {})
 
-        res = opt.minimize(rastrigin_wrap, x0[mask], method='BFGS')
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-1.798e-09 -3.752e-09')
+        res = rastrigin_wrap(x0[mask])
+        self.assertEqual('{:.4g}'.format(res), '15.1')
 
     # exe_mask_wrapper, pargs, keepparameterfile, keepoutputfile
     def test_exe_mask_wrapper_pargs_keepparameterfile_keepoutputfile(self):
         import os
         from functools import partial
         import numpy as np
-        import scipy.optimize as opt
         from partialwrap import exe_mask_wrapper, sub_params_names
         from partialwrap import standard_output_reader
 
@@ -362,10 +329,8 @@ class TestWrappers(unittest.TestCase):
                                  {'pargs': [names], 'keepparameterfile': True,
                                   'keepoutputfile': True})
 
-        res = opt.minimize(rastrigin_wrap, x0[mask], method='BFGS')
-
-        self.assertEqual('{:.4g} {:.4g}'.format(*res.x),
-                         '-1.798e-09 -3.752e-09')
+        res = rastrigin_wrap(x0[mask])
+        self.assertEqual('{:.4g}'.format(res), '15.1')
         self.assertTrue(os.path.exists(parameterfile))
         self.assertTrue(os.path.exists(outputfile))
 
