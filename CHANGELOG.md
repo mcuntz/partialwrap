@@ -4,6 +4,7 @@ All notable changes after its initial development up to June 2020 (v1.0) are doc
 
 ### v1.2 (Dec 2020)
     - Removed scipy.optimize from tests of wrappers.
+    - Use build instead of cibuildwheel to build pure Python wheels.
 
 ### v1.1 (Dec 2020)
     - Check only Linux on TravisCI.
