@@ -65,6 +65,8 @@ History:
   Jun 2020, Matthias Cuntz
 * Use `exe_wrapper` in `exe_mask_wrapper`, Jun 2020, Matthias Cuntz
 * Make flake8 compliant, Dec 2020, Matthias Cuntz
+* pass exe and pid as list if not shell in exe_wrapper,
+  May 2021, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 
@@ -281,6 +283,7 @@ def exe_wrapper(func,
               Matthias Cuntz, Jun 2020 - pass pid just before keyword arguments
                                          to parameterwriter and outputreader
               Matthias Cuntz, Jun 2020 - called from `exe_mask_wrapper`
+              Matthias Cuntz, May 2021 - pass func and pid as list if not shell
     """
     shell   = kwarg['shell']   if 'shell'   in kwarg else False
     debug   = kwarg['debug']   if 'debug'   in kwarg else False
@@ -305,9 +308,12 @@ def exe_wrapper(func,
         if pid:
             parameterwriter(parameterfile, x, *pargs, pid=ipid, **pkwargs)
             if isinstance(func, str):
-                func1 = func+' '+ipid
+                if shell:
+                    func1 = func + ' ' + ipid
+                else:
+                    func1 = [func, ipid]
             else:
-                func1 = func+[ipid]
+                func1 = func + [ipid]
             if debug:
                 err = subprocess.check_call(func1, stderr=subprocess.STDOUT,
                                             shell=shell)
@@ -317,12 +323,12 @@ def exe_wrapper(func,
             obj = outputreader(outputfile, *oargs, pid=ipid, **okwargs)
             if not keepparameterfile:
                 for ff in _tolist(parameterfile):
-                    if os.path.exists(ff+'.'+ipid):
-                        os.remove(ff+'.'+ipid)
+                    if os.path.exists(ff + '.' + ipid):
+                        os.remove(ff + '.' + ipid)
             if not keepoutputfile:
                 for ff in _tolist(outputfile):
-                    if os.path.exists(ff+'.'+ipid):
-                        os.remove(ff+'.'+ipid)
+                    if os.path.exists(ff + '.' + ipid):
+                        os.remove(ff + '.' + ipid)
         else:
             parameterwriter(parameterfile, x, *pargs, **pkwargs)
             if debug:

@@ -51,6 +51,7 @@ History:
   Matthias Cuntz
 * Add pid keyword to all routines, Jun 2020, Matthias Cuntz
 * Make flake8 compliant, Dec 2020, Matthias Cuntz
+* Allow non-numeric parameters, Feb 2021, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 
@@ -236,6 +237,7 @@ def sub_params_ja(files, params, pid=None):
               Matthias Cuntz, Jun 2020 - overwrite input files by default
                                          if pid not given
               Matthias Cuntz, Jun 2020 - pid keyword after arguments
+              Matthias Cuntz, Feb 2021 - allow non-numeric parameter
     """
     # assert list of files
     if isinstance(files, str):
@@ -245,7 +247,11 @@ def sub_params_ja(files, params, pid=None):
     dd = {}
     for i, p in enumerate(params):
         k = "#JA{:04d}#".format(i)
-        dd[k] = "{:.14e}".format(params[i])
+        try:
+            repl = "{:.14e}".format(p)
+        except ValueError:
+            repl = "{}".format(p)
+        dd[k] = repl
 
     # replace in each file
     _msub_files(files, dd, pid)
@@ -308,6 +314,7 @@ def sub_params_names_case(files, params, names, pid=None):
                                          expressions
               Matthias Cuntz, Feb 2020 - keep formatting of names and spaces
               Matthias Cuntz, Jun 2020 - pid keyword after arguments
+              Matthias Cuntz, Feb 2021 - allow non-numeric parameter
     """
     # assert list of files
     if isinstance(files, str):
@@ -316,12 +323,16 @@ def sub_params_names_case(files, params, names, pid=None):
     # make dict for _msub with dict[pattern] = replacement
     dd = {}
     for i, p in enumerate(params):
+        try:
+            repl = r"\1\2= {:.14e}".format(p)
+        except ValueError:
+            repl = r"\1\2= {}".format(p)
         nep = r"("+names[i]+r"\s*)=\s*[a-zA-Z0-9_.+-]*"  # name = value
         k = r"^(\s*)"+nep                                # beginning of line
-        dd[k] = r"\1\2= {:.14e}".format(params[i])       # replacement using
+        dd[k] = repl                                     # replacement using
                                                          # substitutions \1, \2
         k = r"(\n+\s*)"+nep                              # after newline
-        dd[k] = r"\1\2= {:.14e}".format(params[i])
+        dd[k] = repl
 
     # replace in each file
     _msub_files(files, dd, pid)
@@ -381,6 +392,7 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
                                          expressions
               Matthias Cuntz, Feb 2020 - keep formatting of names and spaces
               Matthias Cuntz, Jun 2020 - pid keyword after arguments
+              Matthias Cuntz, Feb 2021 - allow non-numeric parameter
     """
     # assert list of files
     if isinstance(files, str):
@@ -389,12 +401,16 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
     # make dict for _msub with dict[pattern] = replacement
     dd = {}
     for i, p in enumerate(params):
+        try:
+            repl = r"\1\2= {:.14e}".format(p)
+        except ValueError:
+            repl = r"\1\2= {}".format(p)
         nep = r"("+names[i]+r"\s*)=\s*[a-zA-Z0-9_.+-]*"  # name = value
         k = r"^(\s*)"+nep                                # beginning of line
-        dd[k] = r"\1\2= {:.14e}".format(params[i])       # replacement using
+        dd[k] = repl                                     # replacement using
                                                          # substitutions \1, \2
         k = r"(\n+\s*)"+nep                              # after newline
-        dd[k] = r"\1\2= {:.14e}".format(params[i])
+        dd[k] = repl
 
     # replace in each file
     _msub_files(files, dd, pid, flags=re.I)
@@ -573,6 +589,7 @@ def standard_parameter_writer(filename, params, pid=None):
     Modified, Matthias Cuntz, Jan 2020 - call with 2 or 3 arguments,
                                          i.e. pid given or not
               Matthias Cuntz, Jun 2020 - pid keyword after arguments
+              Matthias Cuntz, Feb 2021 - allow non-numeric parameter
     """
     # Existing file will be overwritten
     if pid:
@@ -581,7 +598,11 @@ def standard_parameter_writer(filename, params, pid=None):
         ofile = filename
     with open(ofile, 'w') as ff:
         for pp in params:
-            dstr = '{:.14e}'.format(pp)
+            try:
+                repl = '{:.14e}'.format(pp)
+            except ValueError:
+                repl = '{}'.format(pp)
+            dstr = repl
             print(dstr, file=ff)
 
     return
