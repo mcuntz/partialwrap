@@ -316,6 +316,8 @@ def sub_params_names_case(files, params, names, pid=None):
               Matthias Cuntz, Jun 2020 - pid keyword after arguments
               Matthias Cuntz, Feb 2021 - allow non-numeric parameter
               Matthias Cuntz, May 2021 - respect space after = sign
+                                       - replace everything after space after
+                                         = sign up to next space
     """
     # assert list of files
     if isinstance(files, str):
@@ -328,11 +330,11 @@ def sub_params_names_case(files, params, names, pid=None):
             repl = r"\1\2=\3{:.14e}".format(p)
         except ValueError:
             repl = r"\1\2=\3{}".format(p)
-        nep = r"("+names[i]+r"\s*)=(\s*)[a-zA-Z0-9_.+-]*"  # name = value
-        k = r"^(\s*)"+nep                                  # beginning of line
-        dd[k] = repl                                       # replacement using
-                                                           # substitutions \1, \2
-        k = r"(\n+\s*)"+nep                                # after newline
+        nep = r"("+names[i]+r"\s*)=(\s*)\S*"  # name = value
+        k = r"^(\s*)"+nep                     # beginning of line
+        dd[k] = repl                          # replacement using
+                                              # substitutions \1, \2, and \3
+        k = r"(\n+\s*)"+nep                   # after newline
         dd[k] = repl
 
     # replace in each file
@@ -395,6 +397,8 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
               Matthias Cuntz, Jun 2020 - pid keyword after arguments
               Matthias Cuntz, Feb 2021 - allow non-numeric parameter
               Matthias Cuntz, May 2021 - respect space after = sign
+                                       - replace everything after space after
+                                         = sign up to next space
     """
     # assert list of files
     if isinstance(files, str):
@@ -407,11 +411,11 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
             repl = r"\1\2=\3{:.14e}".format(p)
         except ValueError:
             repl = r"\1\2=\3{}".format(p)
-        nep = r"("+names[i]+r"\s*)=(\s*)[a-zA-Z0-9_.+-]*"  # name = value
-        k = r"^(\s*)"+nep                                # beginning of line
-        dd[k] = repl                                     # replacement using
-                                                         # substitutions \1, \2
-        k = r"(\n+\s*)"+nep                              # after newline
+        nep = r"("+names[i]+r"\s*)=(\s*)\S*"  # name = value
+        k = r"^(\s*)"+nep                     # beginning of line
+        dd[k] = repl                          # replacement using
+                                              # substitutions \1, \2, and \3
+        k = r"(\n+\s*)"+nep                   # after newline
         dd[k] = repl
 
     # replace in each file
