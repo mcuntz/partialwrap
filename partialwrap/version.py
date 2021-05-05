@@ -16,9 +16,11 @@ Released under the MIT License; see LICENSE file for details.
 * v1.1, make flake8 compliant, Dec 2020, Matthias Cuntz
 * v1.2, remove scipy.optimize from tests, Dec 2020, Matthias Cuntz
 * v1.3, allow non-numeric parameters, May 2021, Matthias Cuntz
+* v1.3.1, respect space after = sign in sub_params_names routines,
+  May 2021, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 """
 
 __author__  = "Matthias Cuntz"
-__version__ = "1.3"
+__version__ = "1.3.1"
