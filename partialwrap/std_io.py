@@ -52,6 +52,7 @@ History:
 * Add pid keyword to all routines, Jun 2020, Matthias Cuntz
 * Make flake8 compliant, Dec 2020, Matthias Cuntz
 * Allow non-numeric parameters, Feb 2021, Matthias Cuntz
+* More generic right-hand in sub_params_names, May 2021, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 
@@ -318,6 +319,8 @@ def sub_params_names_case(files, params, names, pid=None):
               Matthias Cuntz, May 2021 - respect space after = sign
                                        - replace everything after space after
                                          = sign up to next space
+              Matthias Cuntz, May 2021 - protect saved group with \g<> in
+                                         replacement pattern
     """
     # assert list of files
     if isinstance(files, str):
@@ -327,16 +330,17 @@ def sub_params_names_case(files, params, names, pid=None):
     dd = {}
     for i, p in enumerate(params):
         try:
-            repl = r"\1\2=\3{:.14e}".format(p)
+            repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
         except ValueError:
-            repl = r"\1\2=\3{}".format(p)
-        nep = r"("+names[i]+r"\s*)=(\s*)\S*"  # name = value
-        k = r"^(\s*)"+nep                     # beginning of line
-        dd[k] = repl                          # replacement using
-                                              # substitutions \1, \2, and \3
-        k = r"(\n+\s*)"+nep                   # after newline
+            repl = r"\g<1>\g<2>=\g<3>{}".format(p)
+        nep = r"(" + names[i] + r"\s*)=(\s*).*"  # name = value
+        k = r"^(\s*)" + nep                      # beginning of line
+        dd[k] = repl                             # replacement using
+                                                 # substitutions \1, \2, and \3
+        k = r"(\n+\s*)" + nep                    # after newline
         dd[k] = repl
 
+    print('dd', dd)
     # replace in each file
     _msub_files(files, dd, pid)
 
@@ -399,6 +403,8 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
               Matthias Cuntz, May 2021 - respect space after = sign
                                        - replace everything after space after
                                          = sign up to next space
+              Matthias Cuntz, May 2021 - protect saved group with \g<> in
+                                         replacement pattern
     """
     # assert list of files
     if isinstance(files, str):
@@ -408,9 +414,9 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
     dd = {}
     for i, p in enumerate(params):
         try:
-            repl = r"\1\2=\3{:.14e}".format(p)
+            repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
         except ValueError:
-            repl = r"\1\2=\3{}".format(p)
+            repl = r"\g<1>\g<2>=\g<3>{}".format(p)
         nep = r"("+names[i]+r"\s*)=(\s*)\S*"  # name = value
         k = r"^(\s*)"+nep                     # beginning of line
         dd[k] = repl                          # replacement using

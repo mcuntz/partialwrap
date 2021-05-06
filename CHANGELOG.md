@@ -2,6 +2,9 @@
 
 All notable changes after its initial development up to June 2020 (v1.0) are documented in this file.
 
+### v1.3.2 (May 2021)
+    - Protect saved groups in replacement pattern in sub_params_names routines.
+
 ### v1.3.1 (May 2021)
     - Respect space after = sign in sub_params_names routines.
     - Replace everything after space after = sign up to next space.
