@@ -2,6 +2,10 @@
 
 All notable changes after its initial development up to June 2020 (v1.0) are documented in this file.
 
+### v1.3.3 (May 2021)
+    - Deleted trailing print statement. Deleting and replacing v1.3.2 did
+      not replace whl on PyPI.
+
 ### v1.3.2 (May 2021)
     - Protect saved groups in replacement pattern in sub_params_names routines.
 
