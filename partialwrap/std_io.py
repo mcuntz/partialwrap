@@ -53,6 +53,7 @@ History:
 * Make flake8 compliant, Dec 2020, Matthias Cuntz
 * Allow non-numeric parameters, Feb 2021, Matthias Cuntz
 * More generic right-hand in sub_params_names, May 2021, Matthias Cuntz
+* Escape backslash in names in sub_params_names, May 2021, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 
@@ -321,6 +322,7 @@ def sub_params_names_case(files, params, names, pid=None):
                                          = sign up to next space
               Matthias Cuntz, May 2021 - protect saved group with \g<> in
                                          replacement pattern
+              Matthias Cuntz, May 2021 - escape backslash in names
     """
     # assert list of files
     if isinstance(files, str):
@@ -332,6 +334,7 @@ def sub_params_names_case(files, params, names, pid=None):
         try:
             repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
         except ValueError:
+            p = p.replace('\\', '\\\\')
             repl = r"\g<1>\g<2>=\g<3>{}".format(p)
         nep = r"(" + names[i] + r"\s*)=(\s*).*"  # name = value
         k = r"^(\s*)" + nep                      # beginning of line
@@ -339,6 +342,7 @@ def sub_params_names_case(files, params, names, pid=None):
                                                  # substitutions \1, \2, and \3
         k = r"(\n+\s*)" + nep                    # after newline
         dd[k] = repl
+        print(k, dd[k])
 
     # replace in each file
     _msub_files(files, dd, pid)
@@ -404,6 +408,7 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
                                          = sign up to next space
               Matthias Cuntz, May 2021 - protect saved group with \g<> in
                                          replacement pattern
+              Matthias Cuntz, May 2021 - escape backslash in names
     """
     # assert list of files
     if isinstance(files, str):
@@ -415,6 +420,7 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
         try:
             repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
         except ValueError:
+            p = p.replace('\\', '\\\\')
             repl = r"\g<1>\g<2>=\g<3>{}".format(p)
         nep = r"("+names[i]+r"\s*)=(\s*)\S*"  # name = value
         k = r"^(\s*)"+nep                     # beginning of line
