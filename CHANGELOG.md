@@ -2,8 +2,11 @@
 
 All notable changes after its initial development up to June 2020 (v1.0) are documented in this file.
 
+### v1.3.5 (May 2021)
+    - Escape backslash also in params in sub_params_ja routines.
+
 ### v1.3.4 (May 2021)
-    - Escape backslash in names in sub_params_names routines.
+    - Escape backslash in params in sub_params_names routines.
 
 ### v1.3.3 (May 2021)
     - Deleted trailing print statement. Deleting and replacing v1.3.2 did

@@ -53,7 +53,7 @@ History:
 * Make flake8 compliant, Dec 2020, Matthias Cuntz
 * Allow non-numeric parameters, Feb 2021, Matthias Cuntz
 * More generic right-hand in sub_params_names, May 2021, Matthias Cuntz
-* Escape backslash in names in sub_params_names, May 2021, Matthias Cuntz
+* Escape backslash in params in sub_params routines, May 2021, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 
@@ -240,6 +240,7 @@ def sub_params_ja(files, params, pid=None):
                                          if pid not given
               Matthias Cuntz, Jun 2020 - pid keyword after arguments
               Matthias Cuntz, Feb 2021 - allow non-numeric parameter
+              Matthias Cuntz, May 2021 - escape backslash in params
     """
     # assert list of files
     if isinstance(files, str):
@@ -252,7 +253,8 @@ def sub_params_ja(files, params, pid=None):
         try:
             repl = "{:.14e}".format(p)
         except ValueError:
-            repl = "{}".format(p)
+            p1 = p.replace('\\', '\\\\')
+            repl = "{}".format(p1)
         dd[k] = repl
 
     # replace in each file
@@ -322,7 +324,7 @@ def sub_params_names_case(files, params, names, pid=None):
                                          = sign up to next space
               Matthias Cuntz, May 2021 - protect saved group with \g<> in
                                          replacement pattern
-              Matthias Cuntz, May 2021 - escape backslash in names
+              Matthias Cuntz, May 2021 - escape backslash in params
     """
     # assert list of files
     if isinstance(files, str):
@@ -334,8 +336,8 @@ def sub_params_names_case(files, params, names, pid=None):
         try:
             repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
         except ValueError:
-            p = p.replace('\\', '\\\\')
-            repl = r"\g<1>\g<2>=\g<3>{}".format(p)
+            p1 = p.replace('\\', '\\\\')
+            repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
         nep = r"(" + names[i] + r"\s*)=(\s*).*"  # name = value
         k = r"^(\s*)" + nep                      # beginning of line
         dd[k] = repl                             # replacement using
@@ -408,7 +410,7 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
                                          = sign up to next space
               Matthias Cuntz, May 2021 - protect saved group with \g<> in
                                          replacement pattern
-              Matthias Cuntz, May 2021 - escape backslash in names
+              Matthias Cuntz, May 2021 - escape backslash in params
     """
     # assert list of files
     if isinstance(files, str):
@@ -420,8 +422,8 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
         try:
             repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
         except ValueError:
-            p = p.replace('\\', '\\\\')
-            repl = r"\g<1>\g<2>=\g<3>{}".format(p)
+            p1 = p.replace('\\', '\\\\')
+            repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
         nep = r"("+names[i]+r"\s*)=(\s*)\S*"  # name = value
         k = r"^(\s*)"+nep                     # beginning of line
         dd[k] = repl                          # replacement using
