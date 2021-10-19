@@ -4,7 +4,7 @@ All notable changes after its initial development up to June 2020 (v1.0) are doc
 
 ### v1.4 (Oct 2021)
     - Move to pyproject.toml structure with Github actions.
-    - Remove History sections from docstrings.
+    - Remove History sections from docstrings of wrappers and IO routines.
 
 ### v1.3.5 (May 2021)
     - Escape backslash also in params in sub_params_ja routines.
