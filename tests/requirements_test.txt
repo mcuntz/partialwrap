@@ -1,6 +1,0 @@
-cibuildwheel
-setuptools
-coverage
-coveralls
-pytest-cov
-numpy

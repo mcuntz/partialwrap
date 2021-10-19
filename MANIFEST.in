@@ -8,6 +8,4 @@ include setup.py setup.cfg
 recursive-include partialwrap *.py
 recursive-include docs/source *
 recursive-include docs/examples_userguide *
-include docs/Makefile docs/requirements.txt
 recursive-include tests *.py
-include tests/requirements_test.txt

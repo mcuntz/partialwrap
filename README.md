@@ -251,7 +251,7 @@ in the [documentation](http://partialwrap.readthedocs.io) for more information.
 *partialwrap* is distributed under the MIT License.  
 See the [LICENSE](https://github.com/mcuntz/partialwrap/LICENSE) file for details.
 
-Copyright (c) 2016-2020 Matthias Cuntz
+Copyright (c) 2016-2021 Matthias Cuntz
 
 The project structure is based on a
 [template](https://github.com/MuellerSeb/template) provided by [Sebastian

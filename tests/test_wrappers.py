@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 from __future__ import division, absolute_import, print_function
 """
-    This is the unittest for the wrappers module.
+This is the unittest for the wrappers module.
 
-    python -m unittest -v tests/test_wrappers.py
-    python -m pytest --cov-report term-missing -v tests/test_wrappers.py
+python -m unittest -v tests/test_wrappers.py
+python -m pytest --cov-report term-missing -v tests/test_wrappers.py
 """
 import unittest
 import numpy as np

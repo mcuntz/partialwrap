@@ -10,50 +10,9 @@ This module was written by Matthias Cuntz while at Institut National de
 Recherche pour l'Agriculture, l'Alimentation et l'Environnement (INRAE), Nancy,
 France.
 
-Copyright (c) 2016-2020 Matthias Cuntz - mc (at) macu (dot) de
+Copyright (c) 2016-2021 Matthias Cuntz - mc (at) macu (dot) de
 
 Released under the MIT License; see LICENSE file for details.
-
-History:
-
-* Written Nov 2016 by Matthias Cuntz (mc (at) macu (dot) de),
-  including standard readers and writers
-* Added substitution function for #JA????# in prepared parameter files
-  (sub_ja_params_files), Jan 2018, Matthias Cuntz
-* Use .pid as suffix for multiprocessing, Feb 2018, Matthias Cuntz
-* Return ndarrays instead of lists and line IDs in standard_parameter_reader,
-  Mar 2018, Matthias Cuntz
-* Added substitution functions for arbitrary names in parameter files
-  (sub_names_params_files*), Mar 2018, Matthias Cuntz
-* Allow substitution in several parameter files (_msub_files), Apr 2018,
-  Matthias Cuntz
-* Changed to Sphinx docstring and numpydoc, Dec 2019, Matthias Cuntz
-* Renamed standard_parameter_reader/_writer to
-  standard_parameter_reader_bounds_mask/standard_parameter_writer_bounds_mask,
-  Jan 2020, Matthias Cuntz
-* New standard_parameter_reader/_writer that read/write single values
-  per parameter, Jan 2020, Matthias Cuntz
-* Swapped names and params in call to sub_names_params_files* to be compatible
-  with new generic exe_wrapper, Jan 2020, Matthias Cuntz
-* Call standard_parameter_writer with 2 or 3 arguments, i.e. pid given or not,
-  Jan 2020, Matthias Cuntz
-* Make all strings raw strings in sub_names_params_files_* routines to deal
-  with regular expressions, Jan 2020, Matthias Cuntz
-* Keep formatting of names and spaces with sub_names_params functions;
-  close input file before raising error, Feb 2020, Matthias Cuntz
-* Prepend underscore to local function, Jun 2020, Matthias Cuntz
-* Use with statement for reading file so that they are properly closed,
-  Jun 2020, Matthias Cuntz
-* Overwrite input files by default if no pid given, Jun 2020, Matthias Cuntz
-* Remove _files from function names, Jun 2020, Matthias Cuntz
-* pid keyword after arguments, Jun 2020, Matthias Cuntz
-* Rename all substitution functions sub_* to start with sub_params_*, Jun 2020,
-  Matthias Cuntz
-* Add pid keyword to all routines, Jun 2020, Matthias Cuntz
-* Make flake8 compliant, Dec 2020, Matthias Cuntz
-* Allow non-numeric parameters, Feb 2021, Matthias Cuntz
-* More generic right-hand in sub_params_names, May 2021, Matthias Cuntz
-* Escape backslash in params in sub_params routines, May 2021, Matthias Cuntz
 
 .. moduleauthor:: Matthias Cuntz
 
@@ -71,6 +30,51 @@ The following functions are provided:
    standard_parameter_writer_bounds_mask
    standard_timeseries_reader
    standard_time_series_reader
+
+History
+    * Written Nov 2016 by Matthias Cuntz (mc (at) macu (dot) de),
+      including standard readers and writers
+    * Added substitution function for #JA????# in prepared parameter files
+      (sub_ja_params_files), Jan 2018, Matthias Cuntz
+    * Use .pid as suffix for multiprocessing, Feb 2018, Matthias Cuntz
+    * Return ndarrays instead of lists and line IDs in
+      standard_parameter_reader, Mar 2018, Matthias Cuntz
+    * Added substitution functions for arbitrary names in parameter files
+      (sub_names_params_files*), Mar 2018, Matthias Cuntz
+    * Allow substitution in several parameter files (_msub_files), Apr 2018,
+      Matthias Cuntz
+    * Changed to Sphinx docstring and numpydoc, Dec 2019, Matthias Cuntz
+    * Renamed standard_parameter_reader/_writer to
+      standard_parameter_reader_bounds_mask/standard_parameter_writer_bounds_mask,
+      Jan 2020, Matthias Cuntz
+    * New standard_parameter_reader/_writer that read/write single values
+      per parameter, Jan 2020, Matthias Cuntz
+    * Swapped names and params in call to sub_names_params_files* to be
+      compatible with new generic exe_wrapper, Jan 2020, Matthias Cuntz
+    * Call standard_parameter_writer with 2 or 3 arguments, i.e. pid given or
+      not, Jan 2020, Matthias Cuntz
+    * Make all strings raw strings in sub_names_params_files_* routines to deal
+      with regular expressions, Jan 2020, Matthias Cuntz
+    * Keep formatting of names and spaces with sub_names_params functions;
+      close input file before raising error, Feb 2020, Matthias Cuntz
+    * Prepend underscore to local function, Jun 2020, Matthias Cuntz
+    * Use with statement for reading file so that they are properly closed,
+      Jun 2020, Matthias Cuntz
+    * Overwrite input files by default if no pid given,
+      Jun 2020, Matthias Cuntz
+    * Remove _files from function names, Jun 2020, Matthias Cuntz
+    * pid keyword after arguments, Jun 2020, Matthias Cuntz
+    * Rename all substitution functions sub_* to start with sub_params_*,
+      Jun 2020, Matthias Cuntz
+    * Add pid keyword to all routines, Jun 2020, Matthias Cuntz
+    * Make flake8 compliant, Dec 2020, Matthias Cuntz
+    * Allow non-numeric parameters, Feb 2021, Matthias Cuntz
+    * More generic right-hand side in sub_params_names,
+      May 2021, Matthias Cuntz
+    * Escape backslash in params in sub_params routines,
+      May 2021, Matthias Cuntz
+    * np.float-> float, etc., Sep 2021, Matthias Cuntz
+
 """
 from __future__ import division, absolute_import, print_function
 import re
@@ -119,10 +123,6 @@ def _msub(dic, text, flags=0):
     do not work because match.string returns the string and not the pattern so
     that the key for the dictionary does not work anymore.
 
-    History
-    -------
-    Written,  Matthias Cuntz, Mar 2018
-    Modified, Matthias Cuntz, Dec 2019 - Sphinx docstring
     """
     for d in dic:
         text = re.sub(d, dic[d], text, flags=flags)
@@ -157,13 +157,6 @@ def _msub_files(files, dic, pid=None, flags=0):
         names of the input files suffixed by .pid, in which all occurences of
         all patterns were replaced.
 
-    History
-    -------
-    Written,  Matthias Cuntz, Apr 2018
-    Modified, Matthias Cuntz, Dec 2019 - Sphinx docstring
-              Matthias Cuntz, Jun 2020 - use with statement for reading files
-              Matthias Cuntz, Jun 2020 - overwrite input files by default
-                                         if pid not given
     """
     from os.path import exists
 
@@ -228,19 +221,6 @@ def sub_params_ja(files, params, pid=None):
     --------
     >>> sub_params_ja([file1, file2], [0, 1, 2, 3], pid=1234)
 
-
-    History
-    -------
-    Written,  Matthias Cuntz, Jan 2018
-    Modified, Matthias Cuntz, Feb 2018 - pid
-              Matthias Cuntz, Mar 2018 - use _msub
-              Matthias Cuntz, Apr 2018 - use _msub_files
-              Matthias Cuntz, Dec 2019 - Sphinx docstring
-              Matthias Cuntz, Jun 2020 - overwrite input files by default
-                                         if pid not given
-              Matthias Cuntz, Jun 2020 - pid keyword after arguments
-              Matthias Cuntz, Feb 2021 - allow non-numeric parameter
-              Matthias Cuntz, May 2021 - escape backslash in params
     """
     # assert list of files
     if isinstance(files, str):
@@ -307,24 +287,6 @@ def sub_params_names_case(files, params, names, pid=None):
     ...                       ['param1', 'param2', 'param3', 'param4'],
     ...                       pid=1234)
 
-
-    History
-    -------
-    Written,  Matthias Cuntz, Mar 2018
-    Modified, Matthias Cuntz, Apr 2018 - use _msub_files
-              Matthias Cuntz, Dec 2019 - Sphinx docstring
-              Matthias Cuntz, Jan 2020 - swap names and params in argument list
-              Matthias Cuntz, Jan 2020 - make all raw strings for regular
-                                         expressions
-              Matthias Cuntz, Feb 2020 - keep formatting of names and spaces
-              Matthias Cuntz, Jun 2020 - pid keyword after arguments
-              Matthias Cuntz, Feb 2021 - allow non-numeric parameter
-              Matthias Cuntz, May 2021 - respect space after = sign
-                                       - replace everything after space after
-                                         = sign up to next space
-              Matthias Cuntz, May 2021 - protect saved group with \g<> in
-                                         replacement pattern
-              Matthias Cuntz, May 2021 - escape backslash in params
     """
     # assert list of files
     if isinstance(files, str):
@@ -341,7 +303,7 @@ def sub_params_names_case(files, params, names, pid=None):
         nep = r"(" + names[i] + r"\s*)=(\s*).*"  # name = value
         k = r"^(\s*)" + nep                      # beginning of line
         dd[k] = repl                             # replacement using
-                                                 # substitutions \1, \2, and \3
+                                                 # substitutions \\1, \\2, ...
         k = r"(\n+\s*)" + nep                    # after newline
         dd[k] = repl
         print(k, dd[k])
@@ -393,24 +355,6 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
     ...                             ['param1', 'param2', 'param3', 'param4'],
     ...                             pid=1234)
 
-
-    History
-    -------
-    Written,  Matthias Cuntz, Mar 2018
-    Modified, Matthias Cuntz, Apr 2018 - use _msub_files
-              Matthias Cuntz, Dec 2019 - Sphinx docstring
-              Matthias Cuntz, Jan 2020 - swap names and params in argument list
-              Matthias Cuntz, Jan 2020 - make all raw strings for regular
-                                         expressions
-              Matthias Cuntz, Feb 2020 - keep formatting of names and spaces
-              Matthias Cuntz, Jun 2020 - pid keyword after arguments
-              Matthias Cuntz, Feb 2021 - allow non-numeric parameter
-              Matthias Cuntz, May 2021 - respect space after = sign
-                                       - replace everything after space after
-                                         = sign up to next space
-              Matthias Cuntz, May 2021 - protect saved group with \g<> in
-                                         replacement pattern
-              Matthias Cuntz, May 2021 - escape backslash in params
     """
     # assert list of files
     if isinstance(files, str):
@@ -475,12 +419,6 @@ def standard_output_reader(filename, pid=None):
     >>> subprocess.call(model)
     >>> obj = standard_output_reader(filename, pid=1234)
 
-
-    History
-    -------
-    Written,  Matthias Cuntz, Nov 2016
-    Modified, Matthias Cuntz, Dec 2019 - Sphinx docstring
-              Matthias Cuntz, Jun 2020 - pid keyword
     """
     # read output value
     if pid:
@@ -491,7 +429,7 @@ def standard_output_reader(filename, pid=None):
         obj = ff.readline()
 
     # return float
-    return np.float(obj)
+    return float(obj)
 
 
 # ------------------------------------------------------------------------------
@@ -536,11 +474,6 @@ def standard_parameter_reader(filename, pid=None):
     --------
     >>> params = standard_parameter_reader(paramfile)
 
-
-    History
-    -------
-    Written,  Matthias Cuntz, Jan 2020
-    Modified, Matthias Cuntz, Jun 2020 - pid keyword
     """
     if pid:
         fname = filename+'.'+str(pid)
@@ -551,9 +484,9 @@ def standard_parameter_reader(filename, pid=None):
         for line in ff:
             if line.startswith('#'):
                 continue
-            params.append(np.float(line.strip()))
+            params.append(float(line.strip()))
 
-    return np.array(params, dtype=np.float)
+    return np.array(params, dtype=float)
 
 
 # ------------------------------------------------------------------------------
@@ -601,14 +534,6 @@ def standard_parameter_writer(filename, params, pid=None):
     >>> params = sample_parameter(pis, pmin, pmax, pmask)
     >>> standard_parameter_writer(paramfile, params, pid)
 
-
-    History
-    -------
-    Written,  Matthias Cuntz, Jan 2020
-    Modified, Matthias Cuntz, Jan 2020 - call with 2 or 3 arguments,
-                                         i.e. pid given or not
-              Matthias Cuntz, Jun 2020 - pid keyword after arguments
-              Matthias Cuntz, Feb 2021 - allow non-numeric parameter
     """
     # Existing file will be overwritten
     if pid:
@@ -683,17 +608,6 @@ def standard_parameter_reader_bounds_mask(filename, pid=None):
     >>> ids, params, pmin, pmax, pmask = \
     ...     standard_parameter_reader_bounds_mask(paramfile)
 
-
-    History
-    -------
-    Written,  Matthias Cuntz, Nov 2016
-    Modified, Matthias Cuntz, Mar 2018 - return ids
-                                       - return numpy.arrays
-              Matthias Cuntz, Dec 2019 - Sphinx docstring
-              Matthias Cuntz, Jan 2020 - renamed from standard_parameter_reader
-                  to standard_parameter_reader_bounds_mask
-              Matthias Cuntz, Feb 2020 - close file before raising error
-              Matthias Cuntz, Jun 2020 - pid keyword
     """
     ids    = []
     params = []
@@ -713,16 +627,16 @@ def standard_parameter_reader_bounds_mask(filename, pid=None):
             if len(el) != 5:
                 raise IOError('Line has no 5 columns for parameter: '+line)
             ids.append(el[0])
-            params.append(np.float(el[1]))
-            pmin.append(np.float(el[2]))
-            pmax.append(np.float(el[3]))
+            params.append(float(el[1]))
+            pmin.append(float(el[2]))
+            pmax.append(float(el[3]))
             pmask.append(int(el[4]))
 
     return [ids,
-            np.array(params, dtype=np.float),
-            np.array(pmin, dtype=np.float),
-            np.array(pmax, dtype=np.float),
-            np.array(pmask, dtype=np.bool)]
+            np.array(params, dtype=float),
+            np.array(pmin, dtype=float),
+            np.array(pmax, dtype=float),
+            np.array(pmask, dtype=bool)]
 
 
 # ------------------------------------------------------------------------------
@@ -785,16 +699,6 @@ def standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask,
     >>> standard_parameter_writer_bounds_mask(paramfile, params, pmin, pmax,
     ...                                       pmask, pid)
 
-
-    History
-    -------
-    Written,  Matthias Cuntz, Nov 2016
-    Modified, Matthias Cuntz, Feb 2018 - pid
-              Matthias Cuntz, Dec 2019 - Sphinx docstring
-              Matthias Cuntz, Jan 2020 - renamed from standard_parameter_writer
-                  to standard_parameter_writer_bounds_mask
-                                       - no .pid to filename if pid is None
-              Matthias Cuntz, Jun 2020 - pid keyword after arguments
     """
     # Assert correct call
     astr = 'Parameter and minima do not have the same length.'
@@ -866,12 +770,6 @@ def standard_time_series_reader(filename, pid=None):
     >>> subprocess.call(model)
     >>> ts = standard_time_series_reader(filename)
 
-
-    History
-    -------
-    Written,  Matthias Cuntz, Jan 2018
-    Modified, Matthias Cuntz, Dec 2019 - Sphinx docstring
-              Matthias Cuntz, Jun 2020 - pid keyword
     """
     if pid:
         fname = filename+'.'+str(pid)
@@ -882,7 +780,7 @@ def standard_time_series_reader(filename, pid=None):
         serie = ff.readlines()
 
     # return float array
-    return np.array(serie, dtype=np.float)
+    return np.array(serie, dtype=float)
 
 
 def standard_timeseries_reader(*args, **kwargs):

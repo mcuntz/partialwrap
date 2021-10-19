@@ -1,5 +1,0 @@
-# required for readthedocs.org
-numpydoc
-numpy
-scipy
-emcee

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 from __future__ import division, absolute_import, print_function
 """
-    This is the unittest for Standard I/O module.
+This is the unittest for Standard I/O module.
 
-    python -m unittest -v test_std_io.py
-    python -m pytest --cov-report term-missing -v test_std_io.py
+python -m unittest -v test_std_io.py
+python -m pytest --cov-report term-missing -v test_std_io.py
 """
 import unittest
 
@@ -23,7 +23,7 @@ class TestStd_io(unittest.TestCase):
         filename1 = 'params1.txt'
         filename2 = 'params2.txt'
         pid       = 1234
-        params    = np.arange(10, dtype=np.float)
+        params    = np.arange(10, dtype=float)
 
         ff = open(filename1, 'w')
         print('param0 = #JA0000#', file=ff)
@@ -115,7 +115,7 @@ class TestStd_io(unittest.TestCase):
         filename1 = 'params11.txt'
         filename2 = 'params21.txt'
         pid       = 1234
-        params    = np.arange(10, dtype=np.float)
+        params    = np.arange(10, dtype=float)
         names     = ['param0', 'param1', 'param2', 'param3', 'param4',
                      'param5', 'param6', 'param7', 'param8', 'param9']
 
@@ -170,7 +170,7 @@ class TestStd_io(unittest.TestCase):
         filename1 = 'params12.txt'
         filename2 = 'params22.txt'
         pid       = 1234
-        params    = np.arange(10, dtype=np.float)
+        params    = np.arange(10, dtype=float)
         names     = ['param0', 'param1', 'param2', 'param3', 'param4',
                      'param5', 'param6', 'param7', 'param8', 'param9']
 
@@ -225,7 +225,7 @@ class TestStd_io(unittest.TestCase):
         filename1 = 'params13.txt'
         filename2 = 'params23.txt'
         pid       = 1234
-        params    = np.arange(10, dtype=np.float)
+        params    = np.arange(10, dtype=float)
         names     = ['param0', 'param1', 'param2', 'param3', 'param4',
                      'param5', 'param6', 'param7', 'param8', 'param9']
 
@@ -314,7 +314,7 @@ class TestStd_io(unittest.TestCase):
 
         # standard_parameter_reader/writer without pid
         filename = 'params.txt'
-        params   = np.arange(10, dtype=np.float)
+        params   = np.arange(10, dtype=float)
         standard_parameter_writer(filename, params)
 
         iparams = standard_parameter_reader(filename)
@@ -327,7 +327,7 @@ class TestStd_io(unittest.TestCase):
         # standard_parameter_writer with pid
         filename = 'params.txt'
         pid      = 1234
-        params   = np.arange(10, dtype=np.float)
+        params   = np.arange(10, dtype=float)
         standard_parameter_writer(filename, params, pid)
 
         iparams = standard_parameter_reader(filename, pid)
@@ -340,10 +340,10 @@ class TestStd_io(unittest.TestCase):
         # standard_parameter_reader/writer_bounds_mask
         filename = 'params.txt'
         pid      = 1234
-        params   = np.arange(10, dtype=np.float)
+        params   = np.arange(10, dtype=float)
         pmin     = params - 1.
         pmax     = params + 1.
-        mask     = np.ones(10, dtype=np.bool)
+        mask     = np.ones(10, dtype=bool)
         standard_parameter_writer_bounds_mask(filename, params, pmin, pmax,
                                               mask, pid)
 
@@ -362,10 +362,10 @@ class TestStd_io(unittest.TestCase):
 
         # standard_parameter_reader_bounds_mask - IOError
         filename = 'params.txt'
-        params   = np.arange(10, dtype=np.float)
+        params   = np.arange(10, dtype=float)
         pmin     = params - 1.
         pmax     = params + 1.
-        mask     = np.ones(10, dtype=np.bool)
+        mask     = np.ones(10, dtype=bool)
         ff = open(filename, 'w')
         for i in range(10):
             dstr = '{:d} {:.14e} {:.14e} {:.14e}'.format(
@@ -381,10 +381,10 @@ class TestStd_io(unittest.TestCase):
 
         # standard_parameter_writer_bounds_mask - no pid
         filename = 'params.txt'
-        params   = np.arange(10, dtype=np.float)
+        params   = np.arange(10, dtype=float)
         pmin     = params - 1.
         pmax     = params + 1.
-        mask     = np.ones(10, dtype=np.bool)
+        mask     = np.ones(10, dtype=bool)
         standard_parameter_writer_bounds_mask(
             filename, params, pmin, pmax, mask)
 
@@ -404,10 +404,10 @@ class TestStd_io(unittest.TestCase):
         # standard_parameter_writer_bounds_mask - pid=None
         filename = 'params.txt'
         pid      = None
-        params   = np.arange(10, dtype=np.float)
+        params   = np.arange(10, dtype=float)
         pmin     = params - 1.
         pmax     = params + 1.
-        mask     = np.ones(10, dtype=np.bool)
+        mask     = np.ones(10, dtype=bool)
         standard_parameter_writer_bounds_mask(filename, params, pmin, pmax,
                                               mask, pid)
 
@@ -453,7 +453,7 @@ class TestStd_io(unittest.TestCase):
 
         # standard_time_series_reader
         filename = 'ts.txt'
-        params   = np.arange(10, dtype=np.float)
+        params   = np.arange(10, dtype=float)
 
         ff = open(filename, 'w')
         for i in params:
@@ -469,7 +469,7 @@ class TestStd_io(unittest.TestCase):
         # standard_timeseries_reader, pid
         pid = 1234
         filename = 'ts.txt'
-        params   = np.arange(10, dtype=np.float)
+        params   = np.arange(10, dtype=float)
 
         ff = open(filename+'.'+str(pid), 'w')
         for i in params:
