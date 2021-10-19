@@ -1,0 +1,46 @@
+{
+    "language": "eng",
+    "license": "MIT",
+    "title": "partialwrap: Wrappers of external executables and Python functions for functools.partial",
+    "related_identifiers": [
+        {
+            "scheme": "url",
+            "identifier": "https://github.com/mcuntz/partialwrap/",
+            "relation": "isDerivedFrom",
+            "resource_type": "software"
+        },
+        {
+            "scheme": "url",
+            "identifier": "http://partialwrap.readthedocs.org/en/latest/",
+            "relation": "isDocumentedBy",
+            "resource_type": "publication-softwaredocumentation"
+        },
+        {
+            "scheme": "url",
+            "identifier": "https://pypi.org/project/partialwrap/",
+            "relation": "isPublishedIn",
+            "resource_type": "software"
+        },
+        {
+            "scheme": "doi",
+            "identifier": "10.5281/zenodo.3893705",
+            "relation": "isVersionOf"
+        }
+    ],
+    "upload_type": "software",
+    "keywords": [
+        "Python",
+        "External programs",
+        "External executables",
+        "functools.partial"
+    ],
+    "creators": [
+        {
+            "orcid": "0000-0002-5966-1829",
+            "affiliation": "Institut National de Recherche pour l'Agriculture, l'Alimentation et l'Environnement - INRAE, Nancy, France",
+            "name": "Matthias Cuntz"
+        }
+    ],
+    "access_right": "open",
+    "description": "<p><strong>partialwrap</strong>&nbsp;is a Python library providing easy wrapper functions to use with<br>\nPython&#39;s&nbsp;<a href=\"https://docs.python.org/3/library/functools.html#functools.partial\">functools.partial</a>.&nbsp;It allows to use any external executable as well as any Python function with<br>\narbitrary arguments and keywords to be used with libraries that call functions&nbsp;simply in the form <em>func(x)</em>. This includes the functions of the&nbsp;<a href=\"https://docs.scipy.org/doc/scipy/reference/tutorial/optimize.html\">scipy.optimize</a>&nbsp;package or external packages such as <a href=\"https://github.com/dfm/emcee\">emcee</a>&nbsp;or&nbsp;<a href=\"https://github.com/mcuntz/pyeee\">pyeee</a>, and allows the use of distributed<br>\nfunction evaluations with Python&#39;s&nbsp;<a href=\"https://docs.python.org/3/library/multiprocessing.html\">multiprocessing</a>&nbsp;or via&nbsp;<a href=\"https://bitbucket.org/mpi4py/mpi4py\">MPI</a>.</p>\n\n<p>&nbsp;</p>\n\n<p>The current release fixes the&nbsp;substitution functions for a more general use, i.e. it respects spaces and replaces all non-space characters on the right-hand side of the equal sign.</p>\n\n<p>&nbsp;</p>"
+}

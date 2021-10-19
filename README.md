@@ -5,11 +5,10 @@ A small Python library providing wrappers for external executables and Python
 functions so that they can easily be partialised with Python's
 functools.partial.
 
-<!-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3893706.svg)](https://doi.org/10.5281/zenodo.3893706) -->
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3893705.svg)](https://doi.org/10.5281/zenodo.3893705)
 [![PyPI version](https://badge.fury.io/py/partialwrap.svg)](https://badge.fury.io/py/partialwrap)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/mcuntz/partialwrap/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/mcuntz/partialwrap.svg?branch=master)](https://travis-ci.org/mcuntz/partialwrap)
+[![Build Status](https://github.com/mcuntz/partialwrap/workflows/Continuous%20Integration/badge.svg?branch=main)](https://github.com/mcuntz/partialwrap/actions)
 [![Coverage Status](https://coveralls.io/repos/github/mcuntz/partialwrap/badge.svg?branch=master)](https://coveralls.io/github/mcuntz/partialwrap?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/partialwrap/badge/?version=latest)](https://partialwrap.readthedocs.io/en/latest/?badge=latest)
 
