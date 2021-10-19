@@ -3,7 +3,8 @@
 All notable changes after its initial development up to June 2020 (v1.0) are documented in this file.
 
 ### v1.4 (Oct 2021)
-    - Move to pyproject.toml structure with Github actions.
+    - Move to new pip structure using pyproject.toml.
+    - Move to Github actions.
     - Remove History sections from docstrings of wrappers and IO routines.
 
 ### v1.3.5 (May 2021)
