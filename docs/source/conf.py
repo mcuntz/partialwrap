@@ -23,8 +23,8 @@
 import os
 import sys
 # this line is needed, if partialwrap is not installed yet
-sys.path.insert(0, os.path.abspath("../../"))
-
+sys.path.insert(
+    0, os.path.dirname(os.path.abspath(__file__)) + '/../../src')
 from partialwrap import __version__ as ver
 
 
