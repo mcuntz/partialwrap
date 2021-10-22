@@ -20,6 +20,7 @@
 # NOTE:
 # pip install sphinx_rtd_theme
 # is needed in order to build the documentation
+import datetime
 import os
 import sys
 # this line is needed, if partialwrap is not installed yet
@@ -52,12 +53,12 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.coverage",
-    "sphinx.ext.imgmath",
+    # "sphinx.ext.imgmath",
+    "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",  # parameters look better than with numpydoc only
-    "sphinx.ext.mathjax",
     "numpydoc",
 ]
 
@@ -97,8 +98,9 @@ source_suffix = ".rst"
 master_doc = "contents"
 
 # General information about the project.
+curr_year = datetime.datetime.now().year
 project = "partialwrap"
-copyright = "2016-2020, Matthias Cuntz"
+copyright = "2016-{}, Matthias Cuntz".format(curr_year)
 author = "Matthias Cuntz"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -208,7 +210,7 @@ latex_documents = [
     (
         master_doc,
         "partialwrap.tex",
-        "partialwrap Documentation",
+        "Documentation of partialwrap",
         "Matthias Cuntz",
         "manual",
     )
@@ -220,7 +222,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, "partialwrap", "partialwrap Documentation", [author], 1)
+    (master_doc, "partialwrap", "Documentation of partialwrap", [author], 1)
 ]
 
 
@@ -236,14 +238,14 @@ texinfo_documents = [
         "partialwrap Documentation",
         author,
         "partialwrap",
-        "A Python template.",
+        "A small Python library providing wrappers for external executables and Python functions so that they can easily be partialised with Python's functools.partial.",
         "Miscellaneous",
     )
 ]
 
 suppress_warnings = [
     "image.nonlocal_uri",
-    # "app.add_directive",  # this evtl. suppresses the numpydoc induced warning   
+    # "app.add_directive",  # this evtl. suppresses the numpydoc induced warning
 ]
 
 # Example configuration for intersphinx: refer to the Python standard library.
