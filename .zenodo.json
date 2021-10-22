@@ -11,20 +11,15 @@
         },
         {
             "scheme": "url",
-            "identifier": "http://partialwrap.readthedocs.org/en/latest/",
+            "identifier": "http://partialwrap.readthedocs.io/en/latest/",
             "relation": "isDocumentedBy",
             "resource_type": "publication-softwaredocumentation"
         },
         {
             "scheme": "url",
             "identifier": "https://pypi.org/project/partialwrap/",
-            "relation": "isPublishedIn",
+            "relation": "isIdenticalTo",
             "resource_type": "software"
-        },
-        {
-            "scheme": "doi",
-            "identifier": "10.5281/zenodo.3893705",
-            "relation": "isVersionOf"
         }
     ],
     "upload_type": "software",
