@@ -306,7 +306,6 @@ def sub_params_names_case(files, params, names, pid=None):
                                                  # substitutions \\1, \\2, ...
         k = r"(\n+\s*)" + nep                    # after newline
         dd[k] = repl
-        print(k, dd[k])
 
     # replace in each file
     _msub_files(files, dd, pid)

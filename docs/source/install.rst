@@ -8,7 +8,6 @@ The easiest way to install ``partialwrap`` is via ``pip``:
 
     pip install partialwrap
 
-
 Manual install
 --------------
 
@@ -19,7 +18,6 @@ The latest version of ``partialwrap`` can be installed from source:
     git clone https://github.com/mcuntz/partialwrap.git
     cd partialwrap
     pip install .
-
 
 Local install
 -------------
@@ -51,7 +49,6 @@ to the command:
 .. code-block:: bash
 
     python setup.py install --user --prefix=
-
     
 Dependencies
 ------------
