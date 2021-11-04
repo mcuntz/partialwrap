@@ -4,6 +4,8 @@ All notable changes after its initial development up to June 2020 (v1.0) are doc
 
 ### v1.5 (Nov 2021)
     - Allow empty right-hand sides in files, such as `name1 =`.
+    - Use helper function for constructing dict for `_msub` in
+      `sub_params_names_ignorecase` and `sub_params_names_case`.
 
 ### v1.4.x (Oct 2021)
     - Corrected error in docs still using directory structure without src.

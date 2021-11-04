@@ -77,6 +77,8 @@ History
     * Use specific whitespace characters instead of all whitespace characters
       on right-hand side because the latter includes line breaks,
       Nov 2021, Matthias Cuntz
+    * Helper function for constructing dict for `_msub`,
+      Nov 2021, Matthias Cuntz
 
 """
 from __future__ import division, absolute_import, print_function
@@ -97,46 +99,46 @@ __all__ = ['sub_params_ja',
 # ------------------------------------------------------------------------------
 
 
-# def _dict4msub(names, params):
-#     """
-#     Helper function for constructing dict for `_msub`.
+def _dict4msub(names, params):
+    """
+    Helper function for constructing dict for `_msub`.
 
-#     pattern/replacement are given as dictionary: d[pattern] = replacement
+    pattern/replacement are given as dictionary: d[pattern] = replacement
 
-#     Parameters
-#     ----------
-#     names : iterable
-#         Variable names on left of = sign
-#     params : iterable
-#         Parameter values to be given to variables on the right of = sign
+    Parameters
+    ----------
+    names : iterable
+        Variable names on left of = sign
+    params : iterable
+        Parameter values to be given to variables on the right of = sign
 
-#         Variable in names[0] will be assigned value in params[0]
+        Variable in names[0] will be assigned value in params[0]
 
-#         Variable in names[1] will be assigned value in params[1]
+        Variable in names[1] will be assigned value in params[1]
 
-#         ...
+        ...
 
-#     Returns
-#     -------
-#     dic : dict
-#         Pattern/replacement dictionary: `dic[pattern] = replacement`
+    Returns
+    -------
+    dic : dict
+        Pattern/replacement dictionary: `dic[pattern] = replacement`
 
-#     """
-#     dd = {}
-#     for i, p in enumerate(params):
-#         try:
-#             repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
-#         except ValueError:
-#             p1 = p.replace('\\', '\\\\')
-#             repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
-#         nep = r"(" + names[i] + r"\s*)=([ \t\f\v]*).*"  # name = value
-#         k = r"^(\s*)" + nep                      # beginning of line
-#         dd[k] = repl                             # replacement using
-#                                                  # substitutions \\1, \\2, ...
-#         k = r"(\n+\s*)" + nep                    # after newline
-#         dd[k] = repl
+    """
+    dd = {}
+    for i, p in enumerate(params):
+        try:
+            repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
+        except ValueError:
+            p1 = p.replace('\\', '\\\\')
+            repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
+        nep = r"(" + names[i] + r"\s*)=([ \t\f\v]*).*"  # name = value
+        k = r"^(\s*)" + nep                      # beginning of line
+        dd[k] = repl                             # replacement using
+                                                 # substitutions \\1, \\2, ...
+        k = r"(\n+\s*)" + nep                    # after newline
+        dd[k] = repl
 
-#     return dd
+    return dd
 
 
 # ------------------------------------------------------------------------------
@@ -341,19 +343,7 @@ def sub_params_names_case(files, params, names, pid=None):
         files = [files]
 
     # make dict for _msub with dict[pattern] = replacement
-    dd = {}
-    for i, p in enumerate(params):
-        try:
-            repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
-        except ValueError:
-            p1 = p.replace('\\', '\\\\')
-            repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
-        nep = r"(" + names[i] + r"\s*)=([ \t\f\v]*).*"  # name = value
-        k = r"^(\s*)" + nep                      # beginning of line
-        dd[k] = repl                             # replacement using
-                                                 # substitutions \\1, \\2, ...
-        k = r"(\n+\s*)" + nep                    # after newline
-        dd[k] = repl
+    dd = _dict4msub(names, params)
 
     # replace in each file
     _msub_files(files, dd, pid)
@@ -408,19 +398,7 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
         files = [files]
 
     # make dict for _msub with dict[pattern] = replacement
-    dd = {}
-    for i, p in enumerate(params):
-        try:
-            repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
-        except ValueError:
-            p1 = p.replace('\\', '\\\\')
-            repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
-        nep = r"("+names[i]+r"\s*)=([ \t\f\v]*).*"  # name = value
-        k = r"^(\s*)"+nep                       # beginning of line
-        dd[k] = repl                            # replacement using
-                                                # substitutions \1, \2, and \3
-        k = r"(\n+\s*)"+nep                     # after newline
-        dd[k] = repl
+    dd = _dict4msub(names, params)
 
     # replace in each file
     _msub_files(files, dd, pid, flags=re.I)
