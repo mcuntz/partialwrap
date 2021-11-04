@@ -74,6 +74,9 @@ History
     * Escape backslash in params in sub_params routines,
       May 2021, Matthias Cuntz
     * np.float-> float, etc., Sep 2021, Matthias Cuntz
+    * Use specific whitespace characters instead of all whitespace characters
+      on right-hand side because the latter includes line breaks,
+      Nov 2021, Matthias Cuntz
 
 """
 from __future__ import division, absolute_import, print_function
@@ -89,6 +92,51 @@ __all__ = ['sub_params_ja',
            'standard_parameter_reader_bounds_mask',
            'standard_parameter_writer_bounds_mask',
            'standard_time_series_reader', 'standard_timeseries_reader']
+
+
+# ------------------------------------------------------------------------------
+
+
+# def _dict4msub(names, params):
+#     """
+#     Helper function for constructing dict for `_msub`.
+
+#     pattern/replacement are given as dictionary: d[pattern] = replacement
+
+#     Parameters
+#     ----------
+#     names : iterable
+#         Variable names on left of = sign
+#     params : iterable
+#         Parameter values to be given to variables on the right of = sign
+
+#         Variable in names[0] will be assigned value in params[0]
+
+#         Variable in names[1] will be assigned value in params[1]
+
+#         ...
+
+#     Returns
+#     -------
+#     dic : dict
+#         Pattern/replacement dictionary: `dic[pattern] = replacement`
+
+#     """
+#     dd = {}
+#     for i, p in enumerate(params):
+#         try:
+#             repl = r"\g<1>\g<2>=\g<3>{:.14e}".format(p)
+#         except ValueError:
+#             p1 = p.replace('\\', '\\\\')
+#             repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
+#         nep = r"(" + names[i] + r"\s*)=([ \t\f\v]*).*"  # name = value
+#         k = r"^(\s*)" + nep                      # beginning of line
+#         dd[k] = repl                             # replacement using
+#                                                  # substitutions \\1, \\2, ...
+#         k = r"(\n+\s*)" + nep                    # after newline
+#         dd[k] = repl
+
+#     return dd
 
 
 # ------------------------------------------------------------------------------
@@ -300,7 +348,7 @@ def sub_params_names_case(files, params, names, pid=None):
         except ValueError:
             p1 = p.replace('\\', '\\\\')
             repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
-        nep = r"(" + names[i] + r"\s*)=(\s*).*"  # name = value
+        nep = r"(" + names[i] + r"\s*)=([ \t\f\v]*).*"  # name = value
         k = r"^(\s*)" + nep                      # beginning of line
         dd[k] = repl                             # replacement using
                                                  # substitutions \\1, \\2, ...
@@ -367,11 +415,11 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
         except ValueError:
             p1 = p.replace('\\', '\\\\')
             repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
-        nep = r"("+names[i]+r"\s*)=(\s*)\S*"  # name = value
-        k = r"^(\s*)"+nep                     # beginning of line
-        dd[k] = repl                          # replacement using
-                                              # substitutions \1, \2, and \3
-        k = r"(\n+\s*)"+nep                   # after newline
+        nep = r"("+names[i]+r"\s*)=([ \t\f\v]*).*"  # name = value
+        k = r"^(\s*)"+nep                       # beginning of line
+        dd[k] = repl                            # replacement using
+                                                # substitutions \1, \2, and \3
+        k = r"(\n+\s*)"+nep                     # after newline
         dd[k] = repl
 
     # replace in each file

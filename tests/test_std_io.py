@@ -3,8 +3,8 @@ from __future__ import division, absolute_import, print_function
 """
 This is the unittest for Standard I/O module.
 
-python -m unittest -v test_std_io.py
-python -m pytest --cov-report term-missing -v test_std_io.py
+python -m unittest -v tests/test_std_io.py
+python -m pytest --cov-report term-missing -v tests/test_std_io.py
 """
 import unittest
 
@@ -114,10 +114,12 @@ class TestStd_io(unittest.TestCase):
         # ignore case
         filename1 = 'params11.txt'
         filename2 = 'params21.txt'
+        filename3 = 'params31.txt'
         pid       = 1234
-        params    = np.arange(10, dtype=float)
+        params    = np.arange(11, dtype=float)
         names     = ['param0', 'param1', 'param2', 'param3', 'param4',
-                     'param5', 'param6', 'param7', 'param8', 'param9']
+                     'param5', 'param6', 'param7', 'param8', 'param9',
+                     'param10']
 
         ff = open(filename1, 'w')
         print('param0 = -6', file=ff)
@@ -134,7 +136,13 @@ class TestStd_io(unittest.TestCase):
         print('param7 = 5', file=ff)
         ff.close()
 
-        sub_params_names_ignorecase([filename1, filename2], params, names, pid)
+        ff = open(filename3, 'w')
+        print('param9 = ', file=ff)
+        print('param8 =', file=ff)
+        ff.close()
+
+        sub_params_names_ignorecase([filename1, filename2, filename3],
+                                    params, names, pid)
 
         f = open(filename1+'.'+str(pid), 'r')
         lines1 = f.readlines()
@@ -157,29 +165,43 @@ class TestStd_io(unittest.TestCase):
                           'PARAM6 = 6.00000000000000e+00',
                           'param7 = 7.00000000000000e+00'])
 
+        f = open(filename3+'.'+str(pid), 'r')
+        lines3 = f.readlines()
+        f.close()
+
+        self.assertEqual([ i.rstrip() for i in lines3 ],
+                         ['param9 = 9.00000000000000e+00',
+                          'param8 =8.00000000000000e+00'])
+
         if os.path.exists(filename1):
             os.remove(filename1)
         if os.path.exists(filename2):
             os.remove(filename2)
+        if os.path.exists(filename3):
+            os.remove(filename3)
         if os.path.exists(filename1+'.'+str(pid)):
             os.remove(filename1+'.'+str(pid))
         if os.path.exists(filename2+'.'+str(pid)):
             os.remove(filename2+'.'+str(pid))
+        if os.path.exists(filename3+'.'+str(pid)):
+            os.remove(filename3+'.'+str(pid))
 
         # wrapper for ignore case
         filename1 = 'params12.txt'
         filename2 = 'params22.txt'
+        filename3 = 'params32.txt'
         pid       = 1234
-        params    = np.arange(10, dtype=float)
+        params    = np.arange(11, dtype=float)
         names     = ['param0', 'param1', 'param2', 'param3', 'param4',
-                     'param5', 'param6', 'param7', 'param8', 'param9']
+                     'param5', 'param6', 'param7', 'param8', 'param9',
+                     'param10']
 
         ff = open(filename1, 'w')
-        print('param0 = -6', file=ff)
-        print('Param1 = -7', file=ff)
-        print('param2 = -8', file=ff)
+        print('param0 =  -6', file=ff)
+        print('Param1 =   -7', file=ff)
+        print('param2 =    -8', file=ff)
         print('Param3 = -9', file=ff)
-        print('param4 = -10', file=ff)
+        print('param4 =-10', file=ff)
         ff.close()
 
         ff = open(filename2, 'w')
@@ -189,18 +211,24 @@ class TestStd_io(unittest.TestCase):
         print('param7 = 5', file=ff)
         ff.close()
 
-        sub_params_names([filename1, filename2], params, names, pid)
+        ff = open(filename3, 'w')
+        print('param9 = ', file=ff)
+        print('param8 =', file=ff)
+        ff.close()
+
+        sub_params_names([filename1, filename2, filename3],
+                         params, names, pid)
 
         f = open(filename1+'.'+str(pid), 'r')
         lines1 = f.readlines()
         f.close()
 
         self.assertEqual([ i.rstrip() for i in lines1 ],
-                         ['param0 = 0.00000000000000e+00',
-                          'Param1 = 1.00000000000000e+00',
-                          'param2 = 2.00000000000000e+00',
+                         ['param0 =  0.00000000000000e+00',
+                          'Param1 =   1.00000000000000e+00',
+                          'param2 =    2.00000000000000e+00',
                           'Param3 = 3.00000000000000e+00',
-                          'param4 = 4.00000000000000e+00'])
+                          'param4 =4.00000000000000e+00'])
 
         f = open(filename2+'.'+str(pid), 'r')
         lines2 = f.readlines()
@@ -212,51 +240,70 @@ class TestStd_io(unittest.TestCase):
                           'PARAM6 = 6.00000000000000e+00',
                           'param7 = 7.00000000000000e+00'])
 
+        f = open(filename3+'.'+str(pid), 'r')
+        lines3 = f.readlines()
+        f.close()
+
+        self.assertEqual([ i.rstrip() for i in lines3 ],
+                         ['param9 = 9.00000000000000e+00',
+                          'param8 =8.00000000000000e+00'])
+
         if os.path.exists(filename1):
             os.remove(filename1)
         if os.path.exists(filename2):
             os.remove(filename2)
+        if os.path.exists(filename3):
+            os.remove(filename3)
         if os.path.exists(filename1+'.'+str(pid)):
             os.remove(filename1+'.'+str(pid))
         if os.path.exists(filename2+'.'+str(pid)):
             os.remove(filename2+'.'+str(pid))
+        if os.path.exists(filename3+'.'+str(pid)):
+            os.remove(filename3+'.'+str(pid))
 
         # case sensitive
         filename1 = 'params13.txt'
         filename2 = 'params23.txt'
+        filename3 = 'params33.txt'
         pid       = 1234
-        params    = np.arange(10, dtype=float)
+        params    = np.arange(11, dtype=float)
         names     = ['param0', 'param1', 'param2', 'param3', 'param4',
-                     'param5', 'param6', 'param7', 'param8', 'param9']
+                     'param5', 'param6', 'param7', 'param8', 'param9',
+                     'param10']
 
         ff = open(filename1, 'w')
-        print('    param0= -6', file=ff)
-        print('   Param1 = -7', file=ff)
-        print('  param2  = -8', file=ff)
+        print('    param0=  -6', file=ff)
+        print('   Param1 =-7', file=ff)
+        print('  param2  =   -8', file=ff)
         print(' Param3   = -9', file=ff)
-        print('param4    = -10', file=ff)
+        print('param4    =-10', file=ff)
         ff.close()
 
         ff = open(filename2, 'w')
         print('param4    = -10', file=ff)
-        print('param5   = 3', file=ff)
+        print('param5   =3', file=ff)
         print('PARAM6  = 4', file=ff)
         print('param7 = 5', file=ff)
         ff.close()
 
+        ff = open(filename3, 'w')
+        print('param9 = ', file=ff)
+        print('param8 =', file=ff)
+        ff.close()
+
         sub_params_names_case(filename1, params, names, pid)
-        sub_params_names_case(filename2, params, names, pid)
+        sub_params_names_case([filename2, filename3], params, names, pid)
 
         f = open(filename1+'.'+str(pid), 'r')
         lines1 = f.readlines()
         f.close()
 
         self.assertEqual([ i.rstrip() for i in lines1 ],
-                         ['    param0= 0.00000000000000e+00',
-                          '   Param1 = -7',
-                          '  param2  = 2.00000000000000e+00',
+                         ['    param0=  0.00000000000000e+00',
+                          '   Param1 =-7',
+                          '  param2  =   2.00000000000000e+00',
                           ' Param3   = -9',
-                          'param4    = 4.00000000000000e+00'])
+                          'param4    =4.00000000000000e+00'])
 
         f = open(filename2+'.'+str(pid), 'r')
         lines2 = f.readlines()
@@ -264,23 +311,31 @@ class TestStd_io(unittest.TestCase):
 
         self.assertEqual([ i.rstrip() for i in lines2 ],
                          ['param4    = 4.00000000000000e+00',
-                          'param5   = 5.00000000000000e+00',
+                          'param5   =5.00000000000000e+00',
                           'PARAM6  = 4',
                           'param7 = 7.00000000000000e+00'])
 
+        f = open(filename3+'.'+str(pid), 'r')
+        lines3 = f.readlines()
+        f.close()
+
+        self.assertEqual([ i.rstrip() for i in lines3 ],
+                         ['param9 = 9.00000000000000e+00',
+                          'param8 =8.00000000000000e+00'])
+
         # no pid
-        sub_params_names_case([filename1, filename2], params, names)
+        sub_params_names_case([filename1, filename2, filename3], params, names)
 
         f = open(filename1, 'r')
         lines1 = f.readlines()
         f.close()
 
         self.assertEqual([ i.rstrip() for i in lines1 ],
-                         ['    param0= 0.00000000000000e+00',
-                          '   Param1 = -7',
-                          '  param2  = 2.00000000000000e+00',
+                         ['    param0=  0.00000000000000e+00',
+                          '   Param1 =-7',
+                          '  param2  =   2.00000000000000e+00',
                           ' Param3   = -9',
-                          'param4    = 4.00000000000000e+00'])
+                          'param4    =4.00000000000000e+00'])
 
         f = open(filename2, 'r')
         lines2 = f.readlines()
@@ -288,18 +343,30 @@ class TestStd_io(unittest.TestCase):
 
         self.assertEqual([ i.rstrip() for i in lines2 ],
                          ['param4    = 4.00000000000000e+00',
-                          'param5   = 5.00000000000000e+00',
+                          'param5   =5.00000000000000e+00',
                           'PARAM6  = 4',
                           'param7 = 7.00000000000000e+00'])
+
+        f = open(filename3, 'r')
+        lines3 = f.readlines()
+        f.close()
+
+        self.assertEqual([ i.rstrip() for i in lines3 ],
+                         ['param9 = 9.00000000000000e+00',
+                          'param8 =8.00000000000000e+00'])
 
         if os.path.exists(filename1):
             os.remove(filename1)
         if os.path.exists(filename2):
             os.remove(filename2)
+        if os.path.exists(filename3):
+            os.remove(filename3)
         if os.path.exists(filename1+'.'+str(pid)):
             os.remove(filename1+'.'+str(pid))
         if os.path.exists(filename2+'.'+str(pid)):
             os.remove(filename2+'.'+str(pid))
+        if os.path.exists(filename3+'.'+str(pid)):
+            os.remove(filename3+'.'+str(pid))
 
     def test_std_io_standard(self):
         import os

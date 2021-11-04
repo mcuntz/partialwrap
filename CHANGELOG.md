@@ -2,6 +2,14 @@
 
 All notable changes after its initial development up to June 2020 (v1.0) are documented in this file.
 
+### v1.5 (Nov 2021)
+    - Allow empty right-hand sides in files, such as `name1 =`.
+
+### v1.4.x (Oct 2021)
+    - Corrected error in docs still using directory structure without src.
+    - Updated Zenodo, MANIFEST.in, and documentation.
+    - Removed stray print statement.
+
 ### v1.4 (Oct 2021)
     - Move to new pip structure using pyproject.toml.
     - Move to Github actions.
