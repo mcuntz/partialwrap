@@ -3,5 +3,5 @@ graft src
 graft tests
 graft docs/examples_userguide
 
-include AUTHORS.md CHANGELOG.md CONTRIBUTING.md README.md LICENSE pyproject.toml setup.cfg
+include AUTHORS.rst CHANGELOG.rst README.md LICENSE pyproject.toml setup.cfg
 global-exclude __pycache__ *.py[cod] .*

@@ -9,4 +9,6 @@ Contents
    index
    userguide
    install
-   package
+   api
+   changelog
+   authors

@@ -1,6 +1,7 @@
-===
-API
-===
+.. _api:
+
+Public API
+----------
 
 .. automodule:: partialwrap
 
@@ -12,3 +13,5 @@ API
 
    wrappers.rst
    std_io.rst
+
+.. currentmodule:: partialwrap
