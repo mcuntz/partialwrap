@@ -10,7 +10,7 @@ This module was written by Matthias Cuntz while at Institut National de
 Recherche pour l'Agriculture, l'Alimentation et l'Environnement (INRAE), Nancy,
 France.
 
-Copyright (c) 2016-2021 Matthias Cuntz - mc (at) macu (dot) de
+Copyright (c) 2016-2022 Matthias Cuntz - mc (at) macu (dot) de
 
 Released under the MIT License; see LICENSE file for details.
 
@@ -81,7 +81,6 @@ History
       Nov 2021, Matthias Cuntz
 
 """
-from __future__ import division, absolute_import, print_function
 import re
 import numpy as np
 

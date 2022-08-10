@@ -6,7 +6,7 @@ Purpose
 partialwrap provides wrappers for Python functions and external executables so
 that they can easily be partialised with functools.partial.
 
-:copyright: Copyright 2016-2021 Matthias Cuntz, see AUTHORS.md for details.
+:copyright: Copyright 2016-2022 Matthias Cuntz, see AUTHORS.md for details.
 :license: MIT License, see LICENSE for details.
 
 Subpackages
@@ -31,6 +31,9 @@ History
     * v1.3.5, escape backslash also in sub_params_ja, May 2021, Matthias Cuntz
     * v1.4, move to pyproject.toml setup with Github actions,
       Oct 2021, Matthias Cuntz
+    * v1.5, Allow empty right-hand sides in files, such as `name1 =`,
+      Nov 2021, Matthias Cuntz
+    * v1.6, Use subprocess.run for Python >= v3.5, Aug 2022, Matthias Cuntz
 
 """
 # version, author

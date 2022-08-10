@@ -18,6 +18,7 @@ x = standard_parameter_reader(pfile)
 
 # calc function
 y = rastrigin1(x)
+# print(x, y)
 
 # write output file
 ofile = 'out.txt'
@@ -25,3 +26,6 @@ if pid:
     ofile = ofile + '.' + pid
 with open(ofile, 'w') as ff:
     print(y, file=ff)
+
+# import sys
+# sys.exit(1)
