@@ -101,6 +101,7 @@ class TestWrappers(unittest.TestCase):
 
     # exe_wrapper, error
     def test_exe_wrapper_error(self):
+        import os
         from functools import partial
         from partialwrap import exe_wrapper, standard_parameter_writer
         from partialwrap import standard_output_reader
@@ -125,6 +126,10 @@ class TestWrappers(unittest.TestCase):
                                  outputfile, standard_output_reader,
                                  {})
         self.assertRaises(ValueError, rastrigin_wrap, x0)
+
+        # clean up
+        if os.path.exists(outputfile):
+            os.remove(outputfile)
 
     # exe_wrapper, w/o kwarg, pid
     def test_exe_wrapper_pid(self):

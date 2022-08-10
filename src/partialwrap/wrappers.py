@@ -232,7 +232,6 @@ def exe_wrapper(func,
           function should take one argument, which will be the random number if
           `pid=True` or *None* otherwise. The return value will be used instead
           of the result of *outputreader*.
-          This is not available for Python < v3.7
 
     Returns
     -------
@@ -319,6 +318,7 @@ def exe_wrapper(func,
     else:
         ipid = None
         pipid = ''
+
     if isinstance(func, (str, list)):
         if pid:
             parameterwriter(parameterfile, x, *pargs, pid=ipid, **pkwargs)
@@ -338,6 +338,7 @@ def exe_wrapper(func,
                 func1 = ' '.join(func)
             else:
                 func1 = func
+
         if debug:
             spkwarg = {'stderr': sp.PIPE}
         else:
@@ -357,14 +358,17 @@ def exe_wrapper(func,
                     print('stdout was:', e.stdout)
                     print('stderr was:', e.stderr)
                 raise ValueError('Subprocess error')
+
         if not keepparameterfile:
             for ff in _tolist(parameterfile):
                 if os.path.exists(ff + pipid):
                     os.remove(ff + pipid)
+
         if not keepoutputfile:
             for ff in _tolist(outputfile):
                 if os.path.exists(ff + pipid):
                     os.remove(ff + pipid)
+
         return obj
     else:
         raise TypeError('func must be string or list of strings for'
@@ -483,6 +487,7 @@ def exe_wrapper_v34(func,
     okwargs = kwarg['okwargs'] if 'okwargs' in kwarg else {}
     keepoutputfile = (kwarg['keepoutputfile']
                       if 'keepoutputfile' in kwarg else False)
+    errorfunc = kwarg['error'] if 'error' in kwarg else ''
     # For multiprocess but not MPI: pid = mp.current_process()._identity[0]
     # seed uses global variables so all processes will produce same random
     # numbers
@@ -491,6 +496,11 @@ def exe_wrapper_v34(func,
     if pid:
         randst = np.random.RandomState()
         ipid   = str(randst.randint(2147483647))
+        pipid = '.' + ipid
+    else:
+        ipid = None
+        pipid = ''
+
     if isinstance(func, (str, list)):
         if pid:
             parameterwriter(parameterfile, x, *pargs, pid=ipid, **pkwargs)
@@ -501,38 +511,41 @@ def exe_wrapper_v34(func,
                     func1 = [func, ipid]
             else:
                 func1 = func + [ipid]
+        else:
+            parameterwriter(parameterfile, x, *pargs, **pkwargs)
+            if shell and (not isinstance(func, str)):
+                func1 = ' '.join(func)
+            else:
+                func1 = func
+
+        try:
             if debug:
                 err = sp.check_call(func1, stderr=sp.STDOUT,
                                     shell=shell)
             else:
                 err = sp.check_output(func1, stderr=sp.STDOUT,
                                       shell=shell)
-            obj = outputreader(outputfile, *oargs, pid=ipid, **okwargs)
-            if not keepparameterfile:
-                for ff in _tolist(parameterfile):
-                    if os.path.exists(ff + '.' + ipid):
-                        os.remove(ff + '.' + ipid)
-            if not keepoutputfile:
-                for ff in _tolist(outputfile):
-                    if os.path.exists(ff + '.' + ipid):
-                        os.remove(ff + '.' + ipid)
-        else:
-            parameterwriter(parameterfile, x, *pargs, **pkwargs)
-            if debug:
-                err = sp.check_call(func, stderr=sp.STDOUT,
-                                    shell=shell)
+            if pid:
+                obj = outputreader(outputfile, *oargs, pid=ipid, **okwargs)
             else:
-                err = sp.check_output(func, stderr=sp.STDOUT,
-                                      shell=shell)
-            obj = outputreader(outputfile, *oargs, **okwargs)
-            if not keepparameterfile:
-                for ff in _tolist(parameterfile):
-                    if os.path.exists(ff):
-                        os.remove(ff)
-            if not keepoutputfile:
-                for ff in _tolist(outputfile):
-                    if os.path.exists(ff):
-                        os.remove(ff)
+                obj = outputreader(outputfile, *oargs, **okwargs)
+        except sp.CalledProcessError as e:
+            if errorfunc:
+                obj = errorfunc(ipid)
+            else:
+                print(e.cmd, 'returned with exit code', e.returncode)
+                raise ValueError('Subprocess error')
+
+        if not keepparameterfile:
+            for ff in _tolist(parameterfile):
+                if os.path.exists(ff + pipid):
+                    os.remove(ff + pipid)
+
+        if not keepoutputfile:
+            for ff in _tolist(outputfile):
+                if os.path.exists(ff + pipid):
+                    os.remove(ff + pipid)
+
         return obj
     else:
         estr  = 'func must be string or list of strings for subprocess.'
