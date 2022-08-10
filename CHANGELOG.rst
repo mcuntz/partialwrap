@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+v1.7 (Aug 2022)
+    * Added error function in `exe_wrapper` as fallback option in case
+      subprocess exits with error code > 0.
+    * Added examples and reformatted docstrings.
+
 v1.6 (Aug 2022)
     * Use subprocess.run for Python > v3.6.
     * Added `partialwrap` to conda-forge.

@@ -20,6 +20,11 @@ def rastrigin1(x):
     return 10.*x.size + np.sum(x**2 - 10.*np.cos(2.*np.pi*x))
 
 
+# error function
+def err(x):
+    return 10000.
+
+
 # --------------------------------------------------------------------
 # wrappers.py
 # Missing coverage:
@@ -93,6 +98,33 @@ class TestWrappers(unittest.TestCase):
                                  parameterfile, standard_parameter_writer,
                                  outputfile, standard_output_reader, {})
         self.assertRaises(TypeError, rastrigin_wrap, x0)
+
+    # exe_wrapper, error
+    def test_exe_wrapper_error(self):
+        from functools import partial
+        from partialwrap import exe_wrapper, standard_parameter_writer
+        from partialwrap import standard_output_reader
+
+        rastrigin_exe  = ['python3', 'tests/rastrigin1e.py']
+        ndim           = 2
+        xmin           = -5.12
+        xmax           = 5.12
+        parameterfile  = 'params.txt'
+        outputfile     = 'out.txt'
+        rastrigin_wrap = partial(exe_wrapper, rastrigin_exe,
+                                 parameterfile, standard_parameter_writer,
+                                 outputfile, standard_output_reader,
+                                 {'error': err})
+
+        x0  = [0.1, 0.2]
+        res = rastrigin_wrap(x0)
+        self.assertEqual('{:.0f}'.format(res), '10000')
+
+        rastrigin_wrap = partial(exe_wrapper, rastrigin_exe,
+                                 parameterfile, standard_parameter_writer,
+                                 outputfile, standard_output_reader,
+                                 {})
+        self.assertRaises(ValueError, rastrigin_wrap, x0)
 
     # exe_wrapper, w/o kwarg, pid
     def test_exe_wrapper_pid(self):

@@ -3,9 +3,6 @@
 Standard parameter reader and writer functions as well as output reader
 functions, including substitution of tags #JA????# or names in files.
 
-Parameter files can be written in some arbitrary standard formats.
-Or a prepared parameter file can be read and parameter values replaced.
-
 This module was written by Matthias Cuntz while at Institut National de
 Recherche pour l'Agriculture, l'Alimentation et l'Environnement (INRAE), Nancy,
 France.
@@ -79,6 +76,7 @@ History
       Nov 2021, Matthias Cuntz
     * Helper function for constructing dict for `_msub`,
       Nov 2021, Matthias Cuntz
+    * Added examples and reformatted docstrings, Aug 2022, Matthias Cuntz
 
 """
 import re
@@ -107,15 +105,13 @@ def _dict4msub(names, params):
     Parameters
     ----------
     names : iterable
-        Variable names on left of = sign
+        Variable names on left of equal (=) sign
     params : iterable
-        Parameter values to be given to variables on the right of = sign
-
-        Variable in names[0] will be assigned value in params[0]
-
-        Variable in names[1] will be assigned value in params[1]
-
-        ...
+        Parameter values to be given to variables on the right of the equal (=)
+        sign.
+        Variable in *names[0]* will be assigned value in *params[0]*.
+        Variable in *names[1]* will be assigned value in *params[1]*.
+        Etc.
 
     Returns
     -------
@@ -192,18 +188,18 @@ def _msub_files(files, dic, pid=None, flags=0):
         List with file names in which pattern replacement will be applied
         on each line.
     dic : dict
-        Pattern/replacement dictionary: dic[pattern] = replacement
+        Pattern/replacement dictionary: `dic[pattern] = replacement`
     pid : int, optional
-        Output files will be input files suffixed by .pid
+        Output files will be input files suffixed by *.pid*
         (default: overwrite input file)
     flags : int, optional
-        Flags will be passed to re.sub() (default: 0)
+        Flags will be passed to *re.sub()* (default: 0)
 
     Returns
     -------
-    files :
+    files
         No return value but either changed input files or output files with
-        names of the input files suffixed by .pid, in which all occurences of
+        names of the input files suffixed by *.pid*, in which all occurences of
         all patterns were replaced.
 
     """
@@ -232,43 +228,40 @@ def sub_params_ja(files, params, pid=None):
     """
     Substitute #JA????# with parameter value in several files, i.e.
 
-        #JA0000# with params[0]
-
-        #JA0001# with params[1]
-
-        ...
+       | #JA0000# with params[0]
+       | #JA0001# with params[1]
+       | ...
 
     Parameters
     ----------
     files : list
         List with file names in which #JA????# will be replaced.
-
     params : iterable
-        Parameter values to replace #JA????# patterns.
-
-        params[0] will replace #JA0000#
-
-        params[1] will replace #JA0001#
-
-        ...
-
+        | Parameter values to replace #JA????# patterns.
+        | params[0] will replace #JA0000#
+        | params[1] will replace #JA0001#
+        | ...
     pid : int, optional
-        Output files will be input files suffixed by .pid
+        Output files will be input files suffixed by *.pid*
         (default: overwrite input file)
 
-        Note that the default `pid=None` might not be useful if you have
-        carefully prepared input file(s).
+        Note that the default *pid=None* might not be useful if you have
+        carefully prepared input files.
 
     Returns
     -------
     None
         No return value but either changed input files or output files with
-        names of the input files suffixed by .pid, in which all #JA????#
-        patterns were replaced by params elements.
+        names of the input files suffixed by *.pid*, in which all #JA????#
+        patterns were replaced by *params*.
 
     Examples
     --------
-    >>> sub_params_ja([file1, file2], [0, 1, 2, 3], pid=1234)
+    Replaces #JA0000# with 0, #JA0001# with 1, #JA0002# with 2, and
+    #JA0003# with 3 in the two input files 'file1.txt' and 'file2.txt',
+    writing the two output files 'file1.txt.1234' and 'file2.txt.1234':
+
+    >>> sub_params_ja(['file1.txt', 'file1.txt'], [0, 1, 2, 3], pid=1234)
 
     """
     # assert list of files
@@ -299,40 +292,44 @@ def sub_params_names_case(files, params, names, pid=None):
     """
     Substitute `name = .*` with `name = parameter` value in several files, i.e.
 
-        `names[i] = params[i]`
+       `names[i] = params[i]`
 
-    Note, `names` are case sensitive.
+    Note, *names* are case sensitive.
 
     Parameters
     ----------
     files : list
-        List with file in which values of `names` will be replaced with
-        `params`.
+        List with files in which values of *names* will be replaced with
+        *params*.
     params : iterable
-        Parameter values to be given to variables on the right of = sign
-
-        Variable in names[0] will be assigned value in params[0]
-
-        Variable in names[1] will be assigned value in params[1]
-
-        ...
-
+        | Parameter values to be given to variables on the right of the
+          equal (=) sign.
+        | Variable in *names[0]* will be assigned value in *params[0]*
+        | Variable in *names[1]* will be assigned value in *params[1]*
+        | ...
     names : iterable
-        Variable names on left of = sign in files
+        Variable names on left of the equal (=) sign in *files*
     pid : int, optional
-        Output files will be input files suffixed by .pid
+        Output files will be input files suffixed by *.pid*
         (default: overwrite input file)
 
     Returns
     -------
     None
         No return value but either changed input files or output files with
-        names of the input files suffixed by .pid, in which all variables given
-        in names are assigned the values given in params.
+        names of the input files suffixed by *.pid*, in which all variables
+        given in *names* are assigned the values given in *params*.
 
     Examples
     --------
-    >>> sub_params_names_case([file1, file2], [0, 1, 2, 3],
+    Replaces `param1 = ...` with `param1 = 0`, `param2 = ...` with
+    `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`
+    with `param4 = 3` in the two input files 'file1.txt' and 'file2.txt',
+    writing the two output files 'file1.txt.1234' and 'file2.txt.1234'.
+    This version is case sensitive so it does not replace `PARAM1 = ...`
+    with `PARAM1 = 0`, for example.
+
+    >>> sub_params_names_case(['file1.txt', 'file1.txt'], [0, 1, 2, 3],
     ...                       ['param1', 'param2', 'param3', 'param4'],
     ...                       pid=1234)
 
@@ -356,38 +353,43 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
 
         `names[i] = params[i]`
 
-    Note, `names` are case insensitive.
+    Note, *names* are case insensitive.
 
     Parameters
     ----------
     files : list
-        List with file in which values of `names` will be replaced with
-        `params`.
+        List with file in which values of *names* will be replaced with
+        *params*.
     params : iterable
-        Parameter values to be given to variables on the right of = sign
-
-        Variable in names[0] will be assigned value in params[0]
-
-        Variable in names[1] will be assigned value in params[1]
-
-        ...
-
+        | Parameter values to be given to variables on the right of the
+          equal (=) sign
+        | Variable in names[0] will be assigned value in params[0]
+        | Variable in names[1] will be assigned value in params[1]
+        | ...
     names : iterable
-        Variable names on left of = sign in files
+        Variable names on left of the equal (=) sign in *files*
     pid : int, optional
-        Output files will be input files suffixed by .pid
+        Output files will be input files suffixed by *.pid*
         (default: overwrite input file)
 
     Returns
     -------
     None
         No return value but either changed input files or output files with
-        names of the input files suffixed by .pid, in which all variables
-        given in names are assigned the values given in params.
+        names of the input files suffixed by *.pid*, in which all variables
+        given in *names* are assigned the values given in *params*.
 
     Examples
     --------
-    >>> sub_params_names_ignorecase([file1, file2], [0, 1, 2, 3],
+    Replaces `param1 = ...` with `param1 = 0`, `param2 = ...` with
+    `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`
+    with `param4 = 3` in the two input files 'file1.txt' and 'file2.txt',
+    writing the two output files 'file1.txt.1234' and 'file2.txt.1234'.
+    This version is case insensitive so it replaces also `PARAM1 = ...`,
+    `Param1 = ...`, or `ParAm1 = ...` with `PARAM1 = 0`, `Param1 = 0`, or
+    `ParAm1 = 0`, for example.
+
+    >>> sub_params_names_ignorecase(['file1.txt', 'file1.txt'], [0, 1, 2, 3],
     ...                             ['param1', 'param2', 'param3', 'param4'],
     ...                             pid=1234)
 
@@ -408,6 +410,21 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
 def sub_params_names(*args, **kwargs):
     """
     Wrapper for :any:`sub_params_names_ignorecase`.
+
+    Examples
+    --------
+    Replaces `param1 = ...` with `param1 = 0`, `param2 = ...` with
+    `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`
+    with `param4 = 3` in the two input files 'file1.txt' and 'file2.txt',
+    writing the two output files 'file1.txt.1234' and 'file2.txt.1234'.
+    This version is case insensitive so it replaces also `PARAM1 = ...`,
+    `Param1 = ...`, or `ParAm1 = ...` with `PARAM1 = 0`, `Param1 = 0`, or
+    `ParAm1 = 0`, for example.
+
+    >>> sub_params_names(['file1.txt', 'file1.txt'], [0, 1, 2, 3],
+    ...                  ['param1', 'param2', 'param3', 'param4'],
+    ...                  pid=1234)
+
     """
     return sub_params_names_ignorecase(*args, **kwargs)
 
@@ -419,10 +436,8 @@ def standard_output_reader(filename, pid=None):
     """
     Standard output reader.
 
-    The standard output reader (if outputreader=None) reads a single value
-    from a file without header, comment line or similar.
-
-    That means for example:
+    The standard output reader reads a single value from a file without header,
+    comment line or similar. That means for example:
 
         0.0123456789e-02
 
@@ -431,7 +446,8 @@ def standard_output_reader(filename, pid=None):
     filename : string
         Filename of file with output value
     pid : int, optional
-        If present, `filename` will be suffixed by .pid
+        If present, *filename* will be suffixed by *.pid*, i.e. the file
+        *filename.pid* will be read.
 
     Returns
     -------
@@ -440,8 +456,17 @@ def standard_output_reader(filename, pid=None):
 
     Examples
     --------
-    >>> subprocess.call(model)
-    >>> obj = standard_output_reader(filename, pid=1234)
+    Imagine an external program *prog.exe* that takes a number *pid* as input
+    and writes out its result in *output.txt.pid*
+
+    >>> import subprocess
+    >>> exe = 'prog.exe'
+    >>> pid = 1234
+    >>> err = subprocess.run([exe, str(pid)])
+
+    The results can be read with:
+
+    >>> obj = standard_output_reader('output.txt', pid=pid)
 
     """
     # read output value
@@ -464,30 +489,24 @@ def standard_parameter_reader(filename, pid=None):
     Read standard parameter file.
 
     The standard parameter file is a file containing
-    1 line per parameter with the parameter value:
-
-    Lines starting with # will be excluded.
-
+    1 line per parameter with the parameter value.
+    Lines starting with '#' will be excluded.
     That means a standard parameter file might look like:
 
-        #par
-
-        3.000000000000000e-01
-
-        2.300000000000000e-01
-
-        1.440000000000000e+01
-
-        3.000000000000000e-01
-
-        ...
+       | # parameter value
+       | 3.000000000000000e-01
+       | 2.300000000000000e-01
+       | 1.440000000000000e+01
+       | 3.000000000000000e-01
+       | ...
 
     Parameters
     ----------
     filename : string
         Filename with parameter values
     pid : int, optional
-        If present, `filename` will be suffixed by .pid
+        If present, *filename* will be suffixed by *.pid*,
+        i.e. the file *filename.pid* will be read.
 
     Returns
     -------
@@ -496,6 +515,9 @@ def standard_parameter_reader(filename, pid=None):
 
     Examples
     --------
+    A most simple parameter file *paramfile* with one line per parameter can be
+    read with:
+
     >>> params = standard_parameter_reader(paramfile)
 
     """
@@ -522,20 +544,14 @@ def standard_parameter_writer(filename, params, pid=None):
 
     The standard parameter writer writes a file containing
     1 line per parameter with the parameter value.
-
     All values will be written in IEEE double precision: {:.14e}.
-
     That means:
 
-        3.000000000000000e-01
-
-        2.300000000000000e-01
-
-        1.440000000000000e+01
-
-        3.000000000000000e-01
-
-        ...
+       | 3.000000000000000e-01
+       | 2.300000000000000e-01
+       | 1.440000000000000e+01
+       | 3.000000000000000e-01
+       | ...
 
     Parameters
     ----------
@@ -544,19 +560,22 @@ def standard_parameter_writer(filename, params, pid=None):
     params : iterable
         Parameter values
     pid : int, optional
-        If given, output file will be `filename` suffixed by .pid
+        If given, output file will be *filename* suffixed by *.pid*,
+        i.e. the file *filename.pid* will be written.
 
     Returns
     -------
     None
-        No return value but output file written: filename or filename.pid
+        No return value but output file written: *filename* or *filename.pid*
 
     Examples
     --------
-    >>> randst = np.random.RandomState()
-    >>> pid = str(randst.randint(2147483647))
-    >>> params = sample_parameter(pis, pmin, pmax, pmask)
-    >>> standard_parameter_writer(paramfile, params, pid)
+    Writes the parameters *params* that were sampled between *bounds* (with
+    the imaginary function *sample_parameters*) to file 'parameters.txt.1234'
+
+    >>> pid = 1234
+    >>> params = sample_parameter(bounds)
+    >>> standard_parameter_writer('parameters.txt', params, pid)
 
     """
     # Existing file will be overwritten
@@ -591,46 +610,41 @@ def standard_parameter_reader_bounds_mask(filename, pid=None):
 
     Lines starting with # will be excluded.
 
-    That means a standard parameter file might look like:
+    That means a standard parameter file with bounds and mask might look like:
 
-        # value min max mask
-
-        1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1
-
-        2 2.300000000000000e-01 -1.000000000000000e+00 1.000000000000000e+00 1
-
-        3 1.440000000000000e+01 9.000000000000000e+00 2.000000000000000e+01 1
-
-        4 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 0
-
-        ...
+       | # value min max mask
+       | 1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1
+       | 2 2.300000000000000e-01 -1.000000000000000e+00 1.000000000000000e+00 1
+       | 3 1.440000000000000e+01 9.000000000000000e+00 2.000000000000000e+01 1
+       | 4 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 0
+       | ...
 
     Parameters
     ----------
     filename : string
         Filename with parameter values
     pid : int, optional
-        If present, `filename` will be suffixed by .pid
+        If present, *filename* will be suffixed by *.pid*,
+        i.e. the file *filename.pid* will be read.
 
     Returns
     -------
     list
         List with ndarrays of
 
-            ids - identifier
-
-            params - parameter values
-
-            pmin - minimum parameter value
-
-            pmax - maximum parameter value
-
-            mask - parameter mask (1: include, 0: exclude from optimisation)
+           | ids - identifier
+           | params - parameter values
+           | pmin - minimum parameter value
+           | pmax - maximum parameter value
+           | mask - parameter mask (1: include, 0: exclude)
 
     Examples
     --------
-    >>> ids, params, pmin, pmax, pmask = \
-    ...     standard_parameter_reader_bounds_mask(paramfile)
+    Read identifiers, parameter values, lower and upper bounds, as well as
+    masks from the parameter file *paramfile*:
+
+    >>> ids, params, pmin, pmax, pmask = (
+    ...     standard_parameter_reader_bounds_mask(paramfile) )
 
     """
     ids    = []
@@ -677,23 +691,18 @@ def standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask,
 
     consecutive parameter number, current parameter value,
     minimum parameter value, maximum parameter value,
-    parameter mask (1: include, 0: exclude).
+    parameter mask (1: include, 0: exclude)
 
     All values will be written in IEEE double precision: {:.14e}.
 
     That means:
 
-        # value min max mask
-
-        1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1
-
-        2 2.300000000000000e-01 -1.000000000000000e+00 1.000000000000000e+00 1
-
-        3 1.440000000000000e+01 9.000000000000000e+00 2.000000000000000e+01 1
-
-        4 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 0
-
-        ...
+       | # value min max mask
+       | 1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1
+       | 2 2.300000000000000e-01 -1.000000000000000e+00 1.000000000000000e+00 1
+       | 3 1.440000000000000e+01 9.000000000000000e+00 2.000000000000000e+01 1
+       | 4 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 0
+       | ...
 
     Parameters
     ----------
@@ -706,22 +715,26 @@ def standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask,
     pmax : iterable
         Maximum parameter values
     mask : iterable
-       Parameter mask (1: include, 0: exclude from optimisation)
+       Parameter mask (1: include, 0: exclude)
     pid : int, optional
-        If given, output file will be `filename` suffixed by .pid
+        If given, output file will be *filename* suffixed by *.pid*,
+        i.e. the file *filename.pid* will be written.
 
     Returns
     -------
     None
-        No return value but output file written: filename or filename.pid
+        No return value but output file written: *filename* or *filename.pid*
 
     Examples
     --------
-    >>> randst = np.random.RandomState()
-    >>> pid = str(randst.randint(2147483647))
-    >>> params = sample_parameter(pis, pmin, pmax, pmask)
-    >>> standard_parameter_writer_bounds_mask(paramfile, params, pmin, pmax,
-    ...                                       pmask, pid)
+    Writes the parameters *params* that were sampled between *pmin* and
+    *pmax* (with the imaginary function *sample_parameters*) to file
+    'parameters.txt.1234'
+
+    >>> pid = 1234
+    >>> params = sample_parameter(p0, pmin, pmax, pmask)
+    >>> standard_parameter_writer_bounds_mask(
+    ...     'parameters.txt', params, pmin, pmax, pmask, pid)
 
     """
     # Assert correct call
@@ -760,39 +773,43 @@ def standard_time_series_reader(filename, pid=None):
     """
     Standard reader for time series.
 
-    The standard time series reader reads a time series of arbitrary length
+    The standard time series reader gets a time series of arbitrary length
     from a file without header, comment line or similar.
-
     That means for example:
 
-        0.0123456789e-02
-
-        0.1234567890e-02
-
-        0.2345678900e-02
-
-        0.3456789000e-02
-
-        0.4567890000e-02
-
-        ...
+       | 0.0123456789e-02
+       | 0.1234567890e-02
+       | 0.2345678900e-02
+       | 0.3456789000e-02
+       | 0.4567890000e-02
+       | ...
 
     Parameters
     ----------
     filename : string
         Filename of with time series values
     pid : int, optional
-        If present, `filename` will be suffixed by .pid
+        If present, *filename* will be suffixed by *.pid*,
+        i.e. the file *filename.pid* will be read.
 
     Returns
     -------
     timeseries : ndarray
-        ndarray with values of each line in filename
+        Values of each line in filename
 
     Examples
     --------
-    >>> subprocess.call(model)
-    >>> ts = standard_time_series_reader(filename)
+    Imagine an external program *prog.exe* that takes a number *pid* as input
+    and writes out a result time series in *output.txt.pid*
+
+    >>> import subprocess
+    >>> exe = 'prog.exe'
+    >>> pid = 1234
+    >>> err = subprocess.run([exe, str(pid)])
+
+    The results can be read with:
+
+    >>> ts = standard_time_series_reader('output.txt', pid=pid)
 
     """
     if pid:
@@ -810,11 +827,23 @@ def standard_time_series_reader(filename, pid=None):
 def standard_timeseries_reader(*args, **kwargs):
     """
     Wrapper for :any:`standard_time_series_reader`
+
+    Examples
+    --------
+    Imagine an external program *prog.exe* that takes a number *pid* as input
+    and writes out a result time series in *output.txt.pid*
+
+    >>> import subprocess
+    >>> exe = 'prog.exe'
+    >>> pid = 1234
+    >>> err = subprocess.run([exe, str(pid)])
+
+    The results can be read with:
+
+    >>> ts = standard_timeseries_reader('output.txt', pid=pid)
+
     """
     return standard_time_series_reader(*args, **kwargs)
-
-
-# ------------------------------------------------------------------------------
 
 
 if __name__ == '__main__':
