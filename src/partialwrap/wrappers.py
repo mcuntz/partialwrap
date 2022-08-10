@@ -257,7 +257,7 @@ def exe_wrapper(func,
         the `outputreader`
 
     """
-    if sys.version_info < (3, 5):
+    if sys.version_info < (3, 7):
         return exe_wrapper_v34(
             func, parameterfile, parameterwriter, outputfile, outputreader,
             kwarg, x)

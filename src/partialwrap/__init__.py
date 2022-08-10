@@ -33,7 +33,7 @@ History
       Oct 2021, Matthias Cuntz
     * v1.5, Allow empty right-hand sides in files, such as `name1 =`,
       Nov 2021, Matthias Cuntz
-    * v1.6, Use subprocess.run for Python >= v3.5, Aug 2022, Matthias Cuntz
+    * v1.6, Use subprocess.run for Python > v3.6, Aug 2022, Matthias Cuntz
 
 """
 # version, author

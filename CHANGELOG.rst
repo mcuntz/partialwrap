@@ -2,7 +2,7 @@ Changelog
 ---------
 
 v1.6 (Aug 2022)
-    * Use subprocess.run for Python >= v3.5.
+    * Use subprocess.run for Python > v3.6.
     * Added `partialwrap` to conda-forge.
     * Changed Markdown to reStructuredText in all files but README.md
 
