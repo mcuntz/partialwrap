@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>partialwrap.std_io &#8212; partialwrap 1.7 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="partialwrap.wrappers" href="wrappers.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-partialwrap.std_io">
+<span id="partialwrap-std-io"></span><h1>partialwrap.std_io<a class="headerlink" href="#module-partialwrap.std_io" title="Permalink to this heading">¶</a></h1>
+<p>Standard parameter reader and writer functions as well as output reader
+functions, including substitution of tags #JA????# or names in files.</p>
+<p>This module was written by Matthias Cuntz while at Institut National de
+Recherche pour l’Agriculture, l’Alimentation et l’Environnement (INRAE), Nancy,
+France.</p>
+<p>Copyright (c) 2016-2022 Matthias Cuntz - mc (at) macu (dot) de</p>
+<p>Released under the MIT License; see LICENSE file for details.</p>
+<p>The following functions are provided:</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.sub_params_ja" title="partialwrap.std_io.sub_params_ja"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_params_ja</span></code></a>(files, params[, pid])</p></td>
+<td><p>Substitute #JA????# with parameter value in several files, i.e.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.sub_params_names" title="partialwrap.std_io.sub_params_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_params_names</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Wrapper for <a class="reference internal" href="#partialwrap.std_io.sub_params_names_ignorecase" title="partialwrap.std_io.sub_params_names_ignorecase"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sub_params_names_ignorecase</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.sub_params_names_case" title="partialwrap.std_io.sub_params_names_case"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_params_names_case</span></code></a>(files, params, names)</p></td>
+<td><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files, i.e.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.sub_params_names_ignorecase" title="partialwrap.std_io.sub_params_names_ignorecase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_params_names_ignorecase</span></code></a>(files, params, names)</p></td>
+<td><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files, i.e.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_output_reader" title="partialwrap.std_io.standard_output_reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_output_reader</span></code></a>(filename[, pid])</p></td>
+<td><p>Standard output reader.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_parameter_reader" title="partialwrap.std_io.standard_parameter_reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_parameter_reader</span></code></a>(filename[, pid])</p></td>
+<td><p>Read standard parameter file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_parameter_writer" title="partialwrap.std_io.standard_parameter_writer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_parameter_writer</span></code></a>(filename, params)</p></td>
+<td><p>Standard parameter writer.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_parameter_reader_bounds_mask" title="partialwrap.std_io.standard_parameter_reader_bounds_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_parameter_reader_bounds_mask</span></code></a>(filename)</p></td>
+<td><p>Read standard parameter file with parameter bounds and mask.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_parameter_writer_bounds_mask" title="partialwrap.std_io.standard_parameter_writer_bounds_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_parameter_writer_bounds_mask</span></code></a>(...[, pid])</p></td>
+<td><p>Standard parameter writer with parameter bounds and mask.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_timeseries_reader" title="partialwrap.std_io.standard_timeseries_reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_timeseries_reader</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Wrapper for <a class="reference internal" href="#partialwrap.std_io.standard_time_series_reader" title="partialwrap.std_io.standard_time_series_reader"><code class="xref any py py-func docutils literal notranslate"><span class="pre">standard_time_series_reader</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_time_series_reader" title="partialwrap.std_io.standard_time_series_reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_time_series_reader</span></code></a>(filename[, pid])</p></td>
+<td><p>Standard reader for time series.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="simple">
+<dt>History</dt><dd><ul class="simple">
+<li><p>Written Nov 2016 by Matthias Cuntz (mc (at) macu (dot) de),
+including standard readers and writers</p></li>
+<li><p>Added substitution function for #JA????# in prepared parameter files
+(sub_ja_params_files), Jan 2018, Matthias Cuntz</p></li>
+<li><p>Use .pid as suffix for multiprocessing, Feb 2018, Matthias Cuntz</p></li>
+<li><p>Return ndarrays instead of lists and line IDs in
+standard_parameter_reader, Mar 2018, Matthias Cuntz</p></li>
+<li><p>Added substitution functions for arbitrary names in parameter files
+(sub_names_params_files*), Mar 2018, Matthias Cuntz</p></li>
+<li><p>Allow substitution in several parameter files (_msub_files), Apr 2018,
+Matthias Cuntz</p></li>
+<li><p>Changed to Sphinx docstring and numpydoc, Dec 2019, Matthias Cuntz</p></li>
+<li><p>Renamed standard_parameter_reader/_writer to
+standard_parameter_reader_bounds_mask/standard_parameter_writer_bounds_mask,
+Jan 2020, Matthias Cuntz</p></li>
+<li><p>New standard_parameter_reader/_writer that read/write single values
+per parameter, Jan 2020, Matthias Cuntz</p></li>
+<li><p>Swapped names and params in call to sub_names_params_files* to be
+compatible with new generic exe_wrapper, Jan 2020, Matthias Cuntz</p></li>
+<li><p>Call standard_parameter_writer with 2 or 3 arguments, i.e. pid given or
+not, Jan 2020, Matthias Cuntz</p></li>
+<li><p>Make all strings raw strings in sub_names_params_files_* routines to deal
+with regular expressions, Jan 2020, Matthias Cuntz</p></li>
+<li><p>Keep formatting of names and spaces with sub_names_params functions;
+close input file before raising error, Feb 2020, Matthias Cuntz</p></li>
+<li><p>Prepend underscore to local function, Jun 2020, Matthias Cuntz</p></li>
+<li><p>Use with statement for reading file so that they are properly closed,
+Jun 2020, Matthias Cuntz</p></li>
+<li><p>Overwrite input files by default if no pid given,
+Jun 2020, Matthias Cuntz</p></li>
+<li><p>Remove _files from function names, Jun 2020, Matthias Cuntz</p></li>
+<li><p>pid keyword after arguments, Jun 2020, Matthias Cuntz</p></li>
+<li><p>Rename all substitution functions sub_* to start with sub_params_*,
+Jun 2020, Matthias Cuntz</p></li>
+<li><p>Add pid keyword to all routines, Jun 2020, Matthias Cuntz</p></li>
+<li><p>Make flake8 compliant, Dec 2020, Matthias Cuntz</p></li>
+<li><p>Allow non-numeric parameters, Feb 2021, Matthias Cuntz</p></li>
+<li><p>More generic right-hand side in sub_params_names,
+May 2021, Matthias Cuntz</p></li>
+<li><p>Escape backslash in params in sub_params routines,
+May 2021, Matthias Cuntz</p></li>
+<li><p>np.float-&gt; float, etc., Sep 2021, Matthias Cuntz</p></li>
+<li><p>Use specific whitespace characters instead of all whitespace characters
+on right-hand side because the latter includes line breaks,
+Nov 2021, Matthias Cuntz</p></li>
+<li><p>Helper function for constructing dict for <cite>_msub</cite>,
+Nov 2021, Matthias Cuntz</p></li>
+<li><p>Added examples and reformatted docstrings, Aug 2022, Matthias Cuntz</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.standard_output_reader">
+<span class="sig-name descname"><span class="pre">standard_output_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_output_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_output_reader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Standard output reader.</p>
+<p>The standard output reader reads a single value from a file without header,
+comment line or similar. That means for example:</p>
+<blockquote>
+<div><p>0.0123456789e-02</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – Filename of file with output value</p></li>
+<li><p><strong>pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – If present, <em>filename</em> will be suffixed by <em>.pid</em>, i.e. the file
+<em>filename.pid</em> will be read.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Single number read from filename</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Imagine an external program <em>prog.exe</em> that takes a number <em>pid</em> as input
+and writes out its result in <em>output.txt.pid</em></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exe</span> <span class="o">=</span> <span class="s1">&#39;prog.exe&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">err</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">exe</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>The results can be read with:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">standard_output_reader</span><span class="p">(</span><span class="s1">&#39;output.txt&#39;</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="n">pid</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.standard_parameter_reader">
+<span class="sig-name descname"><span class="pre">standard_parameter_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_parameter_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_parameter_reader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read standard parameter file.</p>
+<p>The standard parameter file is a file containing
+1 line per parameter with the parameter value.
+Lines starting with ‘#’ will be excluded.
+That means a standard parameter file might look like:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"># parameter value</div>
+<div class="line">3.000000000000000e-01</div>
+<div class="line">2.300000000000000e-01</div>
+<div class="line">1.440000000000000e+01</div>
+<div class="line">3.000000000000000e-01</div>
+<div class="line">…</div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – Filename with parameter values</p></li>
+<li><p><strong>pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – If present, <em>filename</em> will be suffixed by <em>.pid</em>,
+i.e. the file <em>filename.pid</em> will be read.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Parameter values</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>A most simple parameter file <em>paramfile</em> with one line per parameter can be
+read with:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">standard_parameter_reader</span><span class="p">(</span><span class="n">paramfile</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.standard_parameter_reader_bounds_mask">
+<span class="sig-name descname"><span class="pre">standard_parameter_reader_bounds_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_parameter_reader_bounds_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_parameter_reader_bounds_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read standard parameter file with parameter bounds and mask.</p>
+<p>The standard parameter file is a space separated file containing
+1 line per parameter with the following columns:</p>
+<p>identifier, current parameter value, minimum parameter value,
+maximum parameter value, parameter mask (1: include, 0: exclude).</p>
+<p>Lines starting with # will be excluded.</p>
+<p>That means a standard parameter file with bounds and mask might look like:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"># value min max mask</div>
+<div class="line">1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1</div>
+<div class="line">2 2.300000000000000e-01 -1.000000000000000e+00 1.000000000000000e+00 1</div>
+<div class="line">3 1.440000000000000e+01 9.000000000000000e+00 2.000000000000000e+01 1</div>
+<div class="line">4 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 0</div>
+<div class="line">…</div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – Filename with parameter values</p></li>
+<li><p><strong>pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – If present, <em>filename</em> will be suffixed by <em>.pid</em>,
+i.e. the file <em>filename.pid</em> will be read.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>List with ndarrays of</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">ids - identifier</div>
+<div class="line">params - parameter values</div>
+<div class="line">pmin - minimum parameter value</div>
+<div class="line">pmax - maximum parameter value</div>
+<div class="line">mask - parameter mask (1: include, 0: exclude)</div>
+</div>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Read identifiers, parameter values, lower and upper bounds, as well as
+masks from the parameter file <em>paramfile</em>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ids</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmask</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">standard_parameter_reader_bounds_mask</span><span class="p">(</span><span class="n">paramfile</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.standard_parameter_writer">
+<span class="sig-name descname"><span class="pre">standard_parameter_writer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_parameter_writer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_parameter_writer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Standard parameter writer.</p>
+<p>The standard parameter writer writes a file containing
+1 line per parameter with the parameter value.
+All values will be written in IEEE double precision: {:.14e}.
+That means:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">3.000000000000000e-01</div>
+<div class="line">2.300000000000000e-01</div>
+<div class="line">1.440000000000000e+01</div>
+<div class="line">3.000000000000000e-01</div>
+<div class="line">…</div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – Output filename with parameter values</p></li>
+<li><p><strong>params</strong> (<em>iterable</em>) – Parameter values</p></li>
+<li><p><strong>pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – If given, output file will be <em>filename</em> suffixed by <em>.pid</em>,
+i.e. the file <em>filename.pid</em> will be written.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No return value but output file written: <em>filename</em> or <em>filename.pid</em></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Writes the parameters <em>params</em> that were sampled between <em>bounds</em> (with
+the imaginary function <em>sample_parameters</em>) to file ‘parameters.txt.1234’</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">sample_parameter</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_parameter_writer</span><span class="p">(</span><span class="s1">&#39;parameters.txt&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.standard_parameter_writer_bounds_mask">
+<span class="sig-name descname"><span class="pre">standard_parameter_writer_bounds_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_parameter_writer_bounds_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_parameter_writer_bounds_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Standard parameter writer with parameter bounds and mask.</p>
+<p>The standard parameter writer writes a space separated file containing
+1 header line (# value min max mask) plus 1 line per parameter with the
+following columns:</p>
+<p>consecutive parameter number, current parameter value,
+minimum parameter value, maximum parameter value,
+parameter mask (1: include, 0: exclude)</p>
+<p>All values will be written in IEEE double precision: {:.14e}.</p>
+<p>That means:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"># value min max mask</div>
+<div class="line">1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1</div>
+<div class="line">2 2.300000000000000e-01 -1.000000000000000e+00 1.000000000000000e+00 1</div>
+<div class="line">3 1.440000000000000e+01 9.000000000000000e+00 2.000000000000000e+01 1</div>
+<div class="line">4 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 0</div>
+<div class="line">…</div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – Output filename with parameter values</p></li>
+<li><p><strong>params</strong> (<em>iterable</em>) – Parameter values</p></li>
+<li><p><strong>pmin</strong> (<em>iterable</em>) – Minimum parameter values</p></li>
+<li><p><strong>pmax</strong> (<em>iterable</em>) – Maximum parameter values</p></li>
+<li><p><strong>mask</strong> (<em>iterable</em>) – Parameter mask (1: include, 0: exclude)</p></li>
+<li><p><strong>pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – If given, output file will be <em>filename</em> suffixed by <em>.pid</em>,
+i.e. the file <em>filename.pid</em> will be written.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No return value but output file written: <em>filename</em> or <em>filename.pid</em></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Writes the parameters <em>params</em> that were sampled between <em>pmin</em> and
+<em>pmax</em> (with the imaginary function <em>sample_parameters</em>) to file
+‘parameters.txt.1234’</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">sample_parameter</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmask</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_parameter_writer_bounds_mask</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s1">&#39;parameters.txt&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmask</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.standard_time_series_reader">
+<span class="sig-name descname"><span class="pre">standard_time_series_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_time_series_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_time_series_reader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Standard reader for time series.</p>
+<p>The standard time series reader gets a time series of arbitrary length
+from a file without header, comment line or similar.
+That means for example:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">0.0123456789e-02</div>
+<div class="line">0.1234567890e-02</div>
+<div class="line">0.2345678900e-02</div>
+<div class="line">0.3456789000e-02</div>
+<div class="line">0.4567890000e-02</div>
+<div class="line">…</div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – Filename of with time series values</p></li>
+<li><p><strong>pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – If present, <em>filename</em> will be suffixed by <em>.pid</em>,
+i.e. the file <em>filename.pid</em> will be read.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>timeseries</strong> – Values of each line in filename</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Imagine an external program <em>prog.exe</em> that takes a number <em>pid</em> as input
+and writes out a result time series in <em>output.txt.pid</em></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exe</span> <span class="o">=</span> <span class="s1">&#39;prog.exe&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">err</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">exe</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>The results can be read with:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">standard_time_series_reader</span><span class="p">(</span><span class="s1">&#39;output.txt&#39;</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="n">pid</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.standard_timeseries_reader">
+<span class="sig-name descname"><span class="pre">standard_timeseries_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_timeseries_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_timeseries_reader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for <a class="reference internal" href="#partialwrap.std_io.standard_time_series_reader" title="partialwrap.std_io.standard_time_series_reader"><code class="xref any py py-func docutils literal notranslate"><span class="pre">standard_time_series_reader</span></code></a></p>
+<p class="rubric">Examples</p>
+<p>Imagine an external program <em>prog.exe</em> that takes a number <em>pid</em> as input
+and writes out a result time series in <em>output.txt.pid</em></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exe</span> <span class="o">=</span> <span class="s1">&#39;prog.exe&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">err</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">exe</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>The results can be read with:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">standard_timeseries_reader</span><span class="p">(</span><span class="s1">&#39;output.txt&#39;</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="n">pid</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.sub_params_ja">
+<span class="sig-name descname"><span class="pre">sub_params_ja</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#sub_params_ja"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.sub_params_ja" title="Permalink to this definition">¶</a></dt>
+<dd><p>Substitute #JA????# with parameter value in several files, i.e.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">#JA0000# with params[0]</div>
+<div class="line">#JA0001# with params[1]</div>
+<div class="line">…</div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – List with file names in which #JA????# will be replaced.</p></li>
+<li><p><strong>params</strong> (<em>iterable</em>) – <div class="line-block">
+<div class="line">Parameter values to replace #JA????# patterns.</div>
+<div class="line">params[0] will replace #JA0000#</div>
+<div class="line">params[1] will replace #JA0001#</div>
+<div class="line">…</div>
+</div>
+</p></li>
+<li><p><strong>pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – <p>Output files will be input files suffixed by <em>.pid</em>
+(default: overwrite input file)</p>
+<p>Note that the default <em>pid=None</em> might not be useful if you have
+carefully prepared input files.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No return value but either changed input files or output files with
+names of the input files suffixed by <em>.pid</em>, in which all #JA????#
+patterns were replaced by <em>params</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Replaces #JA0000# with 0, #JA0001# with 1, #JA0002# with 2, and
+#JA0003# with 3 in the two input files ‘file1.txt’ and ‘file2.txt’,
+writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sub_params_ja</span><span class="p">([</span><span class="s1">&#39;file1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;file1.txt&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">pid</span><span class="o">=</span><span class="mi">1234</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.sub_params_names">
+<span class="sig-name descname"><span class="pre">sub_params_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#sub_params_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.sub_params_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for <a class="reference internal" href="#partialwrap.std_io.sub_params_names_ignorecase" title="partialwrap.std_io.sub_params_names_ignorecase"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sub_params_names_ignorecase</span></code></a>.</p>
+<p class="rubric">Examples</p>
+<p>Replaces <cite>param1 = …</cite> with <cite>param1 = 0</cite>, <cite>param2 = …</cite> with
+<cite>param2 = 1</cite>, <cite>param3 = …</cite> with <cite>param3 = 2</cite>, and <cite>param4 = …</cite>
+with <cite>param4 = 3</cite> in the two input files ‘file1.txt’ and ‘file2.txt’,
+writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’.
+This version is case insensitive so it replaces also <cite>PARAM1 = …</cite>,
+<cite>Param1 = …</cite>, or <cite>ParAm1 = …</cite> with <cite>PARAM1 = 0</cite>, <cite>Param1 = 0</cite>, or
+<cite>ParAm1 = 0</cite>, for example.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sub_params_names</span><span class="p">([</span><span class="s1">&#39;file1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;file1.txt&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>                 <span class="p">[</span><span class="s1">&#39;param1&#39;</span><span class="p">,</span> <span class="s1">&#39;param2&#39;</span><span class="p">,</span> <span class="s1">&#39;param3&#39;</span><span class="p">,</span> <span class="s1">&#39;param4&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                 <span class="n">pid</span><span class="o">=</span><span class="mi">1234</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.sub_params_names_case">
+<span class="sig-name descname"><span class="pre">sub_params_names_case</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#sub_params_names_case"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.sub_params_names_case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files, i.e.</p>
+<blockquote>
+<div><p><cite>names[i] = params[i]</cite></p>
+</div></blockquote>
+<p>Note, <em>names</em> are case sensitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – List with files in which values of <em>names</em> will be replaced with
+<em>params</em>.</p></li>
+<li><p><strong>params</strong> (<em>iterable</em>) – <div class="line-block">
+<div class="line">Parameter values to be given to variables on the right of the
+equal (=) sign.</div>
+<div class="line">Variable in <em>names[0]</em> will be assigned value in <em>params[0]</em></div>
+<div class="line">Variable in <em>names[1]</em> will be assigned value in <em>params[1]</em></div>
+<div class="line">…</div>
+</div>
+</p></li>
+<li><p><strong>names</strong> (<em>iterable</em>) – Variable names on left of the equal (=) sign in <em>files</em></p></li>
+<li><p><strong>pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Output files will be input files suffixed by <em>.pid</em>
+(default: overwrite input file)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No return value but either changed input files or output files with
+names of the input files suffixed by <em>.pid</em>, in which all variables
+given in <em>names</em> are assigned the values given in <em>params</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Replaces <cite>param1 = …</cite> with <cite>param1 = 0</cite>, <cite>param2 = …</cite> with
+<cite>param2 = 1</cite>, <cite>param3 = …</cite> with <cite>param3 = 2</cite>, and <cite>param4 = …</cite>
+with <cite>param4 = 3</cite> in the two input files ‘file1.txt’ and ‘file2.txt’,
+writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’.
+This version is case sensitive so it does not replace <cite>PARAM1 = …</cite>
+with <cite>PARAM1 = 0</cite>, for example.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sub_params_names_case</span><span class="p">([</span><span class="s1">&#39;file1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;file1.txt&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>                      <span class="p">[</span><span class="s1">&#39;param1&#39;</span><span class="p">,</span> <span class="s1">&#39;param2&#39;</span><span class="p">,</span> <span class="s1">&#39;param3&#39;</span><span class="p">,</span> <span class="s1">&#39;param4&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                      <span class="n">pid</span><span class="o">=</span><span class="mi">1234</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.std_io.sub_params_names_ignorecase">
+<span class="sig-name descname"><span class="pre">sub_params_names_ignorecase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#sub_params_names_ignorecase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.sub_params_names_ignorecase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files, i.e.</p>
+<blockquote>
+<div><p><cite>names[i] = params[i]</cite></p>
+</div></blockquote>
+<p>Note, <em>names</em> are case insensitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – List with file in which values of <em>names</em> will be replaced with
+<em>params</em>.</p></li>
+<li><p><strong>params</strong> (<em>iterable</em>) – <div class="line-block">
+<div class="line">Parameter values to be given to variables on the right of the
+equal (=) sign</div>
+<div class="line">Variable in names[0] will be assigned value in params[0]</div>
+<div class="line">Variable in names[1] will be assigned value in params[1]</div>
+<div class="line">…</div>
+</div>
+</p></li>
+<li><p><strong>names</strong> (<em>iterable</em>) – Variable names on left of the equal (=) sign in <em>files</em></p></li>
+<li><p><strong>pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Output files will be input files suffixed by <em>.pid</em>
+(default: overwrite input file)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No return value but either changed input files or output files with
+names of the input files suffixed by <em>.pid</em>, in which all variables
+given in <em>names</em> are assigned the values given in <em>params</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Replaces <cite>param1 = …</cite> with <cite>param1 = 0</cite>, <cite>param2 = …</cite> with
+<cite>param2 = 1</cite>, <cite>param3 = …</cite> with <cite>param3 = 2</cite>, and <cite>param4 = …</cite>
+with <cite>param4 = 3</cite> in the two input files ‘file1.txt’ and ‘file2.txt’,
+writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’.
+This version is case insensitive so it replaces also <cite>PARAM1 = …</cite>,
+<cite>Param1 = …</cite>, or <cite>ParAm1 = …</cite> with <cite>PARAM1 = 0</cite>, <cite>Param1 = 0</cite>, or
+<cite>ParAm1 = 0</cite>, for example.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sub_params_names_ignorecase</span><span class="p">([</span><span class="s1">&#39;file1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;file1.txt&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>                            <span class="p">[</span><span class="s1">&#39;param1&#39;</span><span class="p">,</span> <span class="s1">&#39;param2&#39;</span><span class="p">,</span> <span class="s1">&#39;param3&#39;</span><span class="p">,</span> <span class="s1">&#39;param4&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                            <span class="n">pid</span><span class="o">=</span><span class="mi">1234</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="contents.html">partialwrap</a></h1>
+
+
+
+<p class="blurb">Wrappers of external executables and Python functions for functools.partial.</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#quick-usage-guide">Quick usage guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">Public API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="api.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrappers.html">partialwrap.wrappers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">partialwrap.std_io</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.standard_output_reader"><code class="docutils literal notranslate"><span class="pre">standard_output_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.standard_parameter_reader"><code class="docutils literal notranslate"><span class="pre">standard_parameter_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.standard_parameter_reader_bounds_mask"><code class="docutils literal notranslate"><span class="pre">standard_parameter_reader_bounds_mask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.standard_parameter_writer"><code class="docutils literal notranslate"><span class="pre">standard_parameter_writer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.standard_parameter_writer_bounds_mask"><code class="docutils literal notranslate"><span class="pre">standard_parameter_writer_bounds_mask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.standard_time_series_reader"><code class="docutils literal notranslate"><span class="pre">standard_time_series_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.standard_timeseries_reader"><code class="docutils literal notranslate"><span class="pre">standard_timeseries_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.sub_params_ja"><code class="docutils literal notranslate"><span class="pre">sub_params_ja()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.sub_params_names"><code class="docutils literal notranslate"><span class="pre">sub_params_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.sub_params_names_case"><code class="docutils literal notranslate"><span class="pre">sub_params_names_case()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partialwrap.std_io.sub_params_names_ignorecase"><code class="docutils literal notranslate"><span class="pre">sub_params_names_ignorecase()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/mcuntz/partialwrap">partialwrap @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://doi.org/10.5281/zenodo.3893705">partialwrap @ Zenodo</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/partialwrap">partialwrap @ PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="https://anaconda.org/conda-forge/partialwrap">partialwrap @ conda-forge</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="contents.html">Documentation overview</a><ul>
+  <li><a href="api.html">Public API</a><ul>
+      <li>Previous: <a href="wrappers.html" title="previous chapter">partialwrap.wrappers</a></li>
+      <li>Next: <a href="changelog.html" title="next chapter">Changelog</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2023, Matthias Cuntz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/std_io.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

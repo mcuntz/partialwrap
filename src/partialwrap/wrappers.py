@@ -476,14 +476,14 @@ def exe_wrapper_v34(func,
     See `exe_wrapper` for details.
 
     """
-    shell   = kwarg['shell']   if 'shell'   in kwarg else False
-    debug   = kwarg['debug']   if 'debug'   in kwarg else False
-    pid     = kwarg['pid']     if 'pid'     in kwarg else False
-    pargs   = kwarg['pargs']   if 'pargs'   in kwarg else []
+    shell   = kwarg['shell'] if 'shell' in kwarg else False
+    debug   = kwarg['debug'] if 'debug' in kwarg else False
+    pid     = kwarg['pid'] if 'pid' in kwarg else False
+    pargs   = kwarg['pargs'] if 'pargs' in kwarg else []
     pkwargs = kwarg['pkwargs'] if 'pkwargs' in kwarg else {}
     keepparameterfile = (kwarg['keepparameterfile']
                          if 'keepparameterfile' in kwarg else False)
-    oargs   = kwarg['oargs']   if 'oargs'   in kwarg else []
+    oargs   = kwarg['oargs'] if 'oargs' in kwarg else []
     okwargs = kwarg['okwargs'] if 'okwargs' in kwarg else {}
     keepoutputfile = (kwarg['keepoutputfile']
                       if 'keepoutputfile' in kwarg else False)

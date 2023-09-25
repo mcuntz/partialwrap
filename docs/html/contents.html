@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Contents &#8212; partialwrap 1.7 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#about-partialwrap">About partialwrap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#quick-usage-guide">Quick usage guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="index.html#context">Context</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#simple-python-functions">Simple Python functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#masking-parameters">Masking parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#external-executables">External executables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#index-and-tables">Index and Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="userguide.html#simple-python-functions">Simple Python functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userguide.html#masked-parameters-in-python-functions">Masked parameters in Python functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userguide.html#external-executables">External executables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userguide.html#masked-parameters-with-external-executables">Masked parameters with external executables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userguide.html#additional-arguments-for-exe-wrapper">Additional arguments for exe_wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userguide.html#provided-parameterwriter-and-outputreader">Provided parameterwriter and outputreader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userguide.html#parallel-evaluation-of-external-executables">Parallel evaluation of external executables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="userguide.html#using-a-launch-script-for-the-external-program">Using a launch script for the external program</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Public API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrappers.html">partialwrap.wrappers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wrappers.html#partialwrap.wrappers.exe_mask_wrapper"><code class="docutils literal notranslate"><span class="pre">exe_mask_wrapper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wrappers.html#partialwrap.wrappers.exe_wrapper"><code class="docutils literal notranslate"><span class="pre">exe_wrapper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wrappers.html#partialwrap.wrappers.function_mask_wrapper"><code class="docutils literal notranslate"><span class="pre">function_mask_wrapper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wrappers.html#partialwrap.wrappers.function_wrapper"><code class="docutils literal notranslate"><span class="pre">function_wrapper()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="std_io.html">partialwrap.std_io</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.standard_output_reader"><code class="docutils literal notranslate"><span class="pre">standard_output_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.standard_parameter_reader"><code class="docutils literal notranslate"><span class="pre">standard_parameter_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.standard_parameter_reader_bounds_mask"><code class="docutils literal notranslate"><span class="pre">standard_parameter_reader_bounds_mask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.standard_parameter_writer"><code class="docutils literal notranslate"><span class="pre">standard_parameter_writer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.standard_parameter_writer_bounds_mask"><code class="docutils literal notranslate"><span class="pre">standard_parameter_writer_bounds_mask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.standard_time_series_reader"><code class="docutils literal notranslate"><span class="pre">standard_time_series_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.standard_timeseries_reader"><code class="docutils literal notranslate"><span class="pre">standard_timeseries_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_ja"><code class="docutils literal notranslate"><span class="pre">sub_params_ja()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_names"><code class="docutils literal notranslate"><span class="pre">sub_params_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_names_case"><code class="docutils literal notranslate"><span class="pre">sub_params_names_case()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_names_ignorecase"><code class="docutils literal notranslate"><span class="pre">sub_params_names_ignorecase()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">partialwrap</a></h1>
+
+
+
+<p class="blurb">Wrappers of external executables and Python functions for functools.partial.</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Public API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/mcuntz/partialwrap">partialwrap @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://doi.org/10.5281/zenodo.3893705">partialwrap @ Zenodo</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/partialwrap">partialwrap @ PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="https://anaconda.org/conda-forge/partialwrap">partialwrap @ conda-forge</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="index.html" title="next chapter">Quickstart</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2023, Matthias Cuntz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/contents.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

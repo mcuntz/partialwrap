@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Quickstart &#8212; partialwrap 1.7 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User Guide" href="userguide.html" />
+    <link rel="prev" title="Contents" href="contents.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">¶</a></h1>
+<p><strong>partialwrap</strong>: small Python library providing wrappers for external
+executables and Python functions so that they can easily be partialized with
+Python’s <code class="xref py py-mod docutils literal notranslate"><span class="pre">functools.partial</span></code>.</p>
+<p><a class="reference external" href="https://doi.org/10.5281/zenodo.3893705"><img alt="DOI" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3893705.svg" /></a> <a class="reference external" href="https://badge.fury.io/py/partialwrap"><img alt="PyPI version" src="https://badge.fury.io/py/partialwrap.svg" /></a> <a class="reference external" href="https://anaconda.org/conda-forge/partialwrap"><img alt="Conda version" src="https://img.shields.io/conda/vn/conda-forge//partialwrap.svg" /></a> <a class="reference external" href="https://github.com/mcuntz/partialwrap/blob/master/LICENSE"><img alt="License" src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a> <a class="reference external" href="https://github.com/mcuntz/partialwrap/actions"><img alt="Build Status" src="https://github.com/mcuntz/partialwrap/workflows/Continuous%20Integration/badge.svg?branch=main" /></a> <a class="reference external" href="https://coveralls.io/github/mcuntz/partialwrap?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/github/mcuntz/partialwrap/badge.svg?branch=master" /></a></p>
+<section id="about-partialwrap">
+<h2>About partialwrap<a class="headerlink" href="#about-partialwrap" title="Permalink to this heading">¶</a></h2>
+<p><strong>partialwrap</strong> is a Python library providing easy wrapper functions to use with
+Python’s <code class="xref py py-mod docutils literal notranslate"><span class="pre">functools.partial</span></code>. It allows to use any external executable as
+well as any Python function with arbitrary arguments and keywords to be used
+with libraries that call functions simply in the form <span class="math notranslate nohighlight">\(func(x)\)</span>. This
+includes the functions of the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.11.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> package or external packages
+such as <code class="xref py py-mod docutils literal notranslate"><span class="pre">emcee</span></code> or <a class="reference external" href="https://pyeee.readthedocs.io/en/latest/package.html#module-pyeee" title="(in pyeee v3.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyeee</span></code></a>, and allows the use of distributed function
+evaluations with Python’s <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing</span></code></a> or via <a class="reference external" href="https://mpi4py.readthedocs.io/en/latest/mpi4py.html#module-mpi4py" title="(in MPI for Python v4.0.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mpi4py</span></code></a>.</p>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>
+<p>The complete documentation for <strong>partialwrap</strong> is available at:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://mcuntz.github.io/partialwrap/">https://mcuntz.github.io/partialwrap/</a></p>
+</div></blockquote>
+</section>
+<section id="quick-usage-guide">
+<h2>Quick usage guide<a class="headerlink" href="#quick-usage-guide" title="Permalink to this heading">¶</a></h2>
+<section id="context">
+<h3>Context<a class="headerlink" href="#context" title="Permalink to this heading">¶</a></h3>
+<p>The easiest wrapper in <strong>partialwrap</strong> is for Python functions.</p>
+<p>Consider the <em>Rastrigin function</em>
+(<a class="reference external" href="https://en.wikipedia.org/wiki/Rastrigin_function">https://en.wikipedia.org/wiki/Rastrigin_function</a>), which is a popular
+function for performance testing of optimization algorithms: <span class="math notranslate nohighlight">\(y
+= a \cdot n + \sum_i^n (x_i^2 - a \cos(b \cdot x_i))\)</span></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">def</span> <span class="nf">rastrigin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The Rastrigin function has a global minimum of <span class="math notranslate nohighlight">\(0\)</span> at all <span class="math notranslate nohighlight">\(x_i =
+0\)</span>. <span class="math notranslate nohighlight">\(a\)</span> influences mainly the depths of the (local and global)
+minima, whereas <span class="math notranslate nohighlight">\(b\)</span> influences mainly the size of the minima.</p>
+<p>A common form uses <span class="math notranslate nohighlight">\(a = 10\)</span> and <span class="math notranslate nohighlight">\(b = 2 \pi\)</span>. The parameters
+<span class="math notranslate nohighlight">\(x_i\)</span> should then be in the interval <span class="math notranslate nohighlight">\([-5.12, 5.12]\)</span>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">def</span> <span class="nf">rastrigin1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">10.</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>One could use the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.11.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> package to try to find the
+minimum of the Rastrigin function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
+
+<span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">rastrigin1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Nelder-Mead&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+<span class="c1"># returns: [0.99497463 0.99498333]</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">rastrigin1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+<span class="c1"># returns: [-7.82960597e-09 -7.82960597e-09]</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.11.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> allows passing arguments to the function to
+minimize. One could hence use the general Rastrigin function
+<cite>rastrigin</cite> (instead of <cite>rastrigin1</cite>) to get the same result:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">rastrigin</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mf">10.</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="simple-python-functions">
+<h3>Simple Python functions<a class="headerlink" href="#simple-python-functions" title="Permalink to this heading">¶</a></h3>
+<p>Not all optimizers allow the passing of arguments. And notably
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.11.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> does not allow the passing of keyword arguments, such as
+<span class="math notranslate nohighlight">\(b\)</span> in the case of <cite>rastrigin</cite>. One can use <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">partial()</span></code></a> of
+Python’s <a class="reference external" href="https://docs.python.org/3/library/functools.html#module-functools" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">functools</span></code></a> in this case:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="k">def</span> <span class="nf">call_func_arg_kwarg</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+   <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+
+<span class="c1"># Partialize function with fixed parameters</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mf">5.</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<span class="n">partial_rastrigin</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">call_func_arg_kwarg</span><span class="p">,</span> <span class="n">rastrigin</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">partial_rastrigin</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Figuratively speaking, <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">partial()</span></code></a> passes <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>
+to the function <cite>call_func_arg_kwarg</cite> already during definition.
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v1.11.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a> can then simply call it as
+<cite>partial_rastrigin(x)</cite>, which finalizes the call to <cite>rastrigin(x, a, b=b)</cite>.</p>
+<p><strong>partialwrap</strong> provides a convenience function
+<code class="xref py py-func docutils literal notranslate"><span class="pre">function_wrapper()</span></code> passing all arguments, given as a
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref any docutils literal notranslate"><span class="pre">list</span></code></a>, and keyword arguments, given as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref any docutils literal notranslate"><span class="pre">dict</span></code></a>, to arbitrary
+functions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">function_wrapper</span>
+
+<span class="n">args</span>   <span class="o">=</span> <span class="p">[</span><span class="mf">20.</span><span class="p">]</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">}</span>
+<span class="n">rastra</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">function_wrapper</span><span class="p">,</span> <span class="n">rastrigin</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">rastra</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or in short, of course:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">function_wrapper</span>
+
+<span class="n">rastra</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">function_wrapper</span><span class="p">,</span> <span class="n">rastrigin</span><span class="p">,</span> <span class="p">[</span><span class="mf">20.</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">})</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">rastra</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="masking-parameters">
+<h3>Masking parameters<a class="headerlink" href="#masking-parameters" title="Permalink to this heading">¶</a></h3>
+<p>A common case in numerical optimization are bound parameters and specifically
+the exclusion of some well-known or correlated parameters from optimization.
+<strong>partialwrap</strong> provides a convenience function
+<code class="xref py py-func docutils literal notranslate"><span class="pre">function_mask_wrapper()</span></code> to include only the masked parameters
+in the function evaluation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">function_mask_wrapper</span>
+
+<span class="n">x0</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="n">mask</span>    <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
+<span class="n">mrastra</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">function_mask_wrapper</span><span class="p">,</span> <span class="n">rastrigin</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">res</span>        <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">mrastra</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
+<span class="n">xout</span>       <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">xout</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+<p>The values of <cite>x0</cite> will be taken where <cite>mask==False</cite>, i.e. <cite>mask</cite> could be
+called an include-mask.</p>
+</section>
+<section id="external-executables">
+<h3>External executables<a class="headerlink" href="#external-executables" title="Permalink to this heading">¶</a></h3>
+<p><strong>partialwrap</strong> provides two wrapper functions to work with external
+executables: <code class="xref py py-func docutils literal notranslate"><span class="pre">partialwrap.exe_wrapper()</span></code> and
+<code class="xref py py-func docutils literal notranslate"><span class="pre">partialwrap.exe_mask_wrapper()</span></code>.</p>
+<p><strong>partialwrap</strong> writes the sampled parameter sets into files that can be read by
+the external program. The external program should write its result to a file
+that will then be read by <strong>partialwrap</strong> in return. That means <strong>partialwrap</strong>
+needs to have a function <cite>parameterwriter</cite> that writes the parameter file
+<cite>parameterfile</cite> needed by the executable <cite>exe</cite>. It then needs to have a function
+<cite>outputreader</cite> for reading the output file <cite>outputfile</cite> of the external
+executable <cite>exe</cite>.</p>
+<p>Consider for simplicity an external Python program (e.g. <cite>rastrigin1.py</cite>)
+that calculates the Rastrigin function with <span class="math notranslate nohighlight">\(a = 10\)</span> and <span class="math notranslate nohighlight">\(b = 2 \pi\)</span>,
+reading in an arbitrary number of parameters <span class="math notranslate nohighlight">\(x_i\)</span> from a
+<cite>parameterfile = params.txt</cite> and writing its output into an
+<cite>outputfile = out.txt</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># File: rastrigin1.py</span>
+
+<span class="c1"># Rastrigin function a=10, b=2*pi</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">def</span> <span class="nf">rastrigin1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">10.</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
+
+<span class="c1"># read parameters</span>
+<span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">standard_parameter_reader</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">standard_parameter_reader</span><span class="p">(</span><span class="s1">&#39;params.txt&#39;</span><span class="p">)</span>
+
+<span class="c1"># calc function</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">rastrigin1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># write output file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;out.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">ff</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This program can be called on the command line (if <cite>params.txt</cite> is present) with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>rastrigin1.py
+</pre></div>
+</div>
+<p>The external program can be used with Python’s <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">functools.partial()</span></code></a> and the
+wrapper function <code class="xref py py-func docutils literal notranslate"><span class="pre">partialwrap.exe_wrapper()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">standard_parameter_writer</span><span class="p">,</span> <span class="n">standard_output_reader</span>
+
+<span class="n">rastrigin_exe</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;python3&#39;</span><span class="p">,</span> <span class="s1">&#39;rastrigin1.py&#39;</span><span class="p">]</span>
+<span class="n">parameterfile</span>  <span class="o">=</span> <span class="s1">&#39;params.txt&#39;</span>
+<span class="n">outputfile</span>     <span class="o">=</span> <span class="s1">&#39;out.txt&#39;</span>
+<span class="n">rastrigin_wrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">rastrigin_exe</span><span class="p">,</span>
+                         <span class="n">parameterfile</span><span class="p">,</span> <span class="n">standard_parameter_writer</span><span class="p">,</span>
+                         <span class="n">outputfile</span><span class="p">,</span> <span class="n">standard_output_reader</span><span class="p">,</span> <span class="p">{})</span>
+
+<span class="n">x0</span>  <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">rastrigin_wrap</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">partialwrap.standard_parameter_reader()</span></code> and
+<code class="xref py py-func docutils literal notranslate"><span class="pre">partialwrap.standard_parameter_writer()</span></code> are convenience functions that
+read and write one parameter per line in a file without a header. The function
+<code class="xref py py-func docutils literal notranslate"><span class="pre">partialwrap.standard_output_reader()</span></code> simply reads one value from a file
+without header. The empty dictionary at the end is explained in the <a class="reference external" href="userguide.html">userguide</a>.</p>
+<p>One can easily imagine to replace the Python program <cite>rastrigin1.py</cite> by
+any compiled executable from C, Fortran or alike. See the <a class="reference external" href="userguide.html">userguide</a> for details.</p>
+</section>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<p>The easiest way to install is via <cite>pip</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>partialwrap
+</pre></div>
+</div>
+<p>or via <cite>conda</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>partialwrap
+</pre></div>
+</div>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://numpy.org/doc/stable/reference/index.html#module-numpy" title="(in NumPy v1.26)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code></a></p></li>
+</ul>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading">¶</a></h2>
+<p><strong>partialwrap</strong> is distributed under the MIT License. See the <a class="reference external" href="https://github.com/mcuntz/partialwrap/LICENSE">LICENSE</a> file for details.</p>
+<p>Copyright (c) 2016-2023 Matthias Cuntz</p>
+<p>The project structure is based on a <a class="reference external" href="https://github.com/MuellerSeb/template">template</a> provided by <a class="reference external" href="https://github.com/MuellerSeb">Sebastian Müller</a>.</p>
+</section>
+<section id="index-and-tables">
+<h2>Index and Tables<a class="headerlink" href="#index-and-tables" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="contents.html">partialwrap</a></h1>
+
+
+
+<p class="blurb">Wrappers of external executables and Python functions for functools.partial.</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#about-partialwrap">About partialwrap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-usage-guide">Quick usage guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#context">Context</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simple-python-functions">Simple Python functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#masking-parameters">Masking parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external-executables">External executables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#index-and-tables">Index and Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Public API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/mcuntz/partialwrap">partialwrap @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://doi.org/10.5281/zenodo.3893705">partialwrap @ Zenodo</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/partialwrap">partialwrap @ PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="https://anaconda.org/conda-forge/partialwrap">partialwrap @ conda-forge</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="contents.html">Documentation overview</a><ul>
+      <li>Previous: <a href="contents.html" title="previous chapter">Contents</a></li>
+      <li>Next: <a href="userguide.html" title="next chapter">User Guide</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2023, Matthias Cuntz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>partialwrap.std_io &#8212; partialwrap 1.7 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for partialwrap.std_io</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Standard parameter reader and writer functions as well as output reader</span>
+<span class="sd">functions, including substitution of tags #JA????# or names in files.</span>
+
+<span class="sd">This module was written by Matthias Cuntz while at Institut National de</span>
+<span class="sd">Recherche pour l&#39;Agriculture, l&#39;Alimentation et l&#39;Environnement (INRAE), Nancy,</span>
+<span class="sd">France.</span>
+
+<span class="sd">Copyright (c) 2016-2022 Matthias Cuntz - mc (at) macu (dot) de</span>
+
+<span class="sd">Released under the MIT License; see LICENSE file for details.</span>
+
+<span class="sd">.. moduleauthor:: Matthias Cuntz</span>
+
+<span class="sd">The following functions are provided:</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">   sub_params_ja</span>
+<span class="sd">   sub_params_names</span>
+<span class="sd">   sub_params_names_case</span>
+<span class="sd">   sub_params_names_ignorecase</span>
+<span class="sd">   standard_output_reader</span>
+<span class="sd">   standard_parameter_reader</span>
+<span class="sd">   standard_parameter_writer</span>
+<span class="sd">   standard_parameter_reader_bounds_mask</span>
+<span class="sd">   standard_parameter_writer_bounds_mask</span>
+<span class="sd">   standard_timeseries_reader</span>
+<span class="sd">   standard_time_series_reader</span>
+
+<span class="sd">History</span>
+<span class="sd">    * Written Nov 2016 by Matthias Cuntz (mc (at) macu (dot) de),</span>
+<span class="sd">      including standard readers and writers</span>
+<span class="sd">    * Added substitution function for #JA????# in prepared parameter files</span>
+<span class="sd">      (sub_ja_params_files), Jan 2018, Matthias Cuntz</span>
+<span class="sd">    * Use .pid as suffix for multiprocessing, Feb 2018, Matthias Cuntz</span>
+<span class="sd">    * Return ndarrays instead of lists and line IDs in</span>
+<span class="sd">      standard_parameter_reader, Mar 2018, Matthias Cuntz</span>
+<span class="sd">    * Added substitution functions for arbitrary names in parameter files</span>
+<span class="sd">      (sub_names_params_files*), Mar 2018, Matthias Cuntz</span>
+<span class="sd">    * Allow substitution in several parameter files (_msub_files), Apr 2018,</span>
+<span class="sd">      Matthias Cuntz</span>
+<span class="sd">    * Changed to Sphinx docstring and numpydoc, Dec 2019, Matthias Cuntz</span>
+<span class="sd">    * Renamed standard_parameter_reader/_writer to</span>
+<span class="sd">      standard_parameter_reader_bounds_mask/standard_parameter_writer_bounds_mask,</span>
+<span class="sd">      Jan 2020, Matthias Cuntz</span>
+<span class="sd">    * New standard_parameter_reader/_writer that read/write single values</span>
+<span class="sd">      per parameter, Jan 2020, Matthias Cuntz</span>
+<span class="sd">    * Swapped names and params in call to sub_names_params_files* to be</span>
+<span class="sd">      compatible with new generic exe_wrapper, Jan 2020, Matthias Cuntz</span>
+<span class="sd">    * Call standard_parameter_writer with 2 or 3 arguments, i.e. pid given or</span>
+<span class="sd">      not, Jan 2020, Matthias Cuntz</span>
+<span class="sd">    * Make all strings raw strings in sub_names_params_files_* routines to deal</span>
+<span class="sd">      with regular expressions, Jan 2020, Matthias Cuntz</span>
+<span class="sd">    * Keep formatting of names and spaces with sub_names_params functions;</span>
+<span class="sd">      close input file before raising error, Feb 2020, Matthias Cuntz</span>
+<span class="sd">    * Prepend underscore to local function, Jun 2020, Matthias Cuntz</span>
+<span class="sd">    * Use with statement for reading file so that they are properly closed,</span>
+<span class="sd">      Jun 2020, Matthias Cuntz</span>
+<span class="sd">    * Overwrite input files by default if no pid given,</span>
+<span class="sd">      Jun 2020, Matthias Cuntz</span>
+<span class="sd">    * Remove _files from function names, Jun 2020, Matthias Cuntz</span>
+<span class="sd">    * pid keyword after arguments, Jun 2020, Matthias Cuntz</span>
+<span class="sd">    * Rename all substitution functions sub_* to start with sub_params_*,</span>
+<span class="sd">      Jun 2020, Matthias Cuntz</span>
+<span class="sd">    * Add pid keyword to all routines, Jun 2020, Matthias Cuntz</span>
+<span class="sd">    * Make flake8 compliant, Dec 2020, Matthias Cuntz</span>
+<span class="sd">    * Allow non-numeric parameters, Feb 2021, Matthias Cuntz</span>
+<span class="sd">    * More generic right-hand side in sub_params_names,</span>
+<span class="sd">      May 2021, Matthias Cuntz</span>
+<span class="sd">    * Escape backslash in params in sub_params routines,</span>
+<span class="sd">      May 2021, Matthias Cuntz</span>
+<span class="sd">    * np.float-&gt; float, etc., Sep 2021, Matthias Cuntz</span>
+<span class="sd">    * Use specific whitespace characters instead of all whitespace characters</span>
+<span class="sd">      on right-hand side because the latter includes line breaks,</span>
+<span class="sd">      Nov 2021, Matthias Cuntz</span>
+<span class="sd">    * Helper function for constructing dict for `_msub`,</span>
+<span class="sd">      Nov 2021, Matthias Cuntz</span>
+<span class="sd">    * Added examples and reformatted docstrings, Aug 2022, Matthias Cuntz</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sub_params_ja&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;sub_params_names&#39;</span><span class="p">,</span> <span class="s1">&#39;sub_params_names_case&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;sub_params_names_ignorecase&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;standard_output_reader&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;standard_parameter_reader&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_parameter_writer&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;standard_parameter_reader_bounds_mask&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;standard_parameter_writer_bounds_mask&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;standard_time_series_reader&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_timeseries_reader&#39;</span><span class="p">]</span>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span> <span class="nf">_dict4msub</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function for constructing dict for `_msub`.</span>
+
+<span class="sd">    pattern/replacement are given as dictionary: d[pattern] = replacement</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    names : iterable</span>
+<span class="sd">        Variable names on left of equal (=) sign</span>
+<span class="sd">    params : iterable</span>
+<span class="sd">        Parameter values to be given to variables on the right of the equal (=)</span>
+<span class="sd">        sign.</span>
+<span class="sd">        Variable in *names[0]* will be assigned value in *params[0]*.</span>
+<span class="sd">        Variable in *names[1]* will be assigned value in *params[1]*.</span>
+<span class="sd">        Etc.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dic : dict</span>
+<span class="sd">        Pattern/replacement dictionary: `dic[pattern] = replacement`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dd</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">repl</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\g&lt;1&gt;\g&lt;2&gt;=\g&lt;3&gt;</span><span class="si">{:.14e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\\</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">repl</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\g&lt;1&gt;\g&lt;2&gt;=\g&lt;3&gt;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+        <span class="n">nep</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;\s*)=([ \t\f\v]*).*&quot;</span>  <span class="c1"># name = value</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^(\s*)&quot;</span> <span class="o">+</span> <span class="n">nep</span>                      <span class="c1"># beginning of line</span>
+        <span class="n">dd</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">repl</span>                             <span class="c1"># replacement using</span>
+                                                 <span class="c1"># substitutions \\1, \\2, ...</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(\n+\s*)&quot;</span> <span class="o">+</span> <span class="n">nep</span>                    <span class="c1"># after newline</span>
+        <span class="n">dd</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">repl</span>
+
+    <span class="k">return</span> <span class="n">dd</span>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span> <span class="nf">_msub</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function for substituting several patterns in one string.</span>
+
+<span class="sd">    pattern/replacement are given as dictionary: d[pattern] = replacement</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic : dict</span>
+<span class="sd">        Pattern/replacement dictionary: `dic[pattern] = replacement`</span>
+<span class="sd">    text : string</span>
+<span class="sd">        String on which patterns will be replaced</span>
+<span class="sd">    flags : int, optional</span>
+<span class="sd">        Flags will be passed to `re.sub()` (default: 0)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    text : string</span>
+<span class="sd">        Input string text with replaced patterns</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Compiled version as in</span>
+<span class="sd">        http://code.activestate.com/recipes/81330-single-pass-multiple-replace/</span>
+<span class="sd">    and</span>
+<span class="sd">        https://www.safaribooksonline.com/library/view/python-cookbook-2nd/0596007973/ch01s19.h</span>
+<span class="sd">    do not work because match.string returns the string and not the pattern so</span>
+<span class="sd">    that the key for the dictionary does not work anymore.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">dic</span><span class="p">[</span><span class="n">d</span><span class="p">],</span> <span class="n">text</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span> <span class="nf">_msub_files</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function for applying replacement dictionary on several files.</span>
+<span class="sd">    pattern/replacement are given as dictionary: d[pattern] = replacement</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    files : list</span>
+<span class="sd">        List with file names in which pattern replacement will be applied</span>
+<span class="sd">        on each line.</span>
+<span class="sd">    dic : dict</span>
+<span class="sd">        Pattern/replacement dictionary: `dic[pattern] = replacement`</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        Output files will be input files suffixed by *.pid*</span>
+<span class="sd">        (default: overwrite input file)</span>
+<span class="sd">    flags : int, optional</span>
+<span class="sd">        Flags will be passed to *re.sub()* (default: 0)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    files</span>
+<span class="sd">        No return value but either changed input files or output files with</span>
+<span class="sd">        names of the input files suffixed by *.pid*, in which all occurences of</span>
+<span class="sd">        all patterns were replaced.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">exists</span>
+
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">exists</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;File does not exist: &#39;</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+            <span class="n">tt</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="n">_msub</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">f</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+            <span class="n">ff</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tt</span><span class="p">)</span>
+
+    <span class="k">return</span>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="sub_params_ja"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.sub_params_ja">[docs]</a><span class="k">def</span> <span class="nf">sub_params_ja</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Substitute #JA????# with parameter value in several files, i.e.</span>
+
+<span class="sd">       | #JA0000# with params[0]</span>
+<span class="sd">       | #JA0001# with params[1]</span>
+<span class="sd">       | ...</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    files : list</span>
+<span class="sd">        List with file names in which #JA????# will be replaced.</span>
+<span class="sd">    params : iterable</span>
+<span class="sd">        | Parameter values to replace #JA????# patterns.</span>
+<span class="sd">        | params[0] will replace #JA0000#</span>
+<span class="sd">        | params[1] will replace #JA0001#</span>
+<span class="sd">        | ...</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        Output files will be input files suffixed by *.pid*</span>
+<span class="sd">        (default: overwrite input file)</span>
+
+<span class="sd">        Note that the default *pid=None* might not be useful if you have</span>
+<span class="sd">        carefully prepared input files.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        No return value but either changed input files or output files with</span>
+<span class="sd">        names of the input files suffixed by *.pid*, in which all #JA????#</span>
+<span class="sd">        patterns were replaced by *params*.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Replaces #JA0000# with 0, #JA0001# with 1, #JA0002# with 2, and</span>
+<span class="sd">    #JA0003# with 3 in the two input files &#39;file1.txt&#39; and &#39;file2.txt&#39;,</span>
+<span class="sd">    writing the two output files &#39;file1.txt.1234&#39; and &#39;file2.txt.1234&#39;:</span>
+
+<span class="sd">    &gt;&gt;&gt; sub_params_ja([&#39;file1.txt&#39;, &#39;file1.txt&#39;], [0, 1, 2, 3], pid=1234)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># assert list of files</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">files</span><span class="p">]</span>
+
+    <span class="c1"># make dict for replacement</span>
+    <span class="n">dd</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="s2">&quot;#JA</span><span class="si">{:04d}</span><span class="s2">#&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">repl</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:.14e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\\</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">repl</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+        <span class="n">dd</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">repl</span>
+
+    <span class="c1"># replace in each file</span>
+    <span class="n">_msub_files</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="sub_params_names_case"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.sub_params_names_case">[docs]</a><span class="k">def</span> <span class="nf">sub_params_names_case</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Substitute `name = .*` with `name = parameter` value in several files, i.e.</span>
+
+<span class="sd">       `names[i] = params[i]`</span>
+
+<span class="sd">    Note, *names* are case sensitive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    files : list</span>
+<span class="sd">        List with files in which values of *names* will be replaced with</span>
+<span class="sd">        *params*.</span>
+<span class="sd">    params : iterable</span>
+<span class="sd">        | Parameter values to be given to variables on the right of the</span>
+<span class="sd">          equal (=) sign.</span>
+<span class="sd">        | Variable in *names[0]* will be assigned value in *params[0]*</span>
+<span class="sd">        | Variable in *names[1]* will be assigned value in *params[1]*</span>
+<span class="sd">        | ...</span>
+<span class="sd">    names : iterable</span>
+<span class="sd">        Variable names on left of the equal (=) sign in *files*</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        Output files will be input files suffixed by *.pid*</span>
+<span class="sd">        (default: overwrite input file)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        No return value but either changed input files or output files with</span>
+<span class="sd">        names of the input files suffixed by *.pid*, in which all variables</span>
+<span class="sd">        given in *names* are assigned the values given in *params*.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Replaces `param1 = ...` with `param1 = 0`, `param2 = ...` with</span>
+<span class="sd">    `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`</span>
+<span class="sd">    with `param4 = 3` in the two input files &#39;file1.txt&#39; and &#39;file2.txt&#39;,</span>
+<span class="sd">    writing the two output files &#39;file1.txt.1234&#39; and &#39;file2.txt.1234&#39;.</span>
+<span class="sd">    This version is case sensitive so it does not replace `PARAM1 = ...`</span>
+<span class="sd">    with `PARAM1 = 0`, for example.</span>
+
+<span class="sd">    &gt;&gt;&gt; sub_params_names_case([&#39;file1.txt&#39;, &#39;file1.txt&#39;], [0, 1, 2, 3],</span>
+<span class="sd">    ...                       [&#39;param1&#39;, &#39;param2&#39;, &#39;param3&#39;, &#39;param4&#39;],</span>
+<span class="sd">    ...                       pid=1234)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># assert list of files</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">files</span><span class="p">]</span>
+
+    <span class="c1"># make dict for _msub with dict[pattern] = replacement</span>
+    <span class="n">dd</span> <span class="o">=</span> <span class="n">_dict4msub</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+    <span class="c1"># replace in each file</span>
+    <span class="n">_msub_files</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="sub_params_names_ignorecase"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.sub_params_names_ignorecase">[docs]</a><span class="k">def</span> <span class="nf">sub_params_names_ignorecase</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Substitute `name = .*` with `name = parameter` value in several files, i.e.</span>
+
+<span class="sd">        `names[i] = params[i]`</span>
+
+<span class="sd">    Note, *names* are case insensitive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    files : list</span>
+<span class="sd">        List with file in which values of *names* will be replaced with</span>
+<span class="sd">        *params*.</span>
+<span class="sd">    params : iterable</span>
+<span class="sd">        | Parameter values to be given to variables on the right of the</span>
+<span class="sd">          equal (=) sign</span>
+<span class="sd">        | Variable in names[0] will be assigned value in params[0]</span>
+<span class="sd">        | Variable in names[1] will be assigned value in params[1]</span>
+<span class="sd">        | ...</span>
+<span class="sd">    names : iterable</span>
+<span class="sd">        Variable names on left of the equal (=) sign in *files*</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        Output files will be input files suffixed by *.pid*</span>
+<span class="sd">        (default: overwrite input file)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        No return value but either changed input files or output files with</span>
+<span class="sd">        names of the input files suffixed by *.pid*, in which all variables</span>
+<span class="sd">        given in *names* are assigned the values given in *params*.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Replaces `param1 = ...` with `param1 = 0`, `param2 = ...` with</span>
+<span class="sd">    `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`</span>
+<span class="sd">    with `param4 = 3` in the two input files &#39;file1.txt&#39; and &#39;file2.txt&#39;,</span>
+<span class="sd">    writing the two output files &#39;file1.txt.1234&#39; and &#39;file2.txt.1234&#39;.</span>
+<span class="sd">    This version is case insensitive so it replaces also `PARAM1 = ...`,</span>
+<span class="sd">    `Param1 = ...`, or `ParAm1 = ...` with `PARAM1 = 0`, `Param1 = 0`, or</span>
+<span class="sd">    `ParAm1 = 0`, for example.</span>
+
+<span class="sd">    &gt;&gt;&gt; sub_params_names_ignorecase([&#39;file1.txt&#39;, &#39;file1.txt&#39;], [0, 1, 2, 3],</span>
+<span class="sd">    ...                             [&#39;param1&#39;, &#39;param2&#39;, &#39;param3&#39;, &#39;param4&#39;],</span>
+<span class="sd">    ...                             pid=1234)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># assert list of files</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">files</span><span class="p">]</span>
+
+    <span class="c1"># make dict for _msub with dict[pattern] = replacement</span>
+    <span class="n">dd</span> <span class="o">=</span> <span class="n">_dict4msub</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+    <span class="c1"># replace in each file</span>
+    <span class="n">_msub_files</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="sub_params_names"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.sub_params_names">[docs]</a><span class="k">def</span> <span class="nf">sub_params_names</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper for :any:`sub_params_names_ignorecase`.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Replaces `param1 = ...` with `param1 = 0`, `param2 = ...` with</span>
+<span class="sd">    `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`</span>
+<span class="sd">    with `param4 = 3` in the two input files &#39;file1.txt&#39; and &#39;file2.txt&#39;,</span>
+<span class="sd">    writing the two output files &#39;file1.txt.1234&#39; and &#39;file2.txt.1234&#39;.</span>
+<span class="sd">    This version is case insensitive so it replaces also `PARAM1 = ...`,</span>
+<span class="sd">    `Param1 = ...`, or `ParAm1 = ...` with `PARAM1 = 0`, `Param1 = 0`, or</span>
+<span class="sd">    `ParAm1 = 0`, for example.</span>
+
+<span class="sd">    &gt;&gt;&gt; sub_params_names([&#39;file1.txt&#39;, &#39;file1.txt&#39;], [0, 1, 2, 3],</span>
+<span class="sd">    ...                  [&#39;param1&#39;, &#39;param2&#39;, &#39;param3&#39;, &#39;param4&#39;],</span>
+<span class="sd">    ...                  pid=1234)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">sub_params_names_ignorecase</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="standard_output_reader"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_output_reader">[docs]</a><span class="k">def</span> <span class="nf">standard_output_reader</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Standard output reader.</span>
+
+<span class="sd">    The standard output reader reads a single value from a file without header,</span>
+<span class="sd">    comment line or similar. That means for example:</span>
+
+<span class="sd">        0.0123456789e-02</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Filename of file with output value</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        If present, *filename* will be suffixed by *.pid*, i.e. the file</span>
+<span class="sd">        *filename.pid* will be read.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Single number read from filename</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Imagine an external program *prog.exe* that takes a number *pid* as input</span>
+<span class="sd">    and writes out its result in *output.txt.pid*</span>
+
+<span class="sd">    &gt;&gt;&gt; import subprocess</span>
+<span class="sd">    &gt;&gt;&gt; exe = &#39;prog.exe&#39;</span>
+<span class="sd">    &gt;&gt;&gt; pid = 1234</span>
+<span class="sd">    &gt;&gt;&gt; err = subprocess.run([exe, str(pid)])</span>
+
+<span class="sd">    The results can be read with:</span>
+
+<span class="sd">    &gt;&gt;&gt; obj = standard_output_reader(&#39;output.txt&#39;, pid=pid)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># read output value</span>
+    <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">ff</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+    <span class="c1"># return float</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="standard_parameter_reader"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_parameter_reader">[docs]</a><span class="k">def</span> <span class="nf">standard_parameter_reader</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read standard parameter file.</span>
+
+<span class="sd">    The standard parameter file is a file containing</span>
+<span class="sd">    1 line per parameter with the parameter value.</span>
+<span class="sd">    Lines starting with &#39;#&#39; will be excluded.</span>
+<span class="sd">    That means a standard parameter file might look like:</span>
+
+<span class="sd">       | # parameter value</span>
+<span class="sd">       | 3.000000000000000e-01</span>
+<span class="sd">       | 2.300000000000000e-01</span>
+<span class="sd">       | 1.440000000000000e+01</span>
+<span class="sd">       | 3.000000000000000e-01</span>
+<span class="sd">       | ...</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Filename with parameter values</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        If present, *filename* will be suffixed by *.pid*,</span>
+<span class="sd">        i.e. the file *filename.pid* will be read.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Parameter values</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    A most simple parameter file *paramfile* with one line per parameter can be</span>
+<span class="sd">    read with:</span>
+
+<span class="sd">    &gt;&gt;&gt; params = standard_parameter_reader(paramfile)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">ff</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="standard_parameter_writer"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_parameter_writer">[docs]</a><span class="k">def</span> <span class="nf">standard_parameter_writer</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Standard parameter writer.</span>
+
+<span class="sd">    The standard parameter writer writes a file containing</span>
+<span class="sd">    1 line per parameter with the parameter value.</span>
+<span class="sd">    All values will be written in IEEE double precision: {:.14e}.</span>
+<span class="sd">    That means:</span>
+
+<span class="sd">       | 3.000000000000000e-01</span>
+<span class="sd">       | 2.300000000000000e-01</span>
+<span class="sd">       | 1.440000000000000e+01</span>
+<span class="sd">       | 3.000000000000000e-01</span>
+<span class="sd">       | ...</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Output filename with parameter values</span>
+<span class="sd">    params : iterable</span>
+<span class="sd">        Parameter values</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        If given, output file will be *filename* suffixed by *.pid*,</span>
+<span class="sd">        i.e. the file *filename.pid* will be written.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        No return value but output file written: *filename* or *filename.pid*</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Writes the parameters *params* that were sampled between *bounds* (with</span>
+<span class="sd">    the imaginary function *sample_parameters*) to file &#39;parameters.txt.1234&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; pid = 1234</span>
+<span class="sd">    &gt;&gt;&gt; params = sample_parameter(bounds)</span>
+<span class="sd">    &gt;&gt;&gt; standard_parameter_writer(&#39;parameters.txt&#39;, params, pid)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Existing file will be overwritten</span>
+    <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
+        <span class="n">ofile</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ofile</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">repl</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.14e}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">repl</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>
+            <span class="n">dstr</span> <span class="o">=</span> <span class="n">repl</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">dstr</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">ff</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="standard_parameter_reader_bounds_mask"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_parameter_reader_bounds_mask">[docs]</a><span class="k">def</span> <span class="nf">standard_parameter_reader_bounds_mask</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read standard parameter file with parameter bounds and mask.</span>
+
+<span class="sd">    The standard parameter file is a space separated file containing</span>
+<span class="sd">    1 line per parameter with the following columns:</span>
+
+<span class="sd">    identifier, current parameter value, minimum parameter value,</span>
+<span class="sd">    maximum parameter value, parameter mask (1: include, 0: exclude).</span>
+
+<span class="sd">    Lines starting with # will be excluded.</span>
+
+<span class="sd">    That means a standard parameter file with bounds and mask might look like:</span>
+
+<span class="sd">       | # value min max mask</span>
+<span class="sd">       | 1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1</span>
+<span class="sd">       | 2 2.300000000000000e-01 -1.000000000000000e+00 1.000000000000000e+00 1</span>
+<span class="sd">       | 3 1.440000000000000e+01 9.000000000000000e+00 2.000000000000000e+01 1</span>
+<span class="sd">       | 4 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 0</span>
+<span class="sd">       | ...</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Filename with parameter values</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        If present, *filename* will be suffixed by *.pid*,</span>
+<span class="sd">        i.e. the file *filename.pid* will be read.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List with ndarrays of</span>
+
+<span class="sd">           | ids - identifier</span>
+<span class="sd">           | params - parameter values</span>
+<span class="sd">           | pmin - minimum parameter value</span>
+<span class="sd">           | pmax - maximum parameter value</span>
+<span class="sd">           | mask - parameter mask (1: include, 0: exclude)</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Read identifiers, parameter values, lower and upper bounds, as well as</span>
+<span class="sd">    masks from the parameter file *paramfile*:</span>
+
+<span class="sd">    &gt;&gt;&gt; ids, params, pmin, pmax, pmask = (</span>
+<span class="sd">    ...     standard_parameter_reader_bounds_mask(paramfile) )</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ids</span>    <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pmin</span>   <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pmax</span>   <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pmask</span>  <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
+        <span class="n">pfile</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pfile</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pfile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">ff</span><span class="p">:</span>
+            <span class="n">ll</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ll</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">el</span> <span class="o">=</span> <span class="n">ll</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;Line has no 5 columns for parameter: &#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">el</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">pmin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">el</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">pmax</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">el</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+            <span class="n">pmask</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">el</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">ids</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pmin</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pmax</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pmask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)]</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="standard_parameter_writer_bounds_mask"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_parameter_writer_bounds_mask">[docs]</a><span class="k">def</span> <span class="nf">standard_parameter_writer_bounds_mask</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
+                                          <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Standard parameter writer with parameter bounds and mask.</span>
+
+<span class="sd">    The standard parameter writer writes a space separated file containing</span>
+<span class="sd">    1 header line (# value min max mask) plus 1 line per parameter with the</span>
+<span class="sd">    following columns:</span>
+
+<span class="sd">    consecutive parameter number, current parameter value,</span>
+<span class="sd">    minimum parameter value, maximum parameter value,</span>
+<span class="sd">    parameter mask (1: include, 0: exclude)</span>
+
+<span class="sd">    All values will be written in IEEE double precision: {:.14e}.</span>
+
+<span class="sd">    That means:</span>
+
+<span class="sd">       | # value min max mask</span>
+<span class="sd">       | 1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1</span>
+<span class="sd">       | 2 2.300000000000000e-01 -1.000000000000000e+00 1.000000000000000e+00 1</span>
+<span class="sd">       | 3 1.440000000000000e+01 9.000000000000000e+00 2.000000000000000e+01 1</span>
+<span class="sd">       | 4 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 0</span>
+<span class="sd">       | ...</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Output filename with parameter values</span>
+<span class="sd">    params : iterable</span>
+<span class="sd">        Parameter values</span>
+<span class="sd">    pmin : iterable</span>
+<span class="sd">        Minimum parameter values</span>
+<span class="sd">    pmax : iterable</span>
+<span class="sd">        Maximum parameter values</span>
+<span class="sd">    mask : iterable</span>
+<span class="sd">       Parameter mask (1: include, 0: exclude)</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        If given, output file will be *filename* suffixed by *.pid*,</span>
+<span class="sd">        i.e. the file *filename.pid* will be written.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        No return value but output file written: *filename* or *filename.pid*</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Writes the parameters *params* that were sampled between *pmin* and</span>
+<span class="sd">    *pmax* (with the imaginary function *sample_parameters*) to file</span>
+<span class="sd">    &#39;parameters.txt.1234&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; pid = 1234</span>
+<span class="sd">    &gt;&gt;&gt; params = sample_parameter(p0, pmin, pmax, pmask)</span>
+<span class="sd">    &gt;&gt;&gt; standard_parameter_writer_bounds_mask(</span>
+<span class="sd">    ...     &#39;parameters.txt&#39;, params, pmin, pmax, pmask, pid)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Assert correct call</span>
+    <span class="n">astr</span> <span class="o">=</span> <span class="s1">&#39;Parameter and minima do not have the same length.&#39;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pmin</span><span class="p">),</span> <span class="n">astr</span>
+    <span class="n">astr</span> <span class="o">=</span> <span class="s1">&#39;Parameter and maxima do not have the same length.&#39;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pmax</span><span class="p">),</span> <span class="n">astr</span>
+    <span class="n">astr</span> <span class="o">=</span> <span class="s1">&#39;Parameter and mask do not have the same length.&#39;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span> <span class="n">astr</span>
+
+    <span class="c1"># Convert mask to integer if boolean</span>
+    <span class="n">pmask</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mask</span> <span class="p">]</span>
+
+    <span class="c1"># Existing file will be overwritten</span>
+    <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+        <span class="c1"># header</span>
+        <span class="n">hstr</span> <span class="o">=</span> <span class="s1">&#39;# value min max mask&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">hstr</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">ff</span><span class="p">)</span>
+        <span class="c1"># data</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)):</span>
+            <span class="n">dstr</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:.14e}</span><span class="s1"> </span><span class="si">{:.14e}</span><span class="s1"> </span><span class="si">{:.14e}</span><span class="s1"> </span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">pmin</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">pmax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">pmask</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">dstr</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">ff</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="standard_time_series_reader"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_time_series_reader">[docs]</a><span class="k">def</span> <span class="nf">standard_time_series_reader</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Standard reader for time series.</span>
+
+<span class="sd">    The standard time series reader gets a time series of arbitrary length</span>
+<span class="sd">    from a file without header, comment line or similar.</span>
+<span class="sd">    That means for example:</span>
+
+<span class="sd">       | 0.0123456789e-02</span>
+<span class="sd">       | 0.1234567890e-02</span>
+<span class="sd">       | 0.2345678900e-02</span>
+<span class="sd">       | 0.3456789000e-02</span>
+<span class="sd">       | 0.4567890000e-02</span>
+<span class="sd">       | ...</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Filename of with time series values</span>
+<span class="sd">    pid : int, optional</span>
+<span class="sd">        If present, *filename* will be suffixed by *.pid*,</span>
+<span class="sd">        i.e. the file *filename.pid* will be read.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    timeseries : ndarray</span>
+<span class="sd">        Values of each line in filename</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Imagine an external program *prog.exe* that takes a number *pid* as input</span>
+<span class="sd">    and writes out a result time series in *output.txt.pid*</span>
+
+<span class="sd">    &gt;&gt;&gt; import subprocess</span>
+<span class="sd">    &gt;&gt;&gt; exe = &#39;prog.exe&#39;</span>
+<span class="sd">    &gt;&gt;&gt; pid = 1234</span>
+<span class="sd">    &gt;&gt;&gt; err = subprocess.run([exe, str(pid)])</span>
+
+<span class="sd">    The results can be read with:</span>
+
+<span class="sd">    &gt;&gt;&gt; ts = standard_time_series_reader(&#39;output.txt&#39;, pid=pid)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="c1"># read output value</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+        <span class="n">serie</span> <span class="o">=</span> <span class="n">ff</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="c1"># return float array</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">serie</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="standard_timeseries_reader"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_timeseries_reader">[docs]</a><span class="k">def</span> <span class="nf">standard_timeseries_reader</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper for :any:`standard_time_series_reader`</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Imagine an external program *prog.exe* that takes a number *pid* as input</span>
+<span class="sd">    and writes out a result time series in *output.txt.pid*</span>
+
+<span class="sd">    &gt;&gt;&gt; import subprocess</span>
+<span class="sd">    &gt;&gt;&gt; exe = &#39;prog.exe&#39;</span>
+<span class="sd">    &gt;&gt;&gt; pid = 1234</span>
+<span class="sd">    &gt;&gt;&gt; err = subprocess.run([exe, str(pid)])</span>
+
+<span class="sd">    The results can be read with:</span>
+
+<span class="sd">    &gt;&gt;&gt; ts = standard_timeseries_reader(&#39;output.txt&#39;, pid=pid)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">standard_time_series_reader</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">(</span><span class="n">optionflags</span><span class="o">=</span><span class="n">doctest</span><span class="o">.</span><span class="n">NORMALIZE_WHITESPACE</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../contents.html">partialwrap</a></h1>
+
+
+
+<p class="blurb">Wrappers of external executables and Python functions for functools.partial.</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html#quick-usage-guide">Quick usage guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Public API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/mcuntz/partialwrap">partialwrap @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://doi.org/10.5281/zenodo.3893705">partialwrap @ Zenodo</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/partialwrap">partialwrap @ PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="https://anaconda.org/conda-forge/partialwrap">partialwrap @ conda-forge</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../contents.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2023, Matthias Cuntz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

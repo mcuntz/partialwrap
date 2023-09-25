@@ -1,6 +1,9 @@
 Changelog
 ---------
 
+v2.0 (??? 2023)
+    * README and documentation from Markdown to reStructuredText.
+
 v1.7 (Aug 2022)
     * Added error function in `exe_wrapper` as fallback option in case
       subprocess exits with error code > 0.

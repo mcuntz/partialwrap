@@ -207,12 +207,12 @@ def _msub_files(files, dic, pid=None, flags=0):
 
     for f in files:
         if not exists(f):
-            raise IOError('File does not exist: '+f)
+            raise IOError('File does not exist: ' + f)
         with open(f, 'r') as fi:
             tt = fi.read()
         tt = _msub(dic, tt, flags=flags)
         if pid:
-            fname = f+'.'+str(pid)
+            fname = f + '.' + str(pid)
         else:
             fname = f
         with open(fname, 'w') as ff:
@@ -471,7 +471,7 @@ def standard_output_reader(filename, pid=None):
     """
     # read output value
     if pid:
-        fname = filename+'.'+str(pid)
+        fname = filename + '.' + str(pid)
     else:
         fname = filename
     with open(fname, 'r') as ff:
@@ -522,7 +522,7 @@ def standard_parameter_reader(filename, pid=None):
 
     """
     if pid:
-        fname = filename+'.'+str(pid)
+        fname = filename + '.' + str(pid)
     else:
         fname = filename
     params = []
@@ -580,7 +580,7 @@ def standard_parameter_writer(filename, params, pid=None):
     """
     # Existing file will be overwritten
     if pid:
-        ofile = filename+'.'+str(pid)
+        ofile = filename + '.' + str(pid)
     else:
         ofile = filename
     with open(ofile, 'w') as ff:
@@ -653,7 +653,7 @@ def standard_parameter_reader_bounds_mask(filename, pid=None):
     pmax   = []
     pmask  = []
     if pid:
-        pfile = filename+'.'+str(pid)
+        pfile = filename + '.' + str(pid)
     else:
         pfile = filename
     with open(pfile, 'r') as ff:
@@ -663,7 +663,7 @@ def standard_parameter_reader_bounds_mask(filename, pid=None):
                 continue
             el = ll.split()
             if len(el) != 5:
-                raise IOError('Line has no 5 columns for parameter: '+line)
+                raise IOError('Line has no 5 columns for parameter: ' + line)
             ids.append(el[0])
             params.append(float(el[1]))
             pmin.append(float(el[2]))
@@ -750,7 +750,7 @@ def standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask,
 
     # Existing file will be overwritten
     if pid:
-        fname = filename+'.'+str(pid)
+        fname = filename + '.' + str(pid)
     else:
         fname = filename
     with open(fname, 'w') as ff:
@@ -760,7 +760,7 @@ def standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask,
         # data
         for i in range(len(params)):
             dstr = '{:d} {:.14e} {:.14e} {:.14e} {:d}'.format(
-                i+1, params[i], pmin[i], pmax[i], pmask[i])
+                i + 1, params[i], pmin[i], pmax[i], pmask[i])
             print(dstr, file=ff)
 
     return
@@ -813,7 +813,7 @@ def standard_time_series_reader(filename, pid=None):
 
     """
     if pid:
-        fname = filename+'.'+str(pid)
+        fname = filename + '.' + str(pid)
     else:
         fname = filename
     # read output value

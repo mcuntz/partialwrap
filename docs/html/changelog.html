@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Changelog &#8212; partialwrap 1.7 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Authors" href="authors.html" />
+    <link rel="prev" title="partialwrap.std_io" href="std_io.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="changelog">
+<span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">¶</a></h1>
+<dl class="simple">
+<dt>v2.0 (??? 2023)</dt><dd><ul class="simple">
+<li><p>README and documentation from Markdown to reStructuredText.</p></li>
+</ul>
+</dd>
+<dt>v1.7 (Aug 2022)</dt><dd><ul class="simple">
+<li><p>Added error function in <cite>exe_wrapper</cite> as fallback option in case
+subprocess exits with error code &gt; 0.</p></li>
+<li><p>Added examples and reformatted docstrings.</p></li>
+</ul>
+</dd>
+<dt>v1.6 (Aug 2022)</dt><dd><ul class="simple">
+<li><p>Use subprocess.run for Python &gt; v3.6.</p></li>
+<li><p>Added <cite>partialwrap</cite> to conda-forge.</p></li>
+<li><p>Changed Markdown to reStructuredText in all files but README.md</p></li>
+</ul>
+</dd>
+<dt>v1.5 (Nov 2021)</dt><dd><ul class="simple">
+<li><p>Allow empty right-hand sides in files, such as <cite>name1 =</cite>.</p></li>
+<li><p>Use helper function for constructing dict for <cite>_msub</cite> in
+<cite>sub_params_names_ignorecase</cite> and <cite>sub_params_names_case</cite>.</p></li>
+</ul>
+</dd>
+<dt>v1.4.x (Oct 2021)</dt><dd><ul class="simple">
+<li><p>Corrected error in docs still using directory structure without src.</p></li>
+<li><p>Updated Zenodo, <cite>MANIFEST.in</cite>, and documentation.</p></li>
+<li><p>Removed stray print statement.</p></li>
+</ul>
+</dd>
+<dt>v1.4 (Oct 2021)</dt><dd><ul class="simple">
+<li><p>Move to new pip structure using <cite>pyproject.toml</cite>.</p></li>
+<li><p>Move to Github actions.</p></li>
+<li><p>Remove History sections from docstrings of wrappers and IO routines.</p></li>
+</ul>
+</dd>
+<dt>v1.3.5 (May 2021)</dt><dd><ul class="simple">
+<li><p>Escape backslash also in params in sub_params_ja routines.</p></li>
+</ul>
+</dd>
+<dt>v1.3.4 (May 2021)</dt><dd><ul class="simple">
+<li><p>Escape backslash in params in sub_params_names routines.</p></li>
+</ul>
+</dd>
+<dt>v1.3.3 (May 2021)</dt><dd><ul class="simple">
+<li><p>Deleted trailing print statement. Deleting and replacing v1.3.2 did
+not replace whl on PyPI.</p></li>
+</ul>
+</dd>
+<dt>v1.3.2 (May 2021)</dt><dd><ul class="simple">
+<li><p>Protect saved groups in replacement pattern in sub_params_names routines.</p></li>
+</ul>
+</dd>
+<dt>v1.3.1 (May 2021)</dt><dd><ul class="simple">
+<li><p>Respect space after = sign in sub_params_names routines.</p></li>
+<li><p>Replace everything after space after = sign up to next space.</p></li>
+</ul>
+</dd>
+<dt>v1.3 (May 2021)</dt><dd><ul class="simple">
+<li><p>Correct bug in exe_wrapper if <cite>pid=True</cite>.</p></li>
+<li><p>Allow non-numeric parameters in std_io functions.</p></li>
+</ul>
+</dd>
+<dt>v1.2 (Dec 2020)</dt><dd><ul class="simple">
+<li><p>Removed <cite>scipy.optimize</cite> from tests of wrappers.</p></li>
+<li><p>Use build instead of cibuildwheel to build pure Python wheels.</p></li>
+</ul>
+</dd>
+<dt>v1.1 (Dec 2020)</dt><dd><ul class="simple">
+<li><p>Check only Linux on TravisCI.</p></li>
+<li><p>Made all flake8 compatible.</p></li>
+</ul>
+</dd>
+<dt>v1.0 (Jun 2020)</dt><dd><ul class="simple">
+<li><p>Initial release on PyPI.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="contents.html">partialwrap</a></h1>
+
+
+
+<p class="blurb">Wrappers of external executables and Python functions for functools.partial.</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#quick-usage-guide">Quick usage guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Public API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/mcuntz/partialwrap">partialwrap @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://doi.org/10.5281/zenodo.3893705">partialwrap @ Zenodo</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/partialwrap">partialwrap @ PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="https://anaconda.org/conda-forge/partialwrap">partialwrap @ conda-forge</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="contents.html">Documentation overview</a><ul>
+      <li>Previous: <a href="std_io.html" title="previous chapter">partialwrap.std_io</a></li>
+      <li>Next: <a href="authors.html" title="next chapter">Authors</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2023, Matthias Cuntz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/changelog.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
