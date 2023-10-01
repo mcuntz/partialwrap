@@ -161,32 +161,52 @@ pygments_style = "sphinx"
 #     "titles_only": False,
 # }
 
-html_theme = 'alabaster'
-html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation.html',
-        'relations.html',
-        'searchbox.html',
-    ]
-}
+# html_theme = 'alabaster'
+# html_sidebars = {
+#     '**': [
+#         'about.html',
+#         'navigation.html',
+#         'relations.html',
+#         'searchbox.html',
+#     ]
+# }
+# html_theme_options = {
+#     'description': 'Wrappers of external executables and Python functions for functools.partial.',
+#     'extra_nav_links': {
+#         'partialwrap @ GitHub': "https://github.com/mcuntz/partialwrap",
+#         'partialwrap @ Zenodo': "https://doi.org/10.5281/zenodo.3893705",
+#         'partialwrap @ PyPI': "https://pypi.org/project/partialwrap",
+#         'partialwrap @ conda-forge': "https://anaconda.org/conda-forge/partialwrap"
+#     },
+# }
+
+html_theme = "sphinx_book_theme"
+html_copy_source = True
+html_show_sourcelink = True
+html_sourcelink_suffix = ""
+html_title = "partialwrap"
+# html_favicon = "_static/favicon.png"
 html_theme_options = {
-    'description': 'Wrappers of external executables and Python functions for functools.partial.',
-    'extra_nav_links': {
-        'partialwrap @ GitHub': "https://github.com/mcuntz/partialwrap",
-        'partialwrap @ Zenodo': "https://doi.org/10.5281/zenodo.3893705",
-        'partialwrap @ PyPI': "https://pypi.org/project/partialwrap",
-        'partialwrap @ conda-forge': "https://anaconda.org/conda-forge/partialwrap"
+    "path_to_docs": "docs",
+    "repository_url": "https://github.com/mcuntz/partialwrap",
+    "repository_branch": "main",
+    "launch_buttons": {
+        "binderhub_url": "https://mybinder.org",
+        "notebook_interface": "classic",
     },
+    "use_edit_page_button": True,
+    "use_issues_button": True,
+    "use_repository_button": True,
+    "use_download_button": True,
 }
 
-# # Add any paths that contain custom static files (such as style sheets) here,
-# # relative to this directory. They are copied after the builtin static files,
-# # so a file named "default.css" will overwrite the builtin "default.css".
+# Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-# # These paths are either relative to html_static_path
-# # or fully qualified paths (eg. https://...)
+# These paths are either relative to html_static_path
+# or fully qualified paths (eg. https://...)
 html_css_files = ['css/custom.css']
 
 # -- Options for HTMLHelp output ------------------------------------------
@@ -263,7 +283,7 @@ intersphinx_mapping = {
     "SciPy":       ("https://docs.scipy.org/doc/scipy/reference/",   None),
     "matplotlib":  ("https://matplotlib.org/",                       None),
     "Pandas":      ("https://pandas.pydata.org/docs/",               None),
-    "cython":      ("https://cython.readthedocs.io/en/latest/",      None),
+    "Cython":      ("https://cython.readthedocs.io/en/latest/",      None),
     "cftime":      ("https://unidata.github.io/cftime/",             None),
     # "netcdf4-python": ("https://unidata.github.io/netcdf4-python/",  None),
     "openpyxl":    ("https://openpyxl.readthedocs.io/en/stable/",    None),
@@ -272,5 +292,4 @@ intersphinx_mapping = {
     "mpi4py":      ("https://mpi4py.readthedocs.io/en/latest/",      None),
     "emcee":       ("https://emcee.readthedocs.io/en/latest/",       None),
     "pyeee":       ("https://pyeee.readthedocs.io/en/latest/",       None),
-    "partialwrap": ("https://partialwrap.readthedocs.io/en/latest/", None),
 }

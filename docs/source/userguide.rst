@@ -2,20 +2,22 @@
 User Guide
 **********
 
-``partialwrap`` provides wrappers for external executables and Python functions so that they can
-easily be partialised with Python's :func:`functools.partial`.
+``partialwrap`` provides wrappers for external executables and Python functions
+so that they can easily be partialised with Python's :func:`functools.partial`.
 
-Partial's ingenious mechanism allows to use even very complex functions with many arguments and
-keyword arguments with routines that need functions in the simple form `func(x)`. This includes
-Python's :func:`map` function, the minimizers in :mod:`scipy.optimize`, and plenty of third-party
-modules such as :mod:`emcee` or :mod:`pyeee`. It also allows easy parallelization of code with, for
-example, the parallel :func:`~multiprocessing.pool.Pool.map` function of the :mod:`multiprocessing`
-module or via the Message Passing Interface (MPI) :mod:`mpi4py`.
+Partial's ingenious mechanism allows to use even very complex functions with
+many arguments and keyword arguments with routines that need functions in the
+simple form `func(x)`. This includes Python's :func:`map` function, the
+minimizers in :mod:`scipy.optimize`, and plenty of third-party modules such as
+`emcee`_ or :mod:`pyeee`. It also allows easy parallelization of code with, for
+example, the parallel `map` function of the :mod:`multiprocessing` module or via
+the Message Passing Interface (MPI) :mod:`mpi4py`.
 
-``partialwrap`` provides two easy wrappers so that :func:`functools.partial` can be used with
-external programs as well as Python functions. It provides further functions to deal with
-input/output external programs. The user guide gives examples how to use pretty much every external
-program within Python modules.
+``partialwrap`` provides two easy wrappers so that :func:`functools.partial` can
+be used with external programs as well as Python functions. It provides further
+convenience functions to deal with input/output external programs. The user
+guide gives examples how to use pretty much every external program within Python
+modules.
 
 
 Simple Python functions
@@ -86,7 +88,7 @@ Figuratively speaking, :func:`~functools.partial` passes :math:`a` and :math:`b`
 to the function `call_func_arg_kwarg`. :func:`~scipy.optimize.minimize` can then simply call it as
 `partial_rastrigin(x)`, which finalizes the call to `rastrigin(x, a, b=b)`.
 
-``partialwrap`` provides a convenience function :func:`~partialwrap.function_wrapper` that
+``partialwrap`` provides a convenience function :func:`~partialwrap.wrappers.function_wrapper` that
 generalises the above helper function `call_func_arg_kwarg` by passing all arguments, given as a
 :any:`list`, and keyword arguments, given as a :any:`dict`, to arbitrary functions by the usual
 `*args`, `**kwargs` mechanism:
@@ -111,7 +113,7 @@ The wrapper is simply coded as the following and given for convenience:
 Another example where partialisation might come in handy is the use of several CPUs to speed up
 multiple evaluations of slow function evaluations. Parallelisation always has on overhead but it
 will be beneficial in case of more expensive models, which is most often true for real research
-problems. One can use the :func:`~multiprocessing.pool.Pool.map` function of Python's
+problems. One can use the `map` function of Python's
 :mod:`multiprocessing` module. I have 4 processors and can hence evaluate the function 4 times
 simultaneously:
 
@@ -136,7 +138,7 @@ Masked parameters in Python functions
 A common case in numerical optimization is the exclusion of some well-known parameters from
 optimization, or fixing correlated parameters during optimization. But the numerical model still
 needs to get a parameter value for the excluded/fixed parameters during optimization.
-``partialwrap`` provides a convenience function :func:`~partialwrap.function_mask_wrapper` to
+``partialwrap`` provides a convenience function :func:`~partialwrap.wrappers.function_mask_wrapper` to
 include only the masked parameters in the function evaluation and take default values where
 `mask==False`:
 
@@ -155,7 +157,7 @@ include only the masked parameters in the function evaluation and take default v
 
 The values of `x0` will be taken where `mask==False`, i.e. `mask` could be called an include-mask.
 
-The wrapper is very similar to :func:`~partialwrap.function_wrapper` in that it passes `args` and
+The wrapper is very similar to :func:`~partialwrap.wrappers.function_wrapper` in that it passes `args` and
 `kwargs` to the function, but further needs the default values `x0` and the `mask` as inputs. The
 wrapper is simply coded as the following and given for convenience:
 
@@ -171,10 +173,10 @@ External executables
 ====================
 
 The great power of ``partialwrap`` is its ability to wrap external executables that cannot directly
-be called from Python via :mod:`Cython` or :mod:`numpy.f2py` or similar.
+be called from Python via `Cython`_ or :mod:`numpy.f2py` or similar.
 
 ``partialwrap`` provides two wrapper functions to work with external executables:
-:func:`partialwrap.exe_wrapper` and :func:`partialwrap.exe_mask_wrapper`. The two wrappers
+:func:`~partialwrap.wrappers.exe_wrapper` and :func:`~partialwrap.wrappers.exe_mask_wrapper`. The two wrappers
 basically launch the external executable `exe` using Python's :mod:`subprocess` module, while
 providing functionality to read and write parameter values and model output. The wrappers write a
 parameter set into file(s) `parameterfile` that can be read by the external program `exe`. The
@@ -211,11 +213,11 @@ reading in an arbitrary number of parameters :math:`x_i` from a
    with open('out.txt', 'w') as ff:
        print(y, file=ff)
 
-:func:`partialwrap.standard_parameter_reader` is a convenience functions that reads one parameter
+:func:`~partialwrap.std_io.standard_parameter_reader` is a convenience functions that reads one parameter
 per line from a file without a header.
 
 The external program, which is in full `python3 rastrigin1.py`, can be used with the wrapper
-function :func:`partialwrap.exe_wrapper` of ``partialwrap``:
+function :func:`~partialwrap.wrappers.exe_wrapper` of ``partialwrap``:
 
 .. code-block:: python
 
@@ -231,9 +233,9 @@ function :func:`partialwrap.exe_wrapper` of ``partialwrap``:
    x0  = [0.1, 0.2]
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
 
-:func:`partialwrap.standard_parameter_writer` is another convenience function that writes one
+:func:`~partialwrap.std_io.standard_parameter_writer` is another convenience function that writes one
 parameter per line in a file without a header. The function
-:func:`partialwrap.standard_output_reader` simply reads one value from a file without a header. The
+:func:`~partialwrap.std_io.standard_output_reader` simply reads one value from a file without a header. The
 empty dictionary at the end of the partial statement is explained below.
 
 Here I changed from the Differential Evolution algorithm to the quasi-Newton method of Broyden,
@@ -313,7 +315,7 @@ and called in Python:
    res = opt.minimize(rastrigin_f90wrap, x0, method='BFGS')
 
 The compiled Fortran needs about 5 ms when run in a :mod:`subprocess`, which is about one tenth of
-the overhead of the wrapper function :func:`partialwrap.exe_wrapper`. Very fast executables can
+the overhead of the wrapper function :func:`~partialwrap.wrappers.exe_wrapper`. Very fast executables can
 hence be minimized in several seconds using ``partialwrap`` (about 4 seconds in the case of the
 two-dimensional Rastrigin function) and the gradient-based methods of :mod:`scipy`, or in several
 minutes with global search algorithms such as Differential Evolution (1.5 minutes in case of the
@@ -324,8 +326,8 @@ Masked parameters with external executables
 ===========================================
 
 Excluding parameters from, for example, optimization works exactly the same as for Python
-functions. One passes the same arguments to :func:`partialwrap.exe_mask_wrapper` than to
-:func:`partialwrap.exe_wrapper` plus the default values `x0` and the `mask`:
+functions. One passes the same arguments to :func:`~partialwrap.wrappers.exe_mask_wrapper` than to
+:func:`~partialwrap.wrappers.exe_wrapper` plus the default values `x0` and the `mask`:
 
 .. code-block:: python
 
@@ -341,22 +343,22 @@ functions. One passes the same arguments to :func:`partialwrap.exe_mask_wrapper`
    xout       = x0.copy()
    xout[mask] = res.x
 
-:func:`partialwrap.exe_mask_wrapper` basically does the transformation:
+:func:`~partialwrap.wrappers.exe_mask_wrapper` basically does the transformation:
 
 .. code-block:: python
 
    xx       = np.copy(x0)
    xx[mask] = x
 
-and then calls :func:`~partialwrap.exe_wrapper` with `xx` (instead of `x`). So everything written
-in the following about :func:`partialwrap.exe_wrapper` is also valid for
-:func:`partialwrap.exe_mask_wrapper`.
+and then calls :func:`~partialwrap.wrappers.exe_wrapper` with `xx` (instead of `x`). So everything written
+in the following about :func:`~partialwrap.wrappers.exe_wrapper` is also valid for
+:func:`~partialwrap.wrappers.exe_mask_wrapper`.
 
 
 Additional arguments for exe_wrapper
 ====================================
 
-The user can pass further arguments to :func:`~partialwrap.exe_wrapper` via a dictionary at the end
+The user can pass further arguments to :func:`~partialwrap.wrappers.exe_wrapper` via a dictionary at the end
 of the call, which was empty at the examples above.
 
 If you need to access shell features such as pipes, wildcards, environment variables, etc., the
@@ -384,29 +386,34 @@ errors that might occur during execution. The above example using the external p
    x0  = [0.1, 0.2]
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
 
-Note the change of `rastrigin_exe = ['python3', 'rastrigin1.py']` to `rastrigin_exe = 'python3
-rastrigin1.py'` due to the use of `shell=True`.
+Note the change of `rastrigin_exe = ['python3', 'rastrigin1.py']` to
+`rastrigin_exe = 'python3 rastrigin1.py'` due to the use of `shell=True`.
 
-Both, `parameterfile` and `outputfile` can either be single filenames (string) or a list of
-filenames, which will be passed to `parameterwriter` and `outputreader`, respectively.
-:func:`~partialwrap.exe_wrapper` deletes the parameter and output files after use. If you want to
-keep the files, you can set the keys `keepparameterfile` and `keepoutputfile` to `True`. This can
-be useful, for example, if your `parameterwriter` just changes a parameterfile in-place. An example
-of such a `parameterwriter` is :func:`~partialwrap.sub_params_names`, which
-substitutes all lines `name=.*` with `name=parameter` in the input files. The input file might be a
+Both, `parameterfile` and `outputfile` can either be single filenames (string)
+or a list of filenames, which will be passed to `parameterwriter` and
+`outputreader`, respectively. :func:`~partialwrap.wrappers.exe_wrapper` deletes
+the parameter and output files after use. If you want to keep the files, you can
+set the keys `keepparameterfile` and `keepoutputfile` to `True`. This can be
+useful, for example, if your `parameterwriter` just changes a parameterfile
+in-place. An example of such a `parameterwriter` is
+:func:`~partialwrap.std_io.sub_params_names`, which substitutes all lines
+`name=.*` with `name=parameter` in the input files. The input file might be a
 `parameterfile` for the external executable `exe`, where a parameter is given as
-`parameter_name=parameter_value`, for example a Fortran namelist or a file in Python's standard
-:mod:`configparser` format. If the first iteration of, for example, an optimization removed the
-file, the next iteration could not use it again to insert the new parameter set. The
-parameterwriter :func:`~partialwrap.sub_params_names` not only needs the filename(s)
+`parameter_name=parameter_value`, for example a Fortran namelist or a file in
+Python's standard :mod:`configparser` format. If the first iteration of, for
+example, an optimization removed the file, the next iteration could not use it
+again to insert the new parameter set. The parameterwriter
+:func:`~partialwrap.std_io.sub_params_names` not only needs the filename(s)
 `parameterfile` and the parameter values `params` as input as the above
-:func:`standard_parameter_writer(parameterfile, params)` but also the `names` of the parameters. One can
-pass additionally arguments `pargs` and keyword arguments `pkwargs` to the `parameterwriter` by
-passing the dictionary entries `'pargs':parameterwriter_arguments` and
-`'pkwargs':parameterwriter_keywords` to :func:`~partialwrap.exe_wrapper`.
+`standard_parameter_writer(parameterfile, params)` but also the `names` of the
+parameters. One can pass additionally arguments `pargs` and keyword arguments
+`pkwargs` to the `parameterwriter` by passing the dictionary entries
+`'pargs':parameterwriter_arguments` and `'pkwargs':parameterwriter_keywords` to
+:func:`~partialwrap.wrappers.exe_wrapper`.
 
-Let's change the above external Python program `rastrigin1.py`, calling it `rastrigin2.py`, so that
-it reads its parameters from an input file of the form `name = parameter`.
+Let's change the above external Python program `rastrigin1.py`, calling it
+`rastrigin2.py`, so that it reads its parameters from an input file of the form
+`name = parameter`.
 
 .. code-block::
 
@@ -440,17 +447,18 @@ it reads its parameters from an input file of the form `name = parameter`.
    with open('out.txt', 'w') as ff:
        print(y, file=ff)
 
-The parameterwriter :func:`~partialwrap.sub_params_names` will take the
-`parameterfile='params.txt'`, searches for the lines that have nothing but whitespace before the
-`names=['param01','param02','param03'] and replaces the lines with `names[i] = params[i]`.
-`params.txt` will be reused for each iteration during optimization so should not be deleted by
-:func:`~partialwrap.exe_wrapper`:
+The parameterwriter :func:`~partialwrap.std_io.sub_params_names` will take the
+`parameterfile='params.txt'`, searches for the lines that have nothing but
+whitespace before the `names=['param01','param02','param03'] and replaces the
+lines with `names[i] = params[i]`. `params.txt` will be reused for each
+iteration during optimization so should not be deleted by
+:func:`~partialwrap.wrappers.exe_wrapper`:
 
 .. code-block:: python
 
    from functools import partial
    from partialwrap import exe_wrapper, sub_params_names, standard_output_reader
-	
+
    rastrigin_exe  = ['python3', 'rastrigin2.py']
    parameterfile  = 'params.txt'
    outputfile     = 'out.txt'
@@ -462,64 +470,76 @@ The parameterwriter :func:`~partialwrap.sub_params_names` will take the
                             {'pargs':[names], 'keepparameterfile':True})
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
 
-Note the list in `'pargs':[names]`. If one put `'pargs':names` than the `*args` mechanism would pass
-three single arguments to `sub_params_names`, which would hence wrongly receive 5 instead of 3 arguments.
+Note the list in `'pargs':[names]`. If one put `'pargs':names` than the `*args`
+mechanism would pass three single arguments to `sub_params_names`, which would
+hence wrongly receive 5 instead of 3 arguments.
 
-The same `*args/**kwargs` mechanism is implemented for the `outputreader`, where one can set the
-keys `oargs` and `okwargs` to be passed to `outputreader`. This can be used, for example, to pass
-observational data and uncertainty to calculate an evaluation metric such as a log-likelihood from
-model output.
+The same `*args/**kwargs` mechanism is implemented for the `outputreader`, where
+one can set the keys `oargs` and `okwargs` to be passed to `outputreader`. This
+can be used, for example, to pass observational data and uncertainty to
+calculate an evaluation metric such as a log-likelihood from model output.
 
 
 Provided parameterwriter and outputreader
 =========================================
 
-`partialwrap` comes with a few predefined `parameterwriter` and `outputreader`. The most basic ones
-were used in the examples above. :func:`~partialwrap.standard_parameter_writer` simply writes
-parameter values one by one in a file. :func:`~partialwrap.standard_parameter_reader` reads
-parameters line by line from a file that does not contain any header lines, comments or similar.
-:func:`~partialwrap.standard_output_reader` similarly reads a single value from a file.
+``partialwrap`` comes with a few predefined `parameterwriter` and
+`outputreader`. The most basic ones were used in the examples above.
+:func:`~partialwrap.std_io.standard_parameter_writer` simply writes parameter
+values one by one in a file.
+:func:`~partialwrap.std_io.standard_parameter_reader` reads parameters line by
+line from a file that does not contain any header lines, comments or similar.
+:func:`~partialwrap.std_io.standard_output_reader` similarly reads a single
+value from a file.
 
-:func:`~partialwrap.standard_parameter_writer_bounds_mask` writes another common format, which
-includes one header line (# value min max mask) plus one line per parameter with the following
-columns: consecutive parameter number, current parameter value, lower bound of parameter, upper
-bound of parameter, 0/1 mask. :func:`~partialwrap.standard_parameter_reader_bounds_mask` reads
-exactly these kind of files (lines starting with '#' will be ignored). A last example of an
-`outputreader` is :func:`~partialwrap.standard_timeseries_reader` (or
-:func:`~partialwrap.standard_time_series_reader`), which reads all lines from an output file into a
-`numpy.ndarray`.
+:func:`~partialwrap.std_io.standard_parameter_writer_bounds_mask` writes another
+common format, which includes one header line (# value min max mask) plus one
+line per parameter with the following columns: consecutive parameter number,
+current parameter value, lower bound of parameter, upper bound of parameter, 0/1
+mask. :func:`~partialwrap.std_io.standard_parameter_reader_bounds_mask` reads
+exactly these kind of files (lines starting with '#' will be ignored). A last
+example of an `outputreader` is
+:func:`~partialwrap.std_io.standard_timeseries_reader` (or
+:func:`~partialwrap.std_io.standard_time_series_reader`), which reads all lines
+from an output file into a `numpy.ndarray`.
 
-These `parameterwriter` and `outputreader` are given rather as examples for users to write their
-own readers and writers.
+These `parameterwriter` and `outputreader` are given rather as examples for
+users to write their own readers and writers.
 
-A versatile `parameterwriter` ready to use is, however, :func:`~partialwrap.sub_params_names`,
-which was used in the example above. It searches the `parameterfile` for lines that have nothing
-but whitespace before given `names` and replaces the right hand side of the equal sign with the
-parameter value. This can be used with a large variety of parameter files such as Python's
-:mod:`configparser` files or Fortran namelists or similar. It exists in two variants: `names` are
-case-sensitive in :func:`~partialwrap.sub_params_names_case` and case-insensitive in
-:func:`~partialwrap.sub_params_names_ignorecase`. :func:`~partialwrap.sub_params_names` is simply a
-wrapper for the latter case-insensitive function.
+A versatile `parameterwriter` ready to use is, however,
+:func:`~partialwrap.std_io.sub_params_names`, which was used in the example
+above. It searches the `parameterfile` for lines that have nothing but
+whitespace before given `names` and replaces the right hand side of the equal
+sign with the parameter value. This can be used with a large variety of
+parameter files such as Python's :mod:`configparser` files or Fortran namelists
+or similar. It exists in two variants: `names` are case-sensitive in
+:func:`~partialwrap.std_io.sub_params_names_case` and case-insensitive in
+:func:`~partialwrap.std_io.sub_params_names_ignorecase`.
+:func:`~partialwrap.std_io.sub_params_names` is simply a wrapper for the latter
+case-insensitive function.
 
 Another versatile `parameterwriter` that comes with `partialwrap` is
-:func:`~partialwrap.sub_params_ja`. It searches for the strings #JA0000#, #JA0001#, ... in the
-`parameterfile` and replaces them with the values of the first parameter, the second parameter, and
-so on. The file must be well prepared in advance but the parameters can then be anywhere in the
-`parameterfile`, appear several times on the same line or on different lines, etc. After
-:func:`~partialwrap.sub_params_ja` was called once, for example by an optimization routine, the
-tags #JA0000#, #JA0001#, ... would be gone and a second iteration could not fill in new parameter
-values. The best way to use :func:`~partialwrap.sub_params_ja` is thus with the key `'pid':True` to
-:func:`~partialwrap.exe_wrapper`, which will be explained in the next section about concurrent
-execution of the external program.
+:func:`~partialwrap.std_io.sub_params_ja`. It searches for the strings #JA0000#,
+#JA0001#, ... in the `parameterfile` and replaces them with the values of the
+first parameter, the second parameter, and so on. The file must be well prepared
+in advance but the parameters can then be anywhere in the `parameterfile`,
+appear several times on the same line or on different lines, etc. After
+:func:`~partialwrap.std_io.sub_params_ja` was called once, for example by an
+optimization routine, the tags #JA0000#, #JA0001#, ... would be gone and a
+second iteration could not fill in new parameter values. The best way to use
+:func:`~partialwrap.std_io.sub_params_ja` is thus with the key `'pid':True` to
+:func:`~partialwrap.wrappers.exe_wrapper`, which will be explained in the next
+section about concurrent execution of the external program.
 
 
 Parallel evaluation of external executables
 ===========================================
 
-Most real-life numerical models have longer run times than just a few milliseconds. One might
-hence like to take advantage of more processing units such as simple multi-core processors,
-multi-processor nodes or computer clusters. Take the simple parallel evaluation of the Rastrigin
-function from above:
+Most real-life numerical models have longer run times than just a few
+milliseconds. One might hence like to take advantage of more processing units
+such as simple multi-core processors, multi-processor nodes or computer
+clusters. Take the simple parallel evaluation of the Rastrigin function from
+above:
 
 .. code-block:: python
 
@@ -536,11 +556,11 @@ function from above:
    xmax  =  5.12
    neval = 100
    x = xmin + (xmax - xmin) * np.random.random_sample((neval,ndim))
-   with Pool(4) as pool: 
+   with Pool(4) as pool:
        y = np.array(pool.map(rastra, x))
 
-If we want to use the external program `rastrigin1.py` instead of the Python function
-:func:`rastrigin`, one would naively do:
+If we want to use the external program `rastrigin1.py` instead of the Python
+function :func:`rastrigin`, one would naively do:
 
 .. code-block:: python
 
@@ -562,18 +582,20 @@ If we want to use the external program `rastrigin1.py` instead of the Python fun
    with Pool(4) as pool: 
        y = np.array(pool.map(rastrigin_wrap, x))
 
-Python would fork 4 times and start 4 concurrent runs of :func:`rastrigin_wrap`. All 4 runs
-would write the file 'params.txt', overwriting each other. ``partialwrap`` provides hence the key
-`'pid':True` to :func:`~partialwrap.exe_wrapper`, which then passes a unique process identifier
-(`pid`) as a keyword to the `parameterwriter`, adds the `pid` to the function call, and then
-also passes the `pid` as a keyword to `outputreader`. :func:`~partialwrap.exe_wrapper` normally
-deletes `parameterfile` and `outputfile` at its end. In case of `'pid':True`, it deletes
-`parameterfile` and `outputfile` suffixed with `.pid`, if present.
+Python would fork 4 times and start 4 concurrent runs of :func:`rastrigin_wrap`.
+All 4 runs would write the file 'params.txt', overwriting each other.
+``partialwrap`` provides hence the key `'pid':True` to
+:func:`~partialwrap.wrappers.exe_wrapper`, which then passes a unique process
+identifier (`pid`) as a keyword to the `parameterwriter`, adds the `pid` to the
+function call, and then also passes the `pid` as a keyword to `outputreader`.
+:func:`~partialwrap.wrappers.exe_wrapper` normally deletes `parameterfile` and
+`outputfile` at its end. In case of `'pid':True`, it deletes `parameterfile` and
+`outputfile` suffixed with `.pid`, if present.
 
 So all `parameterwriter` provided by ``partialwrap`` take a keyword `pid` and, if present, write
 `parameterfile.pid` rather than simply `parameterfile`. Likewise all `outputreader` provided by
 ``partialwrap`` take a keyword `pid` and if present read `outputfile.pid` rather than `outputfile`.
-:func:`~partialwrap.exe_wrapper` then launches `exe+[str(pid)]` (or `exe+' '+str(pid) in case of
+:func:`~partialwrap.wrappers.exe_wrapper` then launches `exe+[str(pid)]` (or `exe+' '+str(pid) in case of
 `'shell':True`). The external executable has hence to be able to read the `pid` from the command line
 and, if present, read `parameterfile.pid` instead of `parameterfile` and write `outputfile.pid`
 instead of `outputfile`. This can be handled with shell scripts if you are unable to change the
@@ -659,9 +681,9 @@ use available CPUs to find the minimum of the Rastrigin function:
    xmax  =  5.12
    res = opt.differential_evolution(rastrigin_wrap, [(xmin,xmax),]*ndim, workers=4)
 
-Or one could use the popular :mod:`emcee` library to calculate parameter uncertainties with the
+Or one could use the popular `emcee`_ library to calculate parameter uncertainties with the
 Markov chain Monte Carlo (MCMC) method. We take the example from the section on parallelization of
-the :mod:`emcee` documentation (https://emcee.readthedocs.io/en/stable/tutorials/parallel/) but
+the `emcee`_ documentation (https://emcee.readthedocs.io/en/stable/tutorials/parallel/) but
 code the log-likelihood function as an external Python program:
 
 .. code-block:: python
@@ -695,7 +717,7 @@ code the log-likelihood function as an external Python program:
    with open(fname, 'w') as ff:
        print(y, file=ff)
 
-Partialize it and sample the log-likelihood with :mod:`emcee` using a single processor:
+Partialize it and sample the log-likelihood with `emcee`_ using a single processor:
 
 .. code-block:: python
 
@@ -744,9 +766,9 @@ This takes about 80 seconds on my machine. The parallel version using Python's
 
 This needs about 26 seconds on my machine; about 3 times faster.
 
-One can see that the `parameterwriter` :func:`~partialwrap.sub_params_ja` works well with the 'pid'
+One can see that the `parameterwriter` :func:`~partialwrap.std_io.sub_params_ja` works well with the 'pid'
 key. The user prepares the `parameterfile` with the tags #JA0000#, #JA0001#, ....
-:func:`~partialwrap.sub_params_ja` then takes `parameterfile` and writes the file
+:func:`~partialwrap.std_io.sub_params_ja` then takes `parameterfile` and writes the file
 `parameterfile.pid` with the tags replaced by parameter values. No file is overwritten and
 `parameterfile` can be reused by the next iteration or from a parallel process.
 
@@ -793,7 +815,7 @@ has no `pid` ability, could still be used using a bash script on Unix/Linux syst
    cd ..
    rm -r ${rundir}
 
-This would be used with :func:`~partialwrap.exe_wrapper` like:
+This would be used with :func:`~partialwrap.wrappers.exe_wrapper` like:
 
 .. code-block:: python
 
@@ -851,7 +873,7 @@ The bash script could, of course, also be a Python script to work on Windows pla
    os.chdir('..')
    shutil.rmtree(rundir)
 
-This would be used with :func:`~partialwrap.exe_wrapper` like:
+This would be used with :func:`~partialwrap.wrappers.exe_wrapper` like:
 
 .. code-block:: python
 
@@ -870,3 +892,6 @@ This would be used with :func:`~partialwrap.exe_wrapper` like:
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
 
 That's all Folks!
+
+.. _emcee: https://emcee.readthedocs.io/
+.. _Cython: https://cython.readthedocs.io/

@@ -2,6 +2,8 @@ Changelog
 ---------
 
 v2.0 (??? 2023)
+    * Use sphinx_book_theme.
+    * Move documentation from ReadTheDocs to Github Pages.
     * README and documentation from Markdown to reStructuredText.
 
 v1.7 (Aug 2022)

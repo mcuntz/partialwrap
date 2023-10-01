@@ -265,7 +265,7 @@ The project structure is based on a `template`_ provided by `Sebastian Müller`_
    :target: https://doi.org/10.5281/zenodo.3893705
 .. |PyPI version| image:: https://badge.fury.io/py/partialwrap.svg
    :target: https://badge.fury.io/py/partialwrap
-.. |Conda version| image:: https://img.shields.io/conda/vn/conda-forge//partialwrap.svg
+.. |Conda version| image:: https://anaconda.org/conda-forge/partialwrap/badges/version.svg
    :target: https://anaconda.org/conda-forge/partialwrap
 .. |License| image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
    :target: https://github.com/mcuntz/partialwrap/blob/master/LICENSE

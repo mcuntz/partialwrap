@@ -1,9 +1,9 @@
 Quickstart
 ==========
 
-**partialwrap**: small Python library providing wrappers for external
+``partialwrap``: small Python library providing wrappers for external
 executables and Python functions so that they can easily be partialized with
-Python’s :mod:`functools.partial`.
+Python’s :py:func:`functools.partial`.
 
 |DOI| |PyPI version| |Conda version| |License| |Build Status| |Coverage Status|
 
@@ -11,19 +11,19 @@ Python’s :mod:`functools.partial`.
 About partialwrap
 -----------------
 
-**partialwrap** is a Python library providing easy wrapper functions to use with
-Python’s :mod:`functools.partial`. It allows to use any external executable as
+``partialwrap`` is a Python library providing easy wrapper functions to use with
+Python’s :py:func:`functools.partial`. It allows to use any external executable as
 well as any Python function with arbitrary arguments and keywords to be used
 with libraries that call functions simply in the form :math:`func(x)`. This
 includes the functions of the :mod:`scipy.optimize` package or external packages
 such as :mod:`emcee` or :mod:`pyeee`, and allows the use of distributed function
-evaluations with Python’s :mod:`multiprocessing` or via :mod:`mpi4py`.
+evaluations with Python’s :py:mod:`multiprocessing` or via :mod:`mpi4py`.
 
 
 Documentation
 -------------
 
-The complete documentation for **partialwrap** is available at:
+The complete documentation for ``partialwrap`` is available at:
 
    https://mcuntz.github.io/partialwrap/
 
@@ -34,7 +34,7 @@ Quick usage guide
 Context
 ~~~~~~~
 
-The easiest wrapper in **partialwrap** is for Python functions.
+The easiest wrapper in ``partialwrap`` is for Python functions.
 
 Consider the *Rastrigin function*
 (https://en.wikipedia.org/wiki/Rastrigin_function), which is a popular
@@ -90,8 +90,8 @@ Simple Python functions
 
 Not all optimizers allow the passing of arguments. And notably
 :mod:`scipy.optimize` does not allow the passing of keyword arguments, such as
-:math:`b` in the case of `rastrigin`. One can use :func:`~functools.partial` of
-Python's :mod:`functools` in this case:
+:math:`b` in the case of `rastrigin`. One can use :py:func:`~functools.partial` of
+Python's :py:mod:`functools` in this case:
 
 .. code-block:: python
 
@@ -107,13 +107,13 @@ Python's :mod:`functools` in this case:
 
    res = opt.minimize(partial_rastrigin, x0, method='BFGS')
 
-Figuratively speaking, :func:`~functools.partial` passes :math:`a` and :math:`b`
+Figuratively speaking, :py:func:`~functools.partial` passes :math:`a` and :math:`b`
 to the function `call_func_arg_kwarg` already during definition.
 :func:`~scipy.optimize.minimize` can then simply call it as
 `partial_rastrigin(x)`, which finalizes the call to `rastrigin(x, a, b=b)`.
 
-**partialwrap** provides a convenience function
-:func:`~partialwrap.function_wrapper` passing all arguments, given as a
+``partialwrap`` provides a convenience function
+:func:`~partialwrap.wrappers.function_wrapper` passing all arguments, given as a
 :any:`list`, and keyword arguments, given as a :any:`dict`, to arbitrary
 functions:
 
@@ -142,8 +142,8 @@ Masking parameters
 
 A common case in numerical optimization are bound parameters and specifically
 the exclusion of some well-known or correlated parameters from optimization.
-**partialwrap** provides a convenience function
-:func:`~partialwrap.function_mask_wrapper` to include only the masked parameters
+``partialwrap`` provides a convenience function
+:func:`~partialwrap.wrappers.function_mask_wrapper` to include only the masked parameters
 in the function evaluation:
 
 .. code-block:: python
@@ -165,13 +165,13 @@ called an include-mask.
 External executables
 ~~~~~~~~~~~~~~~~~~~~
 
-**partialwrap** provides two wrapper functions to work with external
-executables: :func:`partialwrap.exe_wrapper` and
-:func:`partialwrap.exe_mask_wrapper`.
+``partialwrap`` provides two wrapper functions to work with external
+executables: :func:`~partialwrap.wrappers.exe_wrapper` and
+:func:`~partialwrap.wrappers.exe_mask_wrapper`.
 
-**partialwrap** writes the sampled parameter sets into files that can be read by
+``partialwrap`` writes the sampled parameter sets into files that can be read by
 the external program. The external program should write its result to a file
-that will then be read by **partialwrap** in return. That means **partialwrap**
+that will then be read by ``partialwrap`` in return. That means ``partialwrap``
 needs to have a function `parameterwriter` that writes the parameter file
 `parameterfile` needed by the executable `exe`. It then needs to have a function
 `outputreader` for reading the output file `outputfile` of the external
@@ -209,8 +209,8 @@ This program can be called on the command line (if `params.txt` is present) with
 
    python rastrigin1.py
 
-The external program can be used with Python's :func:`functools.partial` and the
-wrapper function :func:`partialwrap.exe_wrapper`:
+The external program can be used with Python's :py:func:`functools.partial` and the
+wrapper function :func:`~partialwrap.wrappers.exe_wrapper`:
 
 .. code-block:: python
 
@@ -227,10 +227,10 @@ wrapper function :func:`partialwrap.exe_wrapper`:
    x0  = [0.1, 0.2, 0.3]
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
 
-:func:`partialwrap.standard_parameter_reader` and
-:func:`partialwrap.standard_parameter_writer` are convenience functions that
+:func:`~partialwrap.std_io.standard_parameter_reader` and
+:func:`~partialwrap.std_io.standard_parameter_writer` are convenience functions that
 read and write one parameter per line in a file without a header. The function
-:func:`partialwrap.standard_output_reader` simply reads one value from a file
+:func:`~partialwrap.std_io.standard_output_reader` simply reads one value from a file
 without header. The empty dictionary at the end is explained in the `userguide
 <userguide.html>`_.
 
@@ -264,7 +264,7 @@ Requirements
 License
 -------
 
-**partialwrap** is distributed under the MIT License. See the `LICENSE`_ file for details.
+``partialwrap`` is distributed under the MIT License. See the `LICENSE`_ file for details.
 
 Copyright (c) 2016-2023 Matthias Cuntz
 
@@ -282,7 +282,7 @@ Index and Tables
    :target: https://doi.org/10.5281/zenodo.3893705
 .. |PyPI version| image:: https://badge.fury.io/py/partialwrap.svg
    :target: https://badge.fury.io/py/partialwrap
-.. |Conda version| image:: https://img.shields.io/conda/vn/conda-forge//partialwrap.svg
+.. |Conda version| image:: https://anaconda.org/conda-forge/partialwrap/badges/version.svg
    :target: https://anaconda.org/conda-forge/partialwrap
 .. |License| image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
    :target: https://github.com/mcuntz/partialwrap/blob/master/LICENSE
