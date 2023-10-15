@@ -893,5 +893,5 @@ This would be used with :func:`~partialwrap.wrappers.exe_wrapper` like:
 
 That's all Folks!
 
-.. _emcee: https://emcee.readthedocs.io/
+.. _emcee: https://emcee.readthedocs.io/en/latest/
 .. _Cython: https://cython.readthedocs.io/

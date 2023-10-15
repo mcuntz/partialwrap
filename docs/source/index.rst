@@ -16,7 +16,7 @@ Python’s :py:func:`functools.partial`. It allows to use any external executabl
 well as any Python function with arbitrary arguments and keywords to be used
 with libraries that call functions simply in the form :math:`func(x)`. This
 includes the functions of the :mod:`scipy.optimize` package or external packages
-such as :mod:`emcee` or :mod:`pyeee`, and allows the use of distributed function
+such as `emcee`_ or :mod:`pyeee`, and allows the use of distributed function
 evaluations with Python’s :py:mod:`multiprocessing` or via :mod:`mpi4py`.
 
 
@@ -31,140 +31,6 @@ The complete documentation for ``partialwrap`` is available at:
 Quick usage guide
 -----------------
 
-Context
-~~~~~~~
-
-The easiest wrapper in ``partialwrap`` is for Python functions.
-
-Consider the *Rastrigin function*
-(https://en.wikipedia.org/wiki/Rastrigin_function), which is a popular
-function for performance testing of optimization algorithms: :math:`y
-= a \cdot n + \sum_i^n (x_i^2 - a \cos(b \cdot x_i))`
-
-.. code-block:: python
-
-   import numpy as np
-   def rastrigin(x, a, b=2. * np.pi):
-       return a * len(x) + np.sum(x**2 - a * np.cos(b * x))
-
-The Rastrigin function has a global minimum of :math:`0` at all :math:`x_i =
-0`. :math:`a` influences mainly the depths of the (local and global)
-minima, whereas :math:`b` influences mainly the size of the minima.
-
-A common form uses :math:`a = 10` and :math:`b = 2 \pi`. The parameters
-:math:`x_i` should then be in the interval :math:`[-5.12, 5.12]`.
-
-.. code-block:: python
-
-   import numpy as np
-   def rastrigin1(x):
-       return 10. * len(x) + np.sum(x**2 - 10. * np.cos(2. * np.pi * x))
-
-One could use the :mod:`scipy.optimize` package to try to find the
-minimum of the Rastrigin function:
-
-.. code-block:: python
-
-   import scipy.optimize as opt
-
-   x0 = np.array([0.5, 0.5])
-   res = opt.minimize(rastrigin1, x0, method='Nelder-Mead')
-   print(res.x)
-   # returns: [0.99497463 0.99498333]
-
-   res = opt.minimize(rastrigin1, x0, method='BFGS')
-   print(res.x)
-   # returns: [-7.82960597e-09 -7.82960597e-09]
-
-:mod:`scipy.optimize` allows passing arguments to the function to
-minimize. One could hence use the general Rastrigin function
-`rastrigin` (instead of `rastrigin1`) to get the same result:
-
-.. code-block:: python
-
-   res = opt.minimize(rastrigin, x0, args=(10.), method='BFGS')
-
-
-Simple Python functions
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Not all optimizers allow the passing of arguments. And notably
-:mod:`scipy.optimize` does not allow the passing of keyword arguments, such as
-:math:`b` in the case of `rastrigin`. One can use :py:func:`~functools.partial` of
-Python's :py:mod:`functools` in this case:
-
-.. code-block:: python
-
-   from functools import partial
-
-   def call_func_arg_kwarg(func, a, b, x):
-      return func(x, a, b=b)
-
-   # Partialize function with fixed parameters
-   a = 5.
-   b = 4. * np.pi
-   partial_rastrigin = partial(call_func_arg_kwarg, rastrigin, a, b)
-
-   res = opt.minimize(partial_rastrigin, x0, method='BFGS')
-
-Figuratively speaking, :py:func:`~functools.partial` passes :math:`a` and :math:`b`
-to the function `call_func_arg_kwarg` already during definition.
-:func:`~scipy.optimize.minimize` can then simply call it as
-`partial_rastrigin(x)`, which finalizes the call to `rastrigin(x, a, b=b)`.
-
-``partialwrap`` provides a convenience function
-:func:`~partialwrap.wrappers.function_wrapper` passing all arguments, given as a
-:any:`list`, and keyword arguments, given as a :any:`dict`, to arbitrary
-functions:
-
-.. code-block:: python
-
-   from partialwrap import function_wrapper
-
-   args   = [20.]
-   kwargs = {'b': 1. * np.pi}
-   rastra = partial(function_wrapper, rastrigin, args, kwargs)
-
-   res = opt.minimize(rastra, x0, method='BFGS')
-
-Or in short, of course:
-
-.. code-block:: python
-
-   from partialwrap import function_wrapper
-
-   rastra = partial(function_wrapper, rastrigin, [20.], {'b': 1.*np.pi})
-   res = opt.minimize(rastra, x0, method='BFGS')
-
-
-Masking parameters
-~~~~~~~~~~~~~~~~~~
-
-A common case in numerical optimization are bound parameters and specifically
-the exclusion of some well-known or correlated parameters from optimization.
-``partialwrap`` provides a convenience function
-:func:`~partialwrap.wrappers.function_mask_wrapper` to include only the masked parameters
-in the function evaluation:
-
-.. code-block:: python
-
-   from partialwrap import function_mask_wrapper
-
-   x0      = np.array([0.5, 0.0001, 0.5])
-   mask    = [True, False, True]
-   mrastra = partial(function_mask_wrapper, rastrigin, x0, mask, args, kwargs)
-
-   res        = opt.minimize(mrastra, x0[mask], method='BFGS')
-   xout       = x0.copy()
-   xout[mask] = res.x
-
-The values of `x0` will be taken where `mask==False`, i.e. `mask` could be
-called an include-mask.
-
-
-External executables
-~~~~~~~~~~~~~~~~~~~~
-
 ``partialwrap`` provides two wrapper functions to work with external
 executables: :func:`~partialwrap.wrappers.exe_wrapper` and
 :func:`~partialwrap.wrappers.exe_mask_wrapper`.
@@ -177,11 +43,19 @@ needs to have a function `parameterwriter` that writes the parameter file
 `outputreader` for reading the output file `outputfile` of the external
 executable `exe`.
 
-Consider for simplicity an external Python program (e.g. `rastrigin1.py`)
-that calculates the Rastrigin function with :math:`a = 10` and :math:`b = 2 \pi`,
-reading in an arbitrary number of parameters :math:`x_i` from a
-`parameterfile = params.txt` and writing its output into an
-`outputfile = out.txt`:
+Take the *Rastrigin function*
+(https://en.wikipedia.org/wiki/Rastrigin_function), which is a popular function
+for performance testing of optimization algorithms: :math:`y = a \cdot n +
+\sum_i^n (x_i^2 - a \cos(b \cdot x_i))`. It has a global minimum of :math:`0` at
+all :math:`x_i = 0`. :math:`a` influences mainly the depth of the (local and
+global) minima, whereas :math:`b` influences mainly the size of the minima. A
+common form uses :math:`a = 10` and :math:`b = 2 \pi`. The parameters :math:`x_i`
+should then be in the interval :math:`[-5.12, 5.12]`.
+
+Consider for simplicity an external Python program (e.g. `rastrigin1.py`) that
+calculates the Rastrigin function with :math:`a = 10` and :math:`b = 2 \pi`,
+reading in an arbitrary number of parameters :math:`x_i` from a `parameterfile =
+params.txt` and writing its output into an `outputfile = out.txt`:
 
 .. code-block:: python
 
@@ -207,7 +81,7 @@ This program can be called on the command line (if `params.txt` is present) with
 
 .. code-block:: bash
 
-   python rastrigin1.py
+   python3 rastrigin1.py
 
 The external program can be used with Python's :py:func:`functools.partial` and the
 wrapper function :func:`~partialwrap.wrappers.exe_wrapper`:
@@ -278,19 +152,26 @@ Index and Tables
 * :ref:`modindex`
 
 
-.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3893705.svg
+.. |DOI|
+   image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3893705.svg
    :target: https://doi.org/10.5281/zenodo.3893705
-.. |PyPI version| image:: https://badge.fury.io/py/partialwrap.svg
+.. |PyPI version|
+   image:: https://badge.fury.io/py/partialwrap.svg
    :target: https://badge.fury.io/py/partialwrap
-.. |Conda version| image:: https://anaconda.org/conda-forge/partialwrap/badges/version.svg
+.. |Conda version|
+   image:: https://anaconda.org/conda-forge/partialwrap/badges/version.svg
    :target: https://anaconda.org/conda-forge/partialwrap
-.. |License| image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+.. |License|
+   image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
    :target: https://github.com/mcuntz/partialwrap/blob/master/LICENSE
-.. |Build Status| image:: https://github.com/mcuntz/partialwrap/workflows/Continuous%20Integration/badge.svg?branch=main
+.. |Build Status|
+   image:: https://github.com/mcuntz/partialwrap/workflows/Continuous%20Integration/badge.svg?branch=main
    :target: https://github.com/mcuntz/partialwrap/actions
-.. |Coverage Status| image:: https://coveralls.io/repos/github/mcuntz/partialwrap/badge.svg?branch=master
+.. |Coverage Status|
+   image:: https://coveralls.io/repos/github/mcuntz/partialwrap/badge.svg?branch=master
    :target: https://coveralls.io/github/mcuntz/partialwrap?branch=master
 
+.. _emcee: https://emcee.readthedocs.io/en/latest/
 .. _MPI: https://bitbucket.org/mpi4py/mpi4py
 .. _LICENSE: https://github.com/mcuntz/partialwrap/LICENSE
 .. _template: https://github.com/MuellerSeb/template

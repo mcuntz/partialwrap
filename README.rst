@@ -27,8 +27,7 @@ Python’s `multiprocessing`_ or via `MPI`_.
 Documentation
 -------------
 
-The complete documentation for **partialwrap** is available from Read The
-Docs.
+The complete documentation for **partialwrap** is available at Github pages:
 
    https://mcuntz.github.io/partialwrap/
 
@@ -36,142 +35,29 @@ Docs.
 Quick usage guide
 -----------------
 
-Context
-~~~~~~~
-
-The easiest wrapper in **partialwrap** is for Python functions.
-
-Consider the `Rastrigin function`_, which is a popular function for performance
-testing of optimization algorithms: ``y = a*n + sum_i^n(x_i^2 - a*cos(b*x_i))``
-
-.. code:: python
-
-   import numpy as np
-   def rastrigin(x, a, b=2. * np.pi):
-       return a * len(x) + np.sum(x**2 - a * np.cos(b * x))
-
-The Rastrigin function has a global minimum of ``0`` at all ``x_i = 0``.
-``a`` influences mainly the depth of the (local and global) minima,
-whereas ``b`` influences mainly the size of the minima.
-
-A common form uses ``a = 10`` and ``b = 2*pi``. The parameters ``x_i``
-should then be in the interval [-5.12, 5.12].
-
-.. code:: python
-
-   import numpy as np
-   def rastrigin1(x):
-       return 10. * len(x) + np.sum(x**2 - 10. * np.cos(2. * np.pi * x))
-
-One could use the `scipy.optimize`_ package to try to find the minimum of the
-Rastrigin function:
-
-.. code:: python
-
-   import scipy.optimize as opt
-
-   x0 = np.array([0.5, 0.5])
-   res = opt.minimize(rastrigin1, x0, method='Nelder-Mead')
-   print(res.x)
-   # returns: [0.99497463 0.99498333]
-
-   res = opt.minimize(rastrigin1, x0, method='BFGS')
-   print(res.x)
-   # returns: [-7.82960597e-09 -7.82960597e-09]
-
-`scipy.optimize`_ allows passing arguments to the function to minimize.
-One could hence use the general Rastrigin function ``rastrigin``
-(instead of ``rastrigin1``) to get the same result:
-
-.. code:: python
-
-   res = opt.minimize(rastrigin, x0, args=(10.), method='BFGS')
-
-
-Simple Python functions
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Not all optimizers allow the passing of arguments. And notably `scipy.optimize`_
-does not allow the passing of keyword arguments. One can use `partial`_ of
-Python’s `functools`_ in this case:
-
-.. code:: python
-
-   from functools import partial
-
-   def call_func_arg_kwarg(func, a, b, x):
-      return func(x, a, b=b)
-
-   # Partialize function with fixed parameters
-   a = 5.
-   b = 4. * np.pi
-   partial_rastrigin = partial(call_func_arg_kwarg, rastrigin, a, b)
-
-   res = opt.minimize(partial_rastrigin, x0, method='BFGS')
-
-Figuratively speaking, `partial`_ passes ``a`` and ``b`` to the
-function ``call_func_arg_kwarg`` already during definition. ``minimize``
-can then simply call it as ``partial_rastrigin(x)``, which finalizes
-the call to ``rastrigin(x, a, b=b)``.
-
-**partialwrap** provides a convenience function ``partialwrap.function_wrapper``
-passing all arguments, given as a *list*, and keyword arguments, given as a
-*dictionary*, to arbitrary functions:
-
-.. code:: python
-
-   from partialwrap import function_wrapper
-
-   args   = [20.]
-   kwargs = {'b': 1. * np.pi}
-   rastra = partial(function_wrapper, rastrigin, args, kwargs)
-
-   res = opt.minimize(rastra, x0, method='BFGS')
-
-Masking parameters
-~~~~~~~~~~~~~~~~~~
-
-A common case in numerical optimization are bound parameters and specifically
-the exclusion of some well-known or correlated parameters from optimization.
-**partialwrap** provides a convenience function
-``partialwrap.function_mask_wrapper`` to include only the masked parameters in
-the function evaluation:
-
-.. code:: python
-
-       from partialwrap import function_mask_wrapper
-
-       x0      = np.array([0.5,  0.0001, 0.5])
-       mask    = np.array([True, False,  True])
-       mrastra = partial(function_mask_wrapper, rastrigin, x0, mask, args, kwargs)
-
-       res        = opt.minimize(mrastra, x0[mask], method='BFGS')
-       xout       = x0.copy()
-       xout[mask] = res.x
-
-The values of ``x0`` will be taken where ``mask==False``, i.e. ``mask`` could be
-called an include-mask.
-
-External executables
-~~~~~~~~~~~~~~~~~~~~
-
 **partialwrap** provides wrapper functions to work with external
 executables: ``partialwrap.exe_wrapper`` and
 ``partialwrap.exe_mask_wrapper``.
 
 **partialwrap** writes the sampled parameter sets into files that can be
-read by the external program. The program writes its result to a file
+read by the external program. The external program writes its result to a file
 that will then be read by **partialwrap** in return. This means
 **partialwrap** needs to have a function ``parameterwriter`` that writes
 the parameter file ``parameterfile`` needed by the executable ``exe``.
 It then needs to have a function ``outputreader`` for reading the output
 file ``outputfile`` of the external executable ``exe``.
 
-Consider for simplicity an external Python program
-(e.g. ``rastrigin1.py``) that calculates the Rastrigin function with
-``a = 10`` and ``b = 2*pi``, reading in an arbitrary number of
-parameters ``x_i`` from a ``parameterfile = params.txt`` and writing its
-output into an ``outputfile = out.txt``:
+Take the `Rastrigin function`_, which is a popular function for performance
+testing of optimization algorithms: ``y = a*n + sum_i^n(x_i^2 - a*cos(b*x_i))``.
+It has a global minimum of ``0`` at all ``x_i = 0``. ``a`` influences mainly the
+depth of the (local and global) minima, whereas ``b`` influences mainly the size
+of the minima. A common form uses ``a = 10`` and ``b = 2*pi``. The parameters
+``x_i`` should then be in the interval [-5.12, 5.12].
+
+Consider for simplicity an external Python program (e.g. ``rastrigin1.py``) that
+calculates the Rastrigin function``with ``a = 10`` and ``b = 2*pi``, reading in
+an arbitrary number of parameters ``x_i`` from a ``parameterfile = params.txt``
+and writing its output into ``outputfile = out.txt``:
 
 .. code:: python
 
@@ -205,7 +91,8 @@ the wrapper function ``partialwrap.exe_wrapper``:
 .. code:: python
 
    from functools import partial
-   from partialwrap import exe_wrapper, standard_parameter_writer, standard_output_reader
+   from partialwrap import exe_wrapper
+   from partialwrap import standard_parameter_writer, standard_output_reader
 
    rastrigin_exe  = ['python3', 'rastrigin1.py']
    parameterfile  = 'params.txt'

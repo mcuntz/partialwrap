@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 """
-Wrappers to partialise functions so that they can be simply called as func(x).
+Wrappers to partialize functions so that they can simply be called as func(x).
 
 .. code-block:: python
 
     from functools import partial
-    if isinstance(func, (str,list)):
+    if isinstance(func, (str, list)):
         obj = partial(exe_wrapper, func,
-                      parameterfile, parameterwriter, outputfile, outputreader,
+                      parameterfile, parameterwriter,
+                      outputfile, outputreader,
                       {'shell':bool, 'debug':bool, 'pid':bool,
                        'pargs':list, 'pkwargs':dict, 'keepparameterfile':bool,
                        'oargs':list, 'okwargs':dict, 'keepoutputfile':bool})
@@ -15,17 +16,19 @@ Wrappers to partialise functions so that they can be simply called as func(x).
         obj = partial(function_wrapper, func, arg, kwarg)
     fx = obj(x)
 
-`func` can be a Python function or external executable. External executables
-will be passed to `subprocess.run(func)`. `func` can then be a string (e.g.
-'./prog -arg') if `shell=True` or a list (e.g. ['./prog', '-arg']) if
-`shell=False` (default). Programs without arguments, pipes, etc. can simply be
-strings with `shell=True` or `False`.
+`func` can hence be an external executable or a Python function using
+`exe_wrapper` or `function_wrapper`, respectively. External executables
+will be passed to `subprocess.run(func)`. Due to `subprocess.run()`, `func` is
+thus a string (e.g. './prog -arg') if `shell=True` or a list
+(e.g. ['./prog', '-arg']) if `shell=False` (default). `func` without any
+arguments, pipes, or similar can simply be strings in both cases
+(e.g. './prog').
 
 This module was written by Matthias Cuntz while at Institut National de
 Recherche pour l'Agriculture, l'Alimentation et l'Environnement (INRAE), Nancy,
 France.
 
-Copyright (c) 2016-2022 Matthias Cuntz - mc (at) macu (dot) de
+Copyright (c) 2016-2023 Matthias Cuntz - mc (at) macu (dot) de
 
 Released under the MIT License; see LICENSE file for details.
 
@@ -127,18 +130,27 @@ def exe_wrapper(func,
                 parameterfile, parameterwriter, outputfile, outputreader,
                 kwarg, x):
     """
-    Wrapper function for external programs using a *parameterwriter* and
-    *outputreader* with the interfaces:
+    Wrapper function for external programs
+
+    Uses a *parameterwriter* and *outputreader* with the interfaces:
+
     ``parameterwriter(parameterfile, x, *pargs, **pkwargs)``
+
     and
+
     ``outputreader(outputfile, *oargs, **okwargs)``
+
     or if *pid==True*:
+
     ``parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)``
+
     and
+
     ``outputreader(outputfile, *oargs, pid=pid, **okwargs)``
 
     Examples of *parameterwriter* with *pid==True* are
-    :any:`standard_parameter_writer` or :any:`sub_params_ja`.
+    :any:`standard_parameter_writer` and :any:`sub_params_ja`.
+
     An example of *outputreader* with or without *pid* is
     :any:`standard_output_reader`.
 
@@ -188,20 +200,26 @@ def exe_wrapper(func,
         Filename(s) of parameter file(s)
     parameterwriter : callable
         Python function writing the *parameterfile*, called as:
+
         ``parameterwriter(parameterfile, x, *pargs, **pkwargs)``
 
         or if *pid==True* as:
+
         ``parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)``
+
     outputfile : string or iterable
         Filename(s) of file(s) with output values written by the external
         executable *func*
     outputreader : callable
         Python function for reading and processing output value(s) from
         *outputfile*, called as:
+
         ``outputreader(ouputfile, x, *oargs, **okwargs)``
 
         or if *pid==True* as:
+
         ``outputreader(ouputfile, x, *oargs, pid=pid, **okwargs)``
+
     kwarg : dict
         Dictionary with keyword arguments for `exe_wrapper`. Possible
         arguments are:
@@ -282,7 +300,7 @@ def exe_wrapper(func,
     this cases that, for example, returns arbitrary large values.
 
     >>> def err(x):
-    ...     return np.random.random() * 10000.
+    ...     return 10000. + np.random.random() * 10000.
     >>> exewrap = partial(exe_wrapper, exe,
     ...                   parameterfile, standard_parameter_writer,
     ...                   outputfile, standard_output_reader,
@@ -559,12 +577,15 @@ def function_wrapper(func, arg, kwarg, x):
     Wrapper for Python functions.
 
     To be used with partial:
+
     ``obj = partial(function_wrapper, func, arg, kwarg)``
 
     This allows then calling obj with only the non-masked parameters:
+
     ``fx = obj(x)``
 
     which translates to:
+
     ``fx = func(x, *arg, **kwarg)``
 
     Parameters
@@ -625,9 +646,11 @@ def function_mask_wrapper(func, x0, mask, arg, kwarg, x):
     Wrapper function for Python function using a mask.
 
     To be used with partial:
+
     ``obj = partial(function_mask_wrapper, func, x0, mask, arg, kwarg)``
 
     This allows then calling obj with only the non-masked parameters:
+
     ``fx = obj(x)``
 
     which translates to:
