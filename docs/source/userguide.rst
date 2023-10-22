@@ -16,8 +16,8 @@ the Message Passing Interface (MPI) :mod:`mpi4py`.
 ``partialwrap`` provides two easy wrappers so that :func:`functools.partial` can
 be used with external programs as well as Python functions. It provides further
 convenience functions to deal with input/output external programs. The user
-guide gives examples how to use pretty much every external program within Python
-modules.
+guide gives examples how to use pretty much every external program with any Python
+program.
 
 
 Simple Python functions
