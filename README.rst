@@ -18,7 +18,7 @@ libraries that call functions simply in the form ``func(x)``. This includes
 Python's `map` function, the functions of the `scipy.optimize`_ package or
 external packages such as `emcee`_ or `pyeee`_. It also allows distributed
 function evaluations with, for example, the parallel `map` function of Python's
-`multiprocessing`_ module or via the Message Passing Interface `(MPI)`_.
+`multiprocessing`_ module or via the Message Passing Interface (`MPI`_).
 
 
 Documentation
@@ -36,7 +36,7 @@ Quick usage guide
 executables: ``partialwrap.exe_wrapper`` and
 ``partialwrap.exe_mask_wrapper``.
 
-**partialwrap** writes its input parameter into files that can be
+**partialwrap** writes its input parameters into files that can be
 read by the external program. The external program writes its result to a file
 that will then be read by **partialwrap** in return. This means
 **partialwrap** needs to have a function ``parameterwriter`` that writes
@@ -101,11 +101,10 @@ the wrapper function ``partialwrap.exe_wrapper``:
    x0  = [0.1, 0.2, 0.3]
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
 
-The `scipy.optimize`_ function ``minimize()`` passes its
-sampled parameters to ``rastrigin_wrap``, which writes it to the file
-``parameterfile = 'params.txt'``. It then calls ``rastrigin_exe = 'python3
-rastrigin1.py'`` and reads its ``outputfile = 'out.txt'``.
-``partialwrap.standard_parameter_reader`` and
+The `scipy.optimize`_ function ``minimize()`` passes its sampled parameters to
+``rastrigin_wrap``, which writes it to the file ``parameterfile = 'params.txt'``.
+It then calls ``rastrigin_exe = 'python3 rastrigin1.py'`` and reads its
+``outputfile = 'out.txt'``. ``partialwrap.standard_parameter_reader`` and
 ``partialwrap.standard_parameter_writer`` are convenience functions that read
 and write one parameter per line in a file without a header. The function
 ``partialwrap.standard_output_reader`` simply reads one value from a file
