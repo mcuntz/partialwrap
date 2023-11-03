@@ -221,7 +221,7 @@ texinfo_documents = [
         "partialwrap Documentation",
         author,
         "partialwrap",
-        "A small Python library providing wrappers for external executables and Python functions so that they can easily be partialized with Python's functools.partial.",
+        "A small Python library providing wrappers for external executables and Python functions to be used easily with Python’s functools.partial.",
         "Miscellaneous",
     )
 ]

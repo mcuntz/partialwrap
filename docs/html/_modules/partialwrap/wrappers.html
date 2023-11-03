@@ -1,45 +1,303 @@
+
+
 <!DOCTYPE html>
 
-<html lang="en">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>partialwrap.wrappers &#8212; partialwrap 1.7 documentation</title>
+    <title>partialwrap.wrappers &#8212; partialwrap</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/partialwrap/wrappers';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
   
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-  </head><body>
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
   
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
+<a class="navbar-brand logo" href="../../contents.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">partialwrap</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../userguide.html">User Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api.html">Public API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../wrappers.html">partialwrap.wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../std_io.html">partialwrap.std_io</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+</ul>
 
-          <div class="body" role="main">
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/mcuntz/partialwrap" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/mcuntz/partialwrap/issues/new?title=Issue%20on%20page%20%2F_modules/partialwrap/wrappers.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
             
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <h1>Source code for partialwrap.wrappers</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Wrappers to partialise functions so that they can be simply called as func(x).</span>
+<span class="sd">Wrappers to partialize functions so that they can simply be called as func(x).</span>
 
 <span class="sd">.. code-block:: python</span>
 
 <span class="sd">    from functools import partial</span>
-<span class="sd">    if isinstance(func, (str,list)):</span>
+<span class="sd">    if isinstance(func, (str, list)):</span>
 <span class="sd">        obj = partial(exe_wrapper, func,</span>
-<span class="sd">                      parameterfile, parameterwriter, outputfile, outputreader,</span>
+<span class="sd">                      parameterfile, parameterwriter,</span>
+<span class="sd">                      outputfile, outputreader,</span>
 <span class="sd">                      {&#39;shell&#39;:bool, &#39;debug&#39;:bool, &#39;pid&#39;:bool,</span>
 <span class="sd">                       &#39;pargs&#39;:list, &#39;pkwargs&#39;:dict, &#39;keepparameterfile&#39;:bool,</span>
 <span class="sd">                       &#39;oargs&#39;:list, &#39;okwargs&#39;:dict, &#39;keepoutputfile&#39;:bool})</span>
@@ -47,17 +305,19 @@
 <span class="sd">        obj = partial(function_wrapper, func, arg, kwarg)</span>
 <span class="sd">    fx = obj(x)</span>
 
-<span class="sd">`func` can be a Python function or external executable. External executables</span>
-<span class="sd">will be passed to `subprocess.run(func)`. `func` can then be a string (e.g.</span>
-<span class="sd">&#39;./prog -arg&#39;) if `shell=True` or a list (e.g. [&#39;./prog&#39;, &#39;-arg&#39;]) if</span>
-<span class="sd">`shell=False` (default). Programs without arguments, pipes, etc. can simply be</span>
-<span class="sd">strings with `shell=True` or `False`.</span>
+<span class="sd">`func` can hence be an external executable or a Python function using</span>
+<span class="sd">`exe_wrapper` or `function_wrapper`, respectively. External executables</span>
+<span class="sd">will be passed to `subprocess.run(func)`. Due to `subprocess.run()`, `func` is</span>
+<span class="sd">thus a string (e.g. &#39;./prog -arg&#39;) if `shell=True` or a list</span>
+<span class="sd">(e.g. [&#39;./prog&#39;, &#39;-arg&#39;]) if `shell=False` (default). `func` without any</span>
+<span class="sd">arguments, pipes, or similar can simply be strings in both cases</span>
+<span class="sd">(e.g. &#39;./prog&#39;).</span>
 
 <span class="sd">This module was written by Matthias Cuntz while at Institut National de</span>
 <span class="sd">Recherche pour l&#39;Agriculture, l&#39;Alimentation et l&#39;Environnement (INRAE), Nancy,</span>
 <span class="sd">France.</span>
 
-<span class="sd">Copyright (c) 2016-2022 Matthias Cuntz - mc (at) macu (dot) de</span>
+<span class="sd">Copyright (c) 2016-2023 Matthias Cuntz - mc (at) macu (dot) de</span>
 
 <span class="sd">Released under the MIT License; see LICENSE file for details.</span>
 
@@ -159,18 +419,27 @@
                 <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
                 <span class="n">kwarg</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper function for external programs using a *parameterwriter* and</span>
-<span class="sd">    *outputreader* with the interfaces:</span>
+<span class="sd">    Wrapper function for external programs</span>
+
+<span class="sd">    Uses a *parameterwriter* and *outputreader* with the interfaces:</span>
+
 <span class="sd">    ``parameterwriter(parameterfile, x, *pargs, **pkwargs)``</span>
+
 <span class="sd">    and</span>
+
 <span class="sd">    ``outputreader(outputfile, *oargs, **okwargs)``</span>
+
 <span class="sd">    or if *pid==True*:</span>
+
 <span class="sd">    ``parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)``</span>
+
 <span class="sd">    and</span>
+
 <span class="sd">    ``outputreader(outputfile, *oargs, pid=pid, **okwargs)``</span>
 
 <span class="sd">    Examples of *parameterwriter* with *pid==True* are</span>
-<span class="sd">    :any:`standard_parameter_writer` or :any:`sub_params_ja`.</span>
+<span class="sd">    :any:`standard_parameter_writer` and :any:`sub_params_ja`.</span>
+
 <span class="sd">    An example of *outputreader* with or without *pid* is</span>
 <span class="sd">    :any:`standard_output_reader`.</span>
 
@@ -220,20 +489,26 @@
 <span class="sd">        Filename(s) of parameter file(s)</span>
 <span class="sd">    parameterwriter : callable</span>
 <span class="sd">        Python function writing the *parameterfile*, called as:</span>
+
 <span class="sd">        ``parameterwriter(parameterfile, x, *pargs, **pkwargs)``</span>
 
 <span class="sd">        or if *pid==True* as:</span>
+
 <span class="sd">        ``parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)``</span>
+
 <span class="sd">    outputfile : string or iterable</span>
 <span class="sd">        Filename(s) of file(s) with output values written by the external</span>
 <span class="sd">        executable *func*</span>
 <span class="sd">    outputreader : callable</span>
 <span class="sd">        Python function for reading and processing output value(s) from</span>
 <span class="sd">        *outputfile*, called as:</span>
+
 <span class="sd">        ``outputreader(ouputfile, x, *oargs, **okwargs)``</span>
 
 <span class="sd">        or if *pid==True* as:</span>
+
 <span class="sd">        ``outputreader(ouputfile, x, *oargs, pid=pid, **okwargs)``</span>
+
 <span class="sd">    kwarg : dict</span>
 <span class="sd">        Dictionary with keyword arguments for `exe_wrapper`. Possible</span>
 <span class="sd">        arguments are:</span>
@@ -314,7 +589,7 @@
 <span class="sd">    this cases that, for example, returns arbitrary large values.</span>
 
 <span class="sd">    &gt;&gt;&gt; def err(x):</span>
-<span class="sd">    ...     return np.random.random() * 10000.</span>
+<span class="sd">    ...     return 10000. + np.random.random() * 10000.</span>
 <span class="sd">    &gt;&gt;&gt; exewrap = partial(exe_wrapper, exe,</span>
 <span class="sd">    ...                   parameterfile, standard_parameter_writer,</span>
 <span class="sd">    ...                   outputfile, standard_output_reader,</span>
@@ -591,12 +866,15 @@
 <span class="sd">    Wrapper for Python functions.</span>
 
 <span class="sd">    To be used with partial:</span>
+
 <span class="sd">    ``obj = partial(function_wrapper, func, arg, kwarg)``</span>
 
 <span class="sd">    This allows then calling obj with only the non-masked parameters:</span>
+
 <span class="sd">    ``fx = obj(x)``</span>
 
 <span class="sd">    which translates to:</span>
+
 <span class="sd">    ``fx = func(x, *arg, **kwarg)``</span>
 
 <span class="sd">    Parameters</span>
@@ -657,9 +935,11 @@
 <span class="sd">    Wrapper function for Python function using a mask.</span>
 
 <span class="sd">    To be used with partial:</span>
+
 <span class="sd">    ``obj = partial(function_mask_wrapper, func, x0, mask, arg, kwarg)``</span>
 
 <span class="sd">    This allows then calling obj with only the non-masked parameters:</span>
+
 <span class="sd">    ``fx = obj(x)``</span>
 
 <span class="sd">    which translates to:</span>
@@ -762,84 +1042,69 @@
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">(</span><span class="n">optionflags</span><span class="o">=</span><span class="n">doctest</span><span class="o">.</span><span class="n">NORMALIZE_WHITESPACE</span><span class="p">)</span>
 </pre></div>
 
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../contents.html">partialwrap</a></h1>
-
-
-
-<p class="blurb">Wrappers of external executables and Python functions for functools.partial.</p>
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html#quick-usage-guide">Quick usage guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html#installation">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html#license">License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../userguide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">Public API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
-</ul>
-
-
-<hr />
-<ul>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
     
-    <li class="toctree-l1"><a href="https://github.com/mcuntz/partialwrap">partialwrap @ GitHub</a></li>
+<p class="component-author">
+By Matthias Cuntz
+</p>
+
+  </div>
+  
+  <div class="footer-item">
     
-    <li class="toctree-l1"><a href="https://doi.org/10.5281/zenodo.3893705">partialwrap @ Zenodo</a></li>
+  <p class="copyright">
     
-    <li class="toctree-l1"><a href="https://pypi.org/project/partialwrap">partialwrap @ PyPI</a></li>
+      © Copyright 2016-2023, Matthias Cuntz.
+      <br/>
     
-    <li class="toctree-l1"><a href="https://anaconda.org/conda-forge/partialwrap">partialwrap @ conda-forge</a></li>
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
     
-</ul>
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../contents.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2016-2023, Matthias Cuntz.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
-      
-    </div>
+          </footer>
+        
 
-    
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
-    
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>

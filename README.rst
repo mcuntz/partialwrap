@@ -1,9 +1,8 @@
 partialwrap – Wrappers of external executables and Python functions for functools.partial
 =========================================================================================
 
-A small Python library providing wrappers for external executables and
-Python functions so that they can easily be partialized with Python’s
-functools.partial.
+A a small Python library providing wrappers for external executables
+to be used easily with Python’s functools.partial.
 
 |DOI| |PyPI version| |Conda version| |License| |Build Status| |Coverage Status|
 
@@ -11,20 +10,26 @@ functools.partial.
 About partialwrap
 -----------------
 
-**partialwrap** is a Python library providing easy wrapper functions to use with
-Python’s `functools.partial`_. It allows to use any external executable as well
-as any Python function with arbitrary arguments and keywords to be used with
-libraries that call functions simply in the form ``func(x)``. This includes
-Python's `map` function, the functions of the `scipy.optimize`_ package or
-external packages such as `emcee`_ or `pyeee`_. It also allows distributed
-function evaluations with, for example, the parallel `map` function of Python's
-`multiprocessing`_ module or via the Message Passing Interface (`MPI`_).
+**partialwrap** is a Python library providing easy wrapper functions
+to use with Python’s `functools.partial`_. Partial's ingenious
+mechanism allows to use even very complex functions with many
+arguments and keyword arguments with routines that need functions in
+the simple form ``func(x)``. This includes Python's `map` function,
+the minimizers in `scipy.optimize`_, and plenty of third-party modules
+such as `emcee`_ or `pyeee`_. **partialwrap** allows to use any
+external executable as well as any Python function with arbitrary
+arguments and keywords to be used with `functools.partial`_. It also
+allows to use the executables or functions with easy parallelization
+of code with, for example, the parallel `map` function of the
+`multiprocessing`_ module or via the Message Passing Interface
+(`MPI`_).
 
 
 Documentation
 -------------
 
-The complete documentation for **partialwrap** is available at Github pages:
+The complete documentation for **partialwrap** is available at Github
+pages:
 
    https://mcuntz.github.io/partialwrap/
 
@@ -32,41 +37,45 @@ The complete documentation for **partialwrap** is available at Github pages:
 Quick usage guide
 -----------------
 
-**partialwrap** provides wrapper functions to work with external
+**partialwrap** provides two wrapper functions to work with external
 executables: ``partialwrap.exe_wrapper`` and
 ``partialwrap.exe_mask_wrapper``.
 
-**partialwrap** writes its input parameters into files that can be
-read by the external program. The external program writes its result to a file
-that will then be read by **partialwrap** in return. This means
-**partialwrap** needs to have a function ``parameterwriter`` that writes
-the parameter file ``parameterfile`` needed by the executable ``exe``.
-It then needs to have a function ``outputreader`` for reading the output
-file ``outputfile`` of the external executable ``exe``.
+**partialwrap** writes the input arguments to the wrapper functions
+into files that can be read by the external executable. The executable
+should write its result to a file that will then be read by
+**partialwrap** in return. This means **partialwrap** needs to have a
+function ``parameterwriter`` that writes the parameter file
+``parameterfile`` needed by the executable ``exe``.  It then also
+needs to have a function ``outputreader`` for reading the output file
+``outputfile`` of the external executable, perhaps calculating an
+objective function value.
 
-Take the `Rastrigin function`_, which is a popular function for performance
-testing of optimization algorithms: ``y = a*n + sum_i^n(x_i^2 - a*cos(b*x_i))``.
-It has a global minimum of ``0`` at all ``x_i = 0``. ``a`` influences mainly the
-depth of the (local and global) minima, whereas ``b`` influences mainly the size
-of the minima. A common form uses ``a = 10`` and ``b = 2*pi``. The parameters
+Take the `Rastrigin function`_, which is a popular function for
+performance testing of optimization algorithms: ``y = a*n +
+sum_i^n(x_i^2 - a*cos(b*x_i))``.  It has a global minimum of ``0`` at
+all ``x_i = 0``. ``a`` influences mainly the depth of the (local and
+global) minima, whereas ``b`` influences mainly the size of the
+minima. A common form uses ``a = 10`` and ``b = 2*pi``. The parameters
 ``x_i`` should then be in the interval [-5.12, 5.12].
 
-Consider for simplicity an external Python program (e.g. ``rastrigin1.py``) that
-calculates the Rastrigin function``with ``a = 10`` and ``b = 2*pi``, reading in
-an arbitrary number of parameters ``x_i`` from a ``parameterfile = params.txt``
-and writing its output into ``outputfile = out.txt``:
+Consider for simplicity an external Python program
+(e.g. ``rastrigin1.py``) that calculates the Rastrigin function``with
+``a = 10`` and ``b = 2*pi``, reading in an arbitrary number of
+parameters ``x_i`` from a ``parameterfile = params.txt`` and writing
+its output into ``outputfile = out.txt``:
 
 .. code:: python
 
    # File: rastrigin1.py
+   import numpy as np
+   from partialwrap import standard_parameter_reader
 
    # Rastrigin function a=10, b=2*pi
-   import numpy as np
    def rastrigin1(x):
        return 10. * len(x) + np.sum(x**2 - 10. * np.cos(2. * np.pi * x))
 
    # read parameters
-   from partialwrap import standard_parameter_reader
    x = standard_parameter_reader('params.txt')
 
    # calc function
@@ -76,14 +85,18 @@ and writing its output into ``outputfile = out.txt``:
    with open('out.txt', 'w') as ff:
        print(y, file=ff)
 
-This program can be called on the command line (if `params.txt` is present) with:
+This program can be called on the command line (if `params.txt` is
+present) with:
 
 .. code:: bash
 
    python rastrigin1.py
 
-The external program can be used with Python’s ``functools.partial`` and
-the wrapper function ``partialwrap.exe_wrapper``:
+The external program calculating the Rastrigin function could, of
+course, also be written in any compiled language such as C or
+Fortran. See the `userguide`_ for details. The external program, here
+the Python version, can be used with Python's `functools.partial`_ and
+the wrapper function ```partialwrap.exe_wrapper``:
 
 .. code:: python
 
@@ -101,18 +114,20 @@ the wrapper function ``partialwrap.exe_wrapper``:
    x0  = [0.1, 0.2, 0.3]
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
 
-The `scipy.optimize`_ function ``minimize()`` passes its sampled parameters to
-``rastrigin_wrap``, which writes it to the file ``parameterfile = 'params.txt'``.
-It then calls ``rastrigin_exe = 'python3 rastrigin1.py'`` and reads its
-``outputfile = 'out.txt'``. ``partialwrap.standard_parameter_reader`` and
-``partialwrap.standard_parameter_writer`` are convenience functions that read
-and write one parameter per line in a file without a header. The function
-``partialwrap.standard_output_reader`` simply reads one value from a file
-without header. The empty dictionary at the end is explained in the
+The `scipy.optimize`_ function ``minimize()`` passes its sampled
+parameters to ``exe_wrapper``, which writes it to the file
+``parameterfile = 'params.txt'``. It then calls ``rastrigin_exe =
+'python3 rastrigin1.py'`` and reads its ``outputfile = 'out.txt'``.
+`partialwrap.standard_parameter_reader`` and
+``partialwrap.standard_parameter_writer`` are convenience functions
+that read and write one parameter per line in a file without a
+header. The empty dictionary at the end is explained in the
 `userguide`_.
 
-One can easily imagine to replace the Python program ``rastrigin1.py`` by any
-compiled executable from C, Fortran or alike. See the `userguide`_ for details.
+More elaborate input/output of the external program can simply be
+dealt with by replacing ``partialwrap.standard_parameter_reader`` and
+``partialwrap.standard_parameter_writer`` with appropriate functions,
+while the rest stays pretty much the same.
 
 
 Installation
@@ -140,8 +155,8 @@ Requirements:
 License
 -------
 
-**partialwrap** is distributed under the MIT License. See the `LICENSE`_ file
-for details.
+**partialwrap** is distributed under the MIT License. See the
+`LICENSE`_ file for details.
 
 Copyright (c) 2016-2023 Matthias Cuntz
 

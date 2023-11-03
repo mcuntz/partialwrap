@@ -18,7 +18,7 @@ help:
 # https://github.com/annegentle/create-demo
 github:
 	@make html
-	@rsync -arv --delete build/html/ ./html/
+	@rsync -arv --delete ./build/html/ ./html/
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
