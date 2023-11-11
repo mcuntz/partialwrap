@@ -293,29 +293,20 @@ document.write(`
 
 <span class="sd">.. code-block:: python</span>
 
-<span class="sd">    from functools import partial</span>
-<span class="sd">    if isinstance(func, (str, list)):</span>
-<span class="sd">        obj = partial(exe_wrapper, func,</span>
-<span class="sd">                      parameterfile, parameterwriter,</span>
-<span class="sd">                      outputfile, outputreader,</span>
-<span class="sd">                      {&#39;shell&#39;:bool, &#39;debug&#39;:bool, &#39;pid&#39;:bool,</span>
-<span class="sd">                       &#39;pargs&#39;:list, &#39;pkwargs&#39;:dict, &#39;keepparameterfile&#39;:bool,</span>
-<span class="sd">                       &#39;oargs&#39;:list, &#39;okwargs&#39;:dict, &#39;keepoutputfile&#39;:bool})</span>
-<span class="sd">    else:</span>
-<span class="sd">        obj = partial(function_wrapper, func, arg, kwarg)</span>
-<span class="sd">    fx = obj(x)</span>
+<span class="sd">   obj = partial(exe_wrapper, func,</span>
+<span class="sd">                 parameterfile, parameterwriter,</span>
+<span class="sd">                 outputfile, outputreader,</span>
+<span class="sd">                 {&#39;shell&#39;:bool, &#39;debug&#39;:bool, &#39;pid&#39;:bool,</span>
+<span class="sd">                  &#39;pargs&#39;:list, &#39;pkwargs&#39;:dict, &#39;keepparameterfile&#39;:bool,</span>
+<span class="sd">                  &#39;oargs&#39;:list, &#39;okwargs&#39;:dict, &#39;keepoutputfile&#39;:bool})</span>
+<span class="sd">   fx = obj(x)</span>
 
 <span class="sd">`func` can hence be an external executable or a Python function using</span>
-<span class="sd">`exe_wrapper` or `function_wrapper`, respectively. External executables</span>
-<span class="sd">will be passed to `subprocess.run(func)`. Due to `subprocess.run()`, `func` is</span>
-<span class="sd">thus a string (e.g. &#39;./prog -arg&#39;) if `shell=True` or a list</span>
-<span class="sd">(e.g. [&#39;./prog&#39;, &#39;-arg&#39;]) if `shell=False` (default). `func` without any</span>
-<span class="sd">arguments, pipes, or similar can simply be strings in both cases</span>
-<span class="sd">(e.g. &#39;./prog&#39;).</span>
+<span class="sd">`exe_wrapper` or `function_wrapper`, respectively.</span>
 
-<span class="sd">This module was written by Matthias Cuntz while at Institut National de</span>
-<span class="sd">Recherche pour l&#39;Agriculture, l&#39;Alimentation et l&#39;Environnement (INRAE), Nancy,</span>
-<span class="sd">France.</span>
+<span class="sd">This module was written by Matthias Cuntz while at Institut National</span>
+<span class="sd">de Recherche pour l&#39;Agriculture, l&#39;Alimentation et l&#39;Environnement</span>
+<span class="sd">(INRAE), Nancy, France.</span>
 
 <span class="sd">Copyright (c) 2016-2023 Matthias Cuntz - mc (at) macu (dot) de</span>
 
@@ -371,6 +362,11 @@ document.write(`
 <span class="sd">    * Added examples and reformatted docstrings, Aug 2022, Matthias Cuntz</span>
 <span class="sd">    * Added error function as fallback option in case subprocess exits with</span>
 <span class="sd">      error code &gt; 0, Aug 2022, Matthias Cuntz</span>
+<span class="sd">    * Rename arg to args and kwarg to kwargs, Nov 2023, Matthias Cuntz</span>
+<span class="sd">    * Use dict.get() function for keywords, Nov 2023, Matthias Cuntz</span>
+<span class="sd">    * Improved docstrings, Nov 2023, Matthias Cuntz</span>
+<span class="sd">    * Removed exe_wrapper_v34 and hence support for &lt; Python 3.7,</span>
+<span class="sd">      Nov 2023, Matthias Cuntz</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -417,31 +413,9 @@ document.write(`
 
 <div class="viewcode-block" id="exe_wrapper"><a class="viewcode-back" href="../../wrappers.html#partialwrap.wrappers.exe_wrapper">[docs]</a><span class="k">def</span> <span class="nf">exe_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">,</span>
                 <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
-                <span class="n">kwarg</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+                <span class="n">kwargs</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper function for external programs</span>
-
-<span class="sd">    Uses a *parameterwriter* and *outputreader* with the interfaces:</span>
-
-<span class="sd">    ``parameterwriter(parameterfile, x, *pargs, **pkwargs)``</span>
-
-<span class="sd">    and</span>
-
-<span class="sd">    ``outputreader(outputfile, *oargs, **okwargs)``</span>
-
-<span class="sd">    or if *pid==True*:</span>
-
-<span class="sd">    ``parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)``</span>
-
-<span class="sd">    and</span>
-
-<span class="sd">    ``outputreader(outputfile, *oargs, pid=pid, **okwargs)``</span>
-
-<span class="sd">    Examples of *parameterwriter* with *pid==True* are</span>
-<span class="sd">    :any:`standard_parameter_writer` and :any:`sub_params_ja`.</span>
-
-<span class="sd">    An example of *outputreader* with or without *pid* is</span>
-<span class="sd">    :any:`standard_output_reader`.</span>
 
 <span class="sd">    To be used with :any:`functools.partial`:</span>
 
@@ -457,34 +431,23 @@ document.write(`
 <span class="sd">                      &#39;keepoutputfile&#39;: bool})</span>
 
 <span class="sd">    This allows then calling *obj* simply with the parameters *x*:</span>
-<span class="sd">    ``fx = obj(x)``</span>
-
-<span class="sd">    which translates to:</span>
-
-<span class="sd">    .. code-block:: python</span>
-
-<span class="sd">       parameterwriter(parameterfile, x, *pargs, **pkwargs)</span>
-<span class="sd">       err = subprocess.run(func)</span>
-<span class="sd">       obj = outputreader(outputfile, *oargs, **okwargs)</span>
-
-<span class="sd">    or if *pid==True* to:</span>
-
-<span class="sd">    .. code-block:: python</span>
-
-<span class="sd">       parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)</span>
-<span class="sd">       err = subprocess.run(func)</span>
-<span class="sd">       obj = outputreader(outputfile, *oargs, pid=pid, **okwargs)</span>
-
-<span class="sd">    Note if *pid==True*, it is assumed that *parameterwriter* produces</span>
-<span class="sd">    files in the form `parameterfile + &#39;.&#39; + processid`,</span>
-<span class="sd">    which will be removed after the function call.</span>
-<span class="sd">    Also files in the form `outputfile + &#39;.&#39; + processid`</span>
-<span class="sd">    will be removed automatically.</span>
+<span class="sd">    `fx = obj(x)` by any python function such as the utilities in</span>
+<span class="sd">    :any:`scipy`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    func : string or list of strings</span>
-<span class="sd">        External program to launch by :any:`subprocess`</span>
+<span class="sd">        External program to be launched by :any:`subprocess`.</span>
+
+<span class="sd">        External executables will be passed to</span>
+<span class="sd">        :any:`subprocess.run`. Due to `subprocess.run()`,</span>
+<span class="sd">        ``func`` is thus a string, e.g. ``func = &#39;./prog.exe -arg&#39;``,</span>
+<span class="sd">        if *shell=True*, or it is a list, e.g.</span>
+<span class="sd">        ``func = [&#39;./prog.exe&#39;, &#39;-arg&#39;]``, if *shell=False*.</span>
+<span class="sd">        If the external program is simply an executable without any arguments,</span>
+<span class="sd">        pipes, or similar, ``func`` can simply be a string in all cases,</span>
+<span class="sd">        e.g. ``func = &#39;./prog.exe&#39;``.</span>
+
 <span class="sd">    parameterfile : string or iterable</span>
 <span class="sd">        Filename(s) of parameter file(s)</span>
 <span class="sd">    parameterwriter : callable</span>
@@ -509,14 +472,15 @@ document.write(`
 
 <span class="sd">        ``outputreader(ouputfile, x, *oargs, pid=pid, **okwargs)``</span>
 
-<span class="sd">    kwarg : dict</span>
+<span class="sd">    kwargs : dict</span>
 <span class="sd">        Dictionary with keyword arguments for `exe_wrapper`. Possible</span>
 <span class="sd">        arguments are:</span>
 
 <span class="sd">        * ``shell`` (bool)</span>
-<span class="sd">          If True, :any:`subprocess` opens shell for external executable</span>
+<span class="sd">          If True, :any:`subprocess` will open a shell to run the external</span>
+<span class="sd">          executable</span>
 <span class="sd">        * ``debug`` (bool)</span>
-<span class="sd">          If True, model output is displayed while executable is running</span>
+<span class="sd">          If True, model output is displayed while the executable is running</span>
 <span class="sd">        * ``pid`` (bool)</span>
 <span class="sd">          If True, append &#39;.RandomNumber&#39; to *parameterfile* and</span>
 <span class="sd">          *outputfile* for parallel calls of *func*</span>
@@ -537,21 +501,21 @@ document.write(`
 <span class="sd">        * ``error`` (function)</span>
 <span class="sd">          Function to call in case subprocess exists with error code &gt; 0. The</span>
 <span class="sd">          function should take one argument, which will be the random number if</span>
-<span class="sd">          `pid=True` or *None* otherwise. The return value will be used instead</span>
-<span class="sd">          of the result of *outputreader*.</span>
+<span class="sd">          *pid=True* or *None* otherwise. The return value of ``error`` will</span>
+<span class="sd">          then be used instead of the result of *outputreader*.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    float</span>
-<span class="sd">        Output value calculated by the external executable *func* or via</span>
-<span class="sd">        the *outputreader*</span>
+<span class="sd">        Output value returned from *outputreader*</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    Imagine an external program *prog.exe* written in C or Fortan, for example,</span>
 <span class="sd">    that reads in two parameters from the file *params.txt* and writes its</span>
-<span class="sd">    results to a file *out.txt*. The parameters can be written with</span>
-<span class="sd">    `standard_parameter_writer` and read with `standard_output_reader`.</span>
+<span class="sd">    results to a file *out.txt*. The parameters are written with</span>
+<span class="sd">    `standard_parameter_writer` and output is read in with</span>
+<span class="sd">    `standard_output_reader`.</span>
 
 <span class="sd">    Then this external program can be wrapped as:</span>
 
@@ -559,11 +523,13 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; from partialwrap import exe_wrapper, standard_parameter_writer</span>
 <span class="sd">    &gt;&gt;&gt; from partialwrap import standard_output_reader</span>
 <span class="sd">    &gt;&gt;&gt; exe = &#39;prog.exe&#39;</span>
-<span class="sd">    &gt;&gt;&gt; parameterfile = &#39;params.txt&#39;</span>
-<span class="sd">    &gt;&gt;&gt; outputfile = &#39;out.txt&#39;</span>
+<span class="sd">    &gt;&gt;&gt; parameterfile   = &#39;params.txt&#39;</span>
+<span class="sd">    &gt;&gt;&gt; parameterwriter = standard_parameter_writer</span>
+<span class="sd">    &gt;&gt;&gt; outputfile      = &#39;out.txt&#39;</span>
+<span class="sd">    &gt;&gt;&gt; outputreader    = standard_output_reader</span>
 <span class="sd">    &gt;&gt;&gt; exewrap = partial(exe_wrapper, exe,</span>
-<span class="sd">    ...                   parameterfile, standard_parameter_writer,</span>
-<span class="sd">    ...                   outputfile, standard_output_reader, {})</span>
+<span class="sd">    ...                   parameterfile, parameterwriter,</span>
+<span class="sd">    ...                   outputfile, outputreader, {})</span>
 
 <span class="sd">    And is run as:</span>
 
@@ -574,7 +540,7 @@ document.write(`
 
 <span class="sd">    Or one can find the minimum of the function in *prog.exe* with the global</span>
 <span class="sd">    optimizer Differential Evolution (assuming here that *prog.exe* calculates</span>
-<span class="sd">    the Rastrigin function).</span>
+<span class="sd">    the Rastrigin function with the minimum 0 at the origin).</span>
 
 <span class="sd">    &gt;&gt;&gt; import scipy.optimize as opt</span>
 <span class="sd">    &gt;&gt;&gt; bounds = [(-5.12, 5.12)] * 2</span>
@@ -589,10 +555,10 @@ document.write(`
 <span class="sd">    this cases that, for example, returns arbitrary large values.</span>
 
 <span class="sd">    &gt;&gt;&gt; def err(x):</span>
-<span class="sd">    ...     return 10000. + np.random.random() * 10000.</span>
+<span class="sd">    ...     return (1. + np.random.random()) * 10000.</span>
 <span class="sd">    &gt;&gt;&gt; exewrap = partial(exe_wrapper, exe,</span>
-<span class="sd">    ...                   parameterfile, standard_parameter_writer,</span>
-<span class="sd">    ...                   outputfile, standard_output_reader,</span>
+<span class="sd">    ...                   parameterfile, parameterwriter,</span>
+<span class="sd">    ...                   outputfile, outputreader,</span>
 <span class="sd">    ...                   {&#39;error&#39;: err})</span>
 <span class="sd">    &gt;&gt;&gt; res = opt.differential_evolution(exewrap, bounds)</span>
 
@@ -600,19 +566,17 @@ document.write(`
     <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">exe_wrapper_v34</span><span class="p">(</span>
             <span class="n">func</span><span class="p">,</span> <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
-            <span class="n">kwarg</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-    <span class="n">shell</span>   <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;shell&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;shell&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span>
-    <span class="n">debug</span>   <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;debug&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span>
-    <span class="n">pid</span>     <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;pid&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span>
-    <span class="n">pargs</span>   <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;pargs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;pargs&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="p">[]</span>
-    <span class="n">pkwargs</span> <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;pkwargs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;pkwargs&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="p">{}</span>
-    <span class="n">keepparameterfile</span> <span class="o">=</span> <span class="p">(</span><span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;keepparameterfile&#39;</span><span class="p">]</span>
-                         <span class="k">if</span> <span class="s1">&#39;keepparameterfile&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">oargs</span>   <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;oargs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;oargs&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="p">[]</span>
-    <span class="n">okwargs</span> <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;okwargs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;okwargs&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="p">{}</span>
-    <span class="n">keepoutputfile</span> <span class="o">=</span> <span class="p">(</span><span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;keepoutputfile&#39;</span><span class="p">]</span>
-                      <span class="k">if</span> <span class="s1">&#39;keepoutputfile&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">errorfunc</span> <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">kwargs</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">shell</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;shell&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">debug</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">pid</span>     <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pid&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">pargs</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pargs&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">pkwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pkwargs&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">keepparameterfile</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keepparameterfile&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">oargs</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;oargs&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">okwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;okwargs&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">keepoutputfile</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keepoutputfile&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">errorfunc</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="c1"># For multiprocess but not MPI: pid = mp.current_process()._identity[0]</span>
     <span class="c1"># seed uses global variables so all processes will produce the same</span>
     <span class="c1"># random numbers</span>
@@ -685,9 +649,9 @@ document.write(`
 
 <div class="viewcode-block" id="exe_mask_wrapper"><a class="viewcode-back" href="../../wrappers.html#partialwrap.wrappers.exe_mask_wrapper">[docs]</a><span class="k">def</span> <span class="nf">exe_mask_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
                      <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
-                     <span class="n">kwarg</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+                     <span class="n">kwargs</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Same as `exe_wrapper` incl./excl. parameters with mask.</span>
+<span class="sd">    Same as :any:`exe_wrapper` incl./excl. parameters with mask.</span>
 
 <span class="sd">    Makes the transformation:</span>
 
@@ -696,16 +660,95 @@ document.write(`
 <span class="sd">       xx = np.copy(x0)</span>
 <span class="sd">       xx[mask] = x</span>
 
-<span class="sd">    and calls `exe_wrapper` with *xx*.</span>
+<span class="sd">    and calls :any:`exe_wrapper` with *xx*.</span>
 
-<span class="sd">    See `exe_wrapper` for details.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : string or list of strings</span>
+<span class="sd">        External program to be launched by :any:`subprocess`.</span>
+
+<span class="sd">        External executables will be passed to</span>
+<span class="sd">        :any:`subprocess.run`. Due to `subprocess.run()`,</span>
+<span class="sd">        ``func`` is thus a string, e.g. ``func = &#39;./prog.exe -arg&#39;``,</span>
+<span class="sd">        if *shell=True*, or it is a list, e.g.</span>
+<span class="sd">        ``func = [&#39;./prog.exe&#39;, &#39;-arg&#39;]``, if *shell=False*.</span>
+<span class="sd">        If the external program is simply an executable without any arguments,</span>
+<span class="sd">        pipes, or similar, ``func`` can simply be a string in all cases,</span>
+<span class="sd">        e.g. ``func = &#39;./prog.exe&#39;``.</span>
+
+<span class="sd">    x0 : array_like</span>
+<span class="sd">        Initial values of all parameters. These will be used for parameters</span>
+<span class="sd">        where `mask` is set to False</span>
+<span class="sd">    mask : array_like</span>
+<span class="sd">        Use default values *x0* in parameterfile where `mask` is False</span>
+<span class="sd">    parameterfile : string or iterable</span>
+<span class="sd">        Filename(s) of parameter file(s)</span>
+<span class="sd">    parameterwriter : callable</span>
+<span class="sd">        Python function writing the *parameterfile*, called as:</span>
+
+<span class="sd">        ``parameterwriter(parameterfile, x, *pargs, **pkwargs)``</span>
+
+<span class="sd">        or if *pid==True* as:</span>
+
+<span class="sd">        ``parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)``</span>
+
+<span class="sd">    outputfile : string or iterable</span>
+<span class="sd">        Filename(s) of file(s) with output values written by the external</span>
+<span class="sd">        executable *func*</span>
+<span class="sd">    outputreader : callable</span>
+<span class="sd">        Python function for reading and processing output value(s) from</span>
+<span class="sd">        *outputfile*, called as:</span>
+
+<span class="sd">        ``outputreader(ouputfile, x, *oargs, **okwargs)``</span>
+
+<span class="sd">        or if *pid==True* as:</span>
+
+<span class="sd">        ``outputreader(ouputfile, x, *oargs, pid=pid, **okwargs)``</span>
+
+<span class="sd">    kwargs : dict</span>
+<span class="sd">        Dictionary with keyword arguments for `exe_wrapper`. Possible</span>
+<span class="sd">        arguments are:</span>
+
+<span class="sd">        * ``shell`` (bool)</span>
+<span class="sd">          If True, :any:`subprocess` will open a shell to run the external</span>
+<span class="sd">          executable</span>
+<span class="sd">        * ``debug`` (bool)</span>
+<span class="sd">          If True, model output is displayed while the executable is running</span>
+<span class="sd">        * ``pid`` (bool)</span>
+<span class="sd">          If True, append &#39;.RandomNumber&#39; to *parameterfile* and</span>
+<span class="sd">          *outputfile* for parallel calls of *func*</span>
+<span class="sd">        * ``pargs`` (iterable)</span>
+<span class="sd">          List of arguments of `parameterwriter`.</span>
+<span class="sd">        * ``pkwargs`` (dict)</span>
+<span class="sd">          Dictionary with keyword arguments of `parameterwriter`.</span>
+<span class="sd">        * ``keepparameterfile`` (bool)</span>
+<span class="sd">          If True, `parameterfile` produced with `parameterwriter` will</span>
+<span class="sd">          not be deleted after function call.</span>
+<span class="sd">        * ``oargs`` (iterable)</span>
+<span class="sd">          List of arguments of `outputreader`.</span>
+<span class="sd">        * ``okwargs`` (dict)</span>
+<span class="sd">          Dictionary with keyword arguments of `outputreader`.</span>
+<span class="sd">        * ``keepoutputfile`` (bool)</span>
+<span class="sd">          If True, `outputfile` produced by `func` will not be deleted</span>
+<span class="sd">          after function call.</span>
+<span class="sd">        * ``error`` (function)</span>
+<span class="sd">          Function to call in case subprocess exists with error code &gt; 0. The</span>
+<span class="sd">          function should take one argument, which will be the random number if</span>
+<span class="sd">          *pid=True* or *None* otherwise. The return value of ``error`` will</span>
+<span class="sd">          then be used instead of the result of *outputreader*.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Output value returned from *outputreader*</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    Imagine an external program *prog.exe* written in C or Fortan, for example,</span>
 <span class="sd">    that reads in two parameters from the file *params.txt* and writes its</span>
-<span class="sd">    results to a file *out.txt*. The parameters can be written with</span>
-<span class="sd">    `standard_parameter_writer` and read with `standard_output_reader`.</span>
+<span class="sd">    results to a file *out.txt*. The parameters are written with</span>
+<span class="sd">    `standard_parameter_writer` and the output is read in with</span>
+<span class="sd">    `standard_output_reader`.</span>
 
 <span class="sd">    Then this external program can be wrapped as:</span>
 
@@ -713,11 +756,13 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; from partialwrap import exe_wrapper, standard_parameter_writer</span>
 <span class="sd">    &gt;&gt;&gt; from partialwrap import standard_output_reader</span>
 <span class="sd">    &gt;&gt;&gt; exe = &#39;prog.exe&#39;</span>
-<span class="sd">    &gt;&gt;&gt; parameterfile = &#39;params.txt&#39;</span>
-<span class="sd">    &gt;&gt;&gt; outputfile = &#39;out.txt&#39;</span>
+<span class="sd">    &gt;&gt;&gt; parameterfile   = &#39;params.txt&#39;</span>
+<span class="sd">    &gt;&gt;&gt; parameterwriter = standard_parameter_writer</span>
+<span class="sd">    &gt;&gt;&gt; outputfile      = &#39;out.txt&#39;</span>
+<span class="sd">    &gt;&gt;&gt; outputreader    = standard_output_reader</span>
 <span class="sd">    &gt;&gt;&gt; exewrap = partial(exe_wrapper, exe,</span>
-<span class="sd">    ...                   parameterfile, standard_parameter_writer,</span>
-<span class="sd">    ...                   outputfile, standard_output_reader, {})</span>
+<span class="sd">    ...                   parameterfile, parameterwriter,</span>
+<span class="sd">    ...                   outputfile, outputreader, {})</span>
 
 <span class="sd">    And is run as:</span>
 
@@ -728,7 +773,7 @@ document.write(`
 
 <span class="sd">    Or one can find the minimum of the function in *prog.exe* with the global</span>
 <span class="sd">    optimizer Differential Evolution (assuming here that *prog.exe* calculates</span>
-<span class="sd">    the Rastrigin function).</span>
+<span class="sd">    the Rastrigin function with the minimum 0 at the origin).</span>
 
 <span class="sd">    &gt;&gt;&gt; import scipy.optimize as opt</span>
 <span class="sd">    &gt;&gt;&gt; bounds = [(-5.12, 5.12)] * 2</span>
@@ -738,18 +783,23 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; res.fun</span>
 <span class="sd">    0.0</span>
 
-<span class="sd">    If one wants to fix the second parameter during optimisation, for example</span>
-<span class="sd">    because the parameter is insensitive or one knows the parameter very well,</span>
-<span class="sd">    then this parameter can be excluded from the optimisation by using</span>
-<span class="sd">    `exe_mask_wrapper`, setting the mask to *False*, and providing *initial*</span>
-<span class="sd">    values of the parameters.</span>
+<span class="sd">    If one wants to fix the second parameter during optimization, for</span>
+<span class="sd">    example because the parameter is insensitive or one knows the</span>
+<span class="sd">    parameter very well, then this parameter can be excluded from the</span>
+<span class="sd">    optimization by using `exe_mask_wrapper`. One provides then</span>
+<span class="sd">    *initial* values for the parameters and sets a mask to *False* at</span>
+<span class="sd">    the positions of the parameters to exclude.</span>
 
 <span class="sd">    &gt;&gt;&gt; from partialwrap import exe_mask_wrapper</span>
+<span class="sd">    &gt;&gt;&gt; x0   = np.array([1., 0.])</span>
 <span class="sd">    &gt;&gt;&gt; mask = np.array([True, False])</span>
-<span class="sd">    &gt;&gt;&gt; x0 = np.array([1., 0.])</span>
 <span class="sd">    &gt;&gt;&gt; exemwrap = partial(exe_mask_wrapper, exe, x0, mask,</span>
 <span class="sd">    ...                    parameterfile, standard_parameter_writer,</span>
 <span class="sd">    ...                    outputfile, standard_output_reader, {})</span>
+
+<span class="sd">    In case of Differential Evolution, one also has to gives bounds</span>
+<span class="sd">    for all parameters. This would be the bounds of only the</span>
+<span class="sd">    non-masked parameters.</span>
 
 <span class="sd">    &gt;&gt;&gt; bounds = [ bb for ii, bb in enumerate(bounds) if mask[ii] ]</span>
 <span class="sd">    &gt;&gt;&gt; res = opt.differential_evolution(exemwrap, bounds)</span>
@@ -758,7 +808,8 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; res.fun</span>
 <span class="sd">    0.0</span>
 
-<span class="sd">    The final output parameters are then:</span>
+<span class="sd">    The output has only 1 value because only 1 value was optimized</span>
+<span class="sd">    by Differential Evolution. The final two output parameters are then:</span>
 
 <span class="sd">    &gt;&gt;&gt; xout = x0.copy()</span>
 <span class="sd">    &gt;&gt;&gt; xout[mask] = res.x</span>
@@ -770,120 +821,31 @@ document.write(`
     <span class="n">xx</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
     <span class="k">return</span> <span class="n">exe_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">,</span>
                        <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">,</span>
-                       <span class="n">outputreader</span><span class="p">,</span> <span class="n">kwarg</span><span class="p">,</span> <span class="n">xx</span><span class="p">)</span></div>
-
-
-<span class="k">def</span> <span class="nf">exe_wrapper_v34</span><span class="p">(</span><span class="n">func</span><span class="p">,</span>
-                    <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
-                    <span class="n">kwarg</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    exe_wrapper for Python &lt; v3.7 using subprocess.check_call and</span>
-<span class="sd">    subprocess.check_output</span>
-
-<span class="sd">    See `exe_wrapper` for details.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">shell</span>   <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;shell&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;shell&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span>
-    <span class="n">debug</span>   <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;debug&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span>
-    <span class="n">pid</span>     <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;pid&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span>
-    <span class="n">pargs</span>   <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;pargs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;pargs&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="p">[]</span>
-    <span class="n">pkwargs</span> <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;pkwargs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;pkwargs&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="p">{}</span>
-    <span class="n">keepparameterfile</span> <span class="o">=</span> <span class="p">(</span><span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;keepparameterfile&#39;</span><span class="p">]</span>
-                         <span class="k">if</span> <span class="s1">&#39;keepparameterfile&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">oargs</span>   <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;oargs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;oargs&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="p">[]</span>
-    <span class="n">okwargs</span> <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;okwargs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;okwargs&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="p">{}</span>
-    <span class="n">keepoutputfile</span> <span class="o">=</span> <span class="p">(</span><span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;keepoutputfile&#39;</span><span class="p">]</span>
-                      <span class="k">if</span> <span class="s1">&#39;keepoutputfile&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">errorfunc</span> <span class="o">=</span> <span class="n">kwarg</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">kwarg</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-    <span class="c1"># For multiprocess but not MPI: pid = mp.current_process()._identity[0]</span>
-    <span class="c1"># seed uses global variables so all processes will produce same random</span>
-    <span class="c1"># numbers</span>
-    <span class="c1"># -&gt; use np.random.RandomState() for each processes for individual seeds in</span>
-    <span class="c1"># each process</span>
-    <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-        <span class="n">randst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">()</span>
-        <span class="n">ipid</span>   <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">randst</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2147483647</span><span class="p">))</span>
-        <span class="n">pipid</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">ipid</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ipid</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">pipid</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-            <span class="n">parameterwriter</span><span class="p">(</span><span class="n">parameterfile</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">pargs</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="n">ipid</span><span class="p">,</span> <span class="o">**</span><span class="n">pkwargs</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">shell</span><span class="p">:</span>
-                    <span class="n">func1</span> <span class="o">=</span> <span class="n">func</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">ipid</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">func1</span> <span class="o">=</span> <span class="p">[</span><span class="n">func</span><span class="p">,</span> <span class="n">ipid</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">func1</span> <span class="o">=</span> <span class="n">func</span> <span class="o">+</span> <span class="p">[</span><span class="n">ipid</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">parameterwriter</span><span class="p">(</span><span class="n">parameterfile</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">pargs</span><span class="p">,</span> <span class="o">**</span><span class="n">pkwargs</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">shell</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
-                <span class="n">func1</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">func1</span> <span class="o">=</span> <span class="n">func</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-                <span class="n">err</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="n">func1</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">,</span>
-                                    <span class="n">shell</span><span class="o">=</span><span class="n">shell</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">err</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">func1</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">,</span>
-                                      <span class="n">shell</span><span class="o">=</span><span class="n">shell</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-                <span class="n">obj</span> <span class="o">=</span> <span class="n">outputreader</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="o">*</span><span class="n">oargs</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="n">ipid</span><span class="p">,</span> <span class="o">**</span><span class="n">okwargs</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">obj</span> <span class="o">=</span> <span class="n">outputreader</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="o">*</span><span class="n">oargs</span><span class="p">,</span> <span class="o">**</span><span class="n">okwargs</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">sp</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">errorfunc</span><span class="p">:</span>
-                <span class="n">obj</span> <span class="o">=</span> <span class="n">errorfunc</span><span class="p">(</span><span class="n">ipid</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">cmd</span><span class="p">,</span> <span class="s1">&#39;returned with exit code&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">returncode</span><span class="p">)</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Subprocess error&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">keepparameterfile</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">ff</span> <span class="ow">in</span> <span class="n">_tolist</span><span class="p">(</span><span class="n">parameterfile</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ff</span> <span class="o">+</span> <span class="n">pipid</span><span class="p">):</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ff</span> <span class="o">+</span> <span class="n">pipid</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">keepoutputfile</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">ff</span> <span class="ow">in</span> <span class="n">_tolist</span><span class="p">(</span><span class="n">outputfile</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ff</span> <span class="o">+</span> <span class="n">pipid</span><span class="p">):</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ff</span> <span class="o">+</span> <span class="n">pipid</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">obj</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">estr</span>  <span class="o">=</span> <span class="s1">&#39;func must be string or list of strings for subprocess.&#39;</span>
-        <span class="n">estr</span> <span class="o">+=</span> <span class="s1">&#39; Use function_wrapper for Python functions.&#39;</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">estr</span><span class="p">)</span>
+                       <span class="n">outputreader</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">xx</span><span class="p">)</span></div>
 
 
 <span class="c1"># Python function wrappers</span>
-<div class="viewcode-block" id="function_wrapper"><a class="viewcode-back" href="../../wrappers.html#partialwrap.wrappers.function_wrapper">[docs]</a><span class="k">def</span> <span class="nf">function_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">kwarg</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="function_wrapper"><a class="viewcode-back" href="../../wrappers.html#partialwrap.wrappers.function_wrapper">[docs]</a><span class="k">def</span> <span class="nf">function_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper for Python functions.</span>
 
-<span class="sd">    To be used with partial:</span>
+<span class="sd">    To be used with :any:`functools.partial`:</span>
 
-<span class="sd">    ``obj = partial(function_wrapper, func, arg, kwarg)``</span>
+<span class="sd">    .. code-block:: python</span>
 
-<span class="sd">    This allows then calling obj with only the non-masked parameters:</span>
+<span class="sd">       obj = partial(function_wrapper, func, args, kwargs)</span>
 
-<span class="sd">    ``fx = obj(x)``</span>
-
-<span class="sd">    which translates to:</span>
-
-<span class="sd">    ``fx = func(x, *arg, **kwarg)``</span>
+<span class="sd">    This allows then calling *obj* simply with the parameters *x*:</span>
+<span class="sd">    `fx = obj(x)` by any python function such as the utilities in</span>
+<span class="sd">    :any:`scipy`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    func : callable</span>
-<span class="sd">        Python function to be called `func(x, *arg, **kwarg)`</span>
-<span class="sd">    arg : iterable</span>
+<span class="sd">        Python function to be called `func(x, *args, **kwargs)`</span>
+<span class="sd">    args : iterable</span>
 <span class="sd">        Arguments passed to *func*</span>
-<span class="sd">    kwarg : dictionary</span>
+<span class="sd">    kwargs : dictionary</span>
 <span class="sd">        Keyword arguments passed to *func*</span>
 
 <span class="sd">    Returns</span>
@@ -927,41 +889,34 @@ document.write(`
 <span class="sd">    0.0</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="function_mask_wrapper"><a class="viewcode-back" href="../../wrappers.html#partialwrap.wrappers.function_mask_wrapper">[docs]</a><span class="k">def</span> <span class="nf">function_mask_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">kwarg</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="function_mask_wrapper"><a class="viewcode-back" href="../../wrappers.html#partialwrap.wrappers.function_mask_wrapper">[docs]</a><span class="k">def</span> <span class="nf">function_mask_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper function for Python function using a mask.</span>
+<span class="sd">    Same as :any:`function_wrapper` incl./excl. parameters with mask.</span>
 
-<span class="sd">    To be used with partial:</span>
-
-<span class="sd">    ``obj = partial(function_mask_wrapper, func, x0, mask, arg, kwarg)``</span>
-
-<span class="sd">    This allows then calling obj with only the non-masked parameters:</span>
-
-<span class="sd">    ``fx = obj(x)``</span>
-
-<span class="sd">    which translates to:</span>
+<span class="sd">    Makes the transformation:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">       xx = np.copy(x0)</span>
 <span class="sd">       xx[mask] = x</span>
-<span class="sd">       fx = func(xx, *arg, **kwarg)</span>
+
+<span class="sd">    and calls :any:`function_wrapper` with *xx*.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    func : callable</span>
-<span class="sd">        Python function to be called `func(x, *arg, **kwarg)`</span>
+<span class="sd">        Python function to be called `func(x, *args, **kwargs)`</span>
 <span class="sd">    x0 : array_like</span>
-<span class="sd">        Fixed values of masked parameters</span>
+<span class="sd">        Initial values of all parameters. These will be used for parameters</span>
+<span class="sd">        where `mask` is set to False</span>
 <span class="sd">    mask : array_like</span>
-<span class="sd">        Mask to use *x0* values (`mask[i]=1`) or use new parameters</span>
-<span class="sd">        *x* (`ask[i]=0`) in call of the function</span>
-<span class="sd">    arg : iterable</span>
+<span class="sd">        Use default values *x0* in function call where `mask` is False</span>
+<span class="sd">    args : iterable</span>
 <span class="sd">        Arguments passed to *func*</span>
-<span class="sd">    kwarg : dictionary</span>
+<span class="sd">    kwargs : dictionary</span>
 <span class="sd">        Keyword arguments passed to *func*</span>
 
 <span class="sd">    Returns</span>
@@ -1004,17 +959,22 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; res.fun</span>
 <span class="sd">    0.0</span>
 
-<span class="sd">    If one wants to fix the second parameter during optimisation, for example</span>
+<span class="sd">    If one wants to fix the second parameter during optimization, for example</span>
 <span class="sd">    because the parameter is insensitive or one knows the parameter very well</span>
 <span class="sd">    (very hypothetical in the example of rastrigin), then this parameter can be</span>
-<span class="sd">    excluded from the optimisation by using `function_mask_wrapper`, setting</span>
-<span class="sd">    the mask to *False*, and providing *initial* values of the parameters.</span>
+<span class="sd">    excluded from the optimization by using `function_mask_wrapper`.</span>
+<span class="sd">    One then provides *initial* values of the parameters and sets a</span>
+<span class="sd">    mask to *False* at the second index.</span>
 
 <span class="sd">    &gt;&gt;&gt; from partialwrap import function_mask_wrapper</span>
+<span class="sd">    &gt;&gt;&gt; x0   = np.array([1., 0., 2., 3., 4.])</span>
 <span class="sd">    &gt;&gt;&gt; mask = np.array([True, False, True, True, True])</span>
-<span class="sd">    &gt;&gt;&gt; x0 = np.array([1., 0., 2., 3., 4.])</span>
 <span class="sd">    &gt;&gt;&gt; rastram = partial(function_mask_wrapper, rastrigin, x0, mask,</span>
 <span class="sd">    ...                   args, kwargs)</span>
+
+<span class="sd">    In case of Differential Evolution, one also has to gives bounds</span>
+<span class="sd">    for all parameters. This would be the bounds of only the</span>
+<span class="sd">    non-masked parameters.</span>
 
 <span class="sd">    &gt;&gt;&gt; bounds = [ bb for ii, bb in enumerate(bounds) if mask[ii] ]</span>
 <span class="sd">    &gt;&gt;&gt; res = opt.differential_evolution(rastram, bounds)</span>
@@ -1023,7 +983,8 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; res.fun</span>
 <span class="sd">    0.0</span>
 
-<span class="sd">    The final output parameters are then:</span>
+<span class="sd">    The output has only 4 values because only 4 values were optimized</span>
+<span class="sd">    by Differential Evolution. The final five output parameters are then:</span>
 
 <span class="sd">    &gt;&gt;&gt; xout = x0.copy()</span>
 <span class="sd">    &gt;&gt;&gt; xout[mask] = res.x</span>
@@ -1034,7 +995,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">xx</span>       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
     <span class="n">xx</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
-    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>

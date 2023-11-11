@@ -446,19 +446,23 @@ present) with:</p>
 </div>
 <p>The external program calculating the Rastrigin function could, of
 course, also be written in any compiled language such as C or
-Fortran. See the <a class="reference external" href="userguide.html">userguide</a> for details. The
+Fortran. See the <a class="reference external" href="userguide.html">User Guide</a> for details. The
 external program, here the Python version, can be used with Python’s
 <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">functools.partial()</span></code></a> and the wrapper function
 <a class="reference internal" href="wrappers.html#partialwrap.wrappers.exe_wrapper" title="partialwrap.wrappers.exe_wrapper"><code class="xref py py-func docutils literal notranslate"><span class="pre">exe_wrapper()</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">standard_parameter_writer</span><span class="p">,</span> <span class="n">standard_output_reader</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">exe_wrapper</span>
+<span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">standard_parameter_writer</span><span class="p">,</span> <span class="n">standard_output_reader</span>
 
-<span class="n">rastrigin_exe</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;python3&#39;</span><span class="p">,</span> <span class="s1">&#39;rastrigin1.py&#39;</span><span class="p">]</span>
-<span class="n">parameterfile</span>  <span class="o">=</span> <span class="s1">&#39;params.txt&#39;</span>
-<span class="n">outputfile</span>     <span class="o">=</span> <span class="s1">&#39;out.txt&#39;</span>
-<span class="n">rastrigin_wrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">rastrigin_exe</span><span class="p">,</span>
-                         <span class="n">parameterfile</span><span class="p">,</span> <span class="n">standard_parameter_writer</span><span class="p">,</span>
-                         <span class="n">outputfile</span><span class="p">,</span> <span class="n">standard_output_reader</span><span class="p">,</span> <span class="p">{})</span>
+<span class="n">rastrigin_exe</span>   <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;python3&#39;</span><span class="p">,</span> <span class="s1">&#39;rastrigin1.py&#39;</span><span class="p">]</span>
+<span class="n">parameterfile</span>   <span class="o">=</span> <span class="s1">&#39;params.txt&#39;</span>
+<span class="n">parameterwriter</span> <span class="o">=</span> <span class="n">standard_parameter_writer</span>
+<span class="n">outputfile</span>      <span class="o">=</span> <span class="s1">&#39;out.txt&#39;</span>
+<span class="n">outputreader</span>    <span class="o">=</span> <span class="n">standard_output_reader</span>
+<span class="n">rastrigin_wrap</span>  <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">rastrigin_exe</span><span class="p">,</span>
+                          <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
+                          <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span> <span class="p">{})</span>
 
 <span class="n">x0</span>  <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">rastrigin_wrap</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
@@ -472,10 +476,9 @@ file <cite>parameterfile = ‘params.txt’</cite>. It then calls <cite>rastrigi
 <a class="reference internal" href="std_io.html#partialwrap.std_io.standard_parameter_writer" title="partialwrap.std_io.standard_parameter_writer"><code class="xref py py-func docutils literal notranslate"><span class="pre">standard_parameter_writer()</span></code></a> are convenience
 functions that read and write one parameter per line in a file without
 a header. The empty dictionary at the end is explained in the
-<a class="reference external" href="userguide.html">userguide</a>.</p>
-<p>More elaborate input/output of the external program can simply be
-dealt with by replacing
-<a class="reference internal" href="std_io.html#partialwrap.std_io.standard_parameter_reader" title="partialwrap.std_io.standard_parameter_reader"><code class="xref py py-func docutils literal notranslate"><span class="pre">standard_parameter_reader()</span></code></a> and
+<a class="reference external" href="userguide.html">User Guide</a>.</p>
+<p>More elaborate input/output of the external program can simply be done
+by replacing <a class="reference internal" href="std_io.html#partialwrap.std_io.standard_parameter_reader" title="partialwrap.std_io.standard_parameter_reader"><code class="xref py py-func docutils literal notranslate"><span class="pre">standard_parameter_reader()</span></code></a> and
 <a class="reference internal" href="std_io.html#partialwrap.std_io.standard_parameter_writer" title="partialwrap.std_io.standard_parameter_writer"><code class="xref py py-func docutils literal notranslate"><span class="pre">standard_parameter_writer()</span></code></a> with appropriate
 functions, while the rest stays pretty much the same.</p>
 </section>

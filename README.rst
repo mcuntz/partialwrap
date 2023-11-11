@@ -52,15 +52,15 @@ needs to have a function ``outputreader`` for reading the output file
 objective function value.
 
 Take the `Rastrigin function`_, which is a popular function for
-performance testing of optimization algorithms: ``y = a*n +
-sum_i^n(x_i^2 - a*cos(b*x_i))``.  It has a global minimum of ``0`` at
-all ``x_i = 0``. ``a`` influences mainly the depth of the (local and
-global) minima, whereas ``b`` influences mainly the size of the
-minima. A common form uses ``a = 10`` and ``b = 2*pi``. The parameters
-``x_i`` should then be in the interval [-5.12, 5.12].
+performance testing of optimization algorithms:
+``y = a*n + sum_i^n(x_i^2 - a*cos(b*x_i))``. It has a global minimum
+of ``0`` at all ``x_i = 0``. ``a`` influences mainly the depth of the
+(local and global) minima, whereas ``b`` influences mainly the size of
+the minima. A common form uses ``a = 10`` and ``b = 2*pi``. The
+parameters ``x_i`` should then be in the interval [-5.12, 5.12].
 
 Consider for simplicity an external Python program
-(e.g. ``rastrigin1.py``) that calculates the Rastrigin function``with
+(e.g. ``rastrigin1.py``) that calculates the Rastrigin function with
 ``a = 10`` and ``b = 2*pi``, reading in an arbitrary number of
 parameters ``x_i`` from a ``parameterfile = params.txt`` and writing
 its output into ``outputfile = out.txt``:
@@ -96,20 +96,23 @@ The external program calculating the Rastrigin function could, of
 course, also be written in any compiled language such as C or
 Fortran. See the `userguide`_ for details. The external program, here
 the Python version, can be used with Python's `functools.partial`_ and
-the wrapper function ```partialwrap.exe_wrapper``:
+the wrapper function ``partialwrap.exe_wrapper``:
 
 .. code:: python
 
+   import scipy.optimize as opt
    from functools import partial
    from partialwrap import exe_wrapper
    from partialwrap import standard_parameter_writer, standard_output_reader
 
-   rastrigin_exe  = ['python3', 'rastrigin1.py']
-   parameterfile  = 'params.txt'
-   outputfile     = 'out.txt'
-   rastrigin_wrap = partial(exe_wrapper, rastrigin_exe,
-                            parameterfile, standard_parameter_writer,
-                            outputfile, standard_output_reader, {})
+   rastrigin_exe   = ['python3', 'rastrigin1.py']
+   parameterfile   = 'params.txt'
+   parameterwriter = standard_parameter_writer
+   outputfile      = 'out.txt'
+   outputreader    = standard_output_reader
+   rastrigin_wrap  = partial(exe_wrapper, rastrigin_exe,
+                             parameterfile, parameterwriter,
+                             outputfile, outputreader, {})
 
    x0  = [0.1, 0.2, 0.3]
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
@@ -118,16 +121,16 @@ The `scipy.optimize`_ function ``minimize()`` passes its sampled
 parameters to ``exe_wrapper``, which writes it to the file
 ``parameterfile = 'params.txt'``. It then calls ``rastrigin_exe =
 'python3 rastrigin1.py'`` and reads its ``outputfile = 'out.txt'``.
-`partialwrap.standard_parameter_reader`` and
+``partialwrap.standard_parameter_reader`` and
 ``partialwrap.standard_parameter_writer`` are convenience functions
 that read and write one parameter per line in a file without a
 header. The empty dictionary at the end is explained in the
 `userguide`_.
 
-More elaborate input/output of the external program can simply be
-dealt with by replacing ``partialwrap.standard_parameter_reader`` and
-``partialwrap.standard_parameter_writer`` with appropriate functions,
-while the rest stays pretty much the same.
+More elaborate input/output of the external program can simply be done
+by replacing ``standard_parameter_reader`` and
+``standard_parameter_writer`` with appropriate functions, while the
+rest stays pretty much the same.
 
 
 Installation

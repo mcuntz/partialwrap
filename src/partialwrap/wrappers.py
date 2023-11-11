@@ -4,29 +4,20 @@ Wrappers to partialize functions so that they can simply be called as func(x).
 
 .. code-block:: python
 
-    from functools import partial
-    if isinstance(func, (str, list)):
-        obj = partial(exe_wrapper, func,
-                      parameterfile, parameterwriter,
-                      outputfile, outputreader,
-                      {'shell':bool, 'debug':bool, 'pid':bool,
-                       'pargs':list, 'pkwargs':dict, 'keepparameterfile':bool,
-                       'oargs':list, 'okwargs':dict, 'keepoutputfile':bool})
-    else:
-        obj = partial(function_wrapper, func, arg, kwarg)
-    fx = obj(x)
+   obj = partial(exe_wrapper, func,
+                 parameterfile, parameterwriter,
+                 outputfile, outputreader,
+                 {'shell':bool, 'debug':bool, 'pid':bool,
+                  'pargs':list, 'pkwargs':dict, 'keepparameterfile':bool,
+                  'oargs':list, 'okwargs':dict, 'keepoutputfile':bool})
+   fx = obj(x)
 
 `func` can hence be an external executable or a Python function using
-`exe_wrapper` or `function_wrapper`, respectively. External executables
-will be passed to `subprocess.run(func)`. Due to `subprocess.run()`, `func` is
-thus a string (e.g. './prog -arg') if `shell=True` or a list
-(e.g. ['./prog', '-arg']) if `shell=False` (default). `func` without any
-arguments, pipes, or similar can simply be strings in both cases
-(e.g. './prog').
+`exe_wrapper` or `function_wrapper`, respectively.
 
-This module was written by Matthias Cuntz while at Institut National de
-Recherche pour l'Agriculture, l'Alimentation et l'Environnement (INRAE), Nancy,
-France.
+This module was written by Matthias Cuntz while at Institut National
+de Recherche pour l'Agriculture, l'Alimentation et l'Environnement
+(INRAE), Nancy, France.
 
 Copyright (c) 2016-2023 Matthias Cuntz - mc (at) macu (dot) de
 
@@ -82,6 +73,11 @@ History
     * Added examples and reformatted docstrings, Aug 2022, Matthias Cuntz
     * Added error function as fallback option in case subprocess exits with
       error code > 0, Aug 2022, Matthias Cuntz
+    * Rename arg to args and kwarg to kwargs, Nov 2023, Matthias Cuntz
+    * Use dict.get() function for keywords, Nov 2023, Matthias Cuntz
+    * Improved docstrings, Nov 2023, Matthias Cuntz
+    * Removed exe_wrapper_v34 and hence support for < Python 3.7,
+      Nov 2023, Matthias Cuntz
 
 """
 import sys
@@ -128,31 +124,9 @@ def _tolist(arg):
 
 def exe_wrapper(func,
                 parameterfile, parameterwriter, outputfile, outputreader,
-                kwarg, x):
+                kwargs, x):
     """
     Wrapper function for external programs
-
-    Uses a *parameterwriter* and *outputreader* with the interfaces:
-
-    ``parameterwriter(parameterfile, x, *pargs, **pkwargs)``
-
-    and
-
-    ``outputreader(outputfile, *oargs, **okwargs)``
-
-    or if *pid==True*:
-
-    ``parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)``
-
-    and
-
-    ``outputreader(outputfile, *oargs, pid=pid, **okwargs)``
-
-    Examples of *parameterwriter* with *pid==True* are
-    :any:`standard_parameter_writer` and :any:`sub_params_ja`.
-
-    An example of *outputreader* with or without *pid* is
-    :any:`standard_output_reader`.
 
     To be used with :any:`functools.partial`:
 
@@ -168,34 +142,23 @@ def exe_wrapper(func,
                       'keepoutputfile': bool})
 
     This allows then calling *obj* simply with the parameters *x*:
-    ``fx = obj(x)``
-
-    which translates to:
-
-    .. code-block:: python
-
-       parameterwriter(parameterfile, x, *pargs, **pkwargs)
-       err = subprocess.run(func)
-       obj = outputreader(outputfile, *oargs, **okwargs)
-
-    or if *pid==True* to:
-
-    .. code-block:: python
-
-       parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)
-       err = subprocess.run(func)
-       obj = outputreader(outputfile, *oargs, pid=pid, **okwargs)
-
-    Note if *pid==True*, it is assumed that *parameterwriter* produces
-    files in the form `parameterfile + '.' + processid`,
-    which will be removed after the function call.
-    Also files in the form `outputfile + '.' + processid`
-    will be removed automatically.
+    `fx = obj(x)` by any python function such as the utilities in
+    :any:`scipy`.
 
     Parameters
     ----------
     func : string or list of strings
-        External program to launch by :any:`subprocess`
+        External program to be launched by :any:`subprocess`.
+
+        External executables will be passed to
+        :any:`subprocess.run`. Due to `subprocess.run()`,
+        ``func`` is thus a string, e.g. ``func = './prog.exe -arg'``,
+        if *shell=True*, or it is a list, e.g.
+        ``func = ['./prog.exe', '-arg']``, if *shell=False*.
+        If the external program is simply an executable without any arguments,
+        pipes, or similar, ``func`` can simply be a string in all cases,
+        e.g. ``func = './prog.exe'``.
+
     parameterfile : string or iterable
         Filename(s) of parameter file(s)
     parameterwriter : callable
@@ -220,14 +183,15 @@ def exe_wrapper(func,
 
         ``outputreader(ouputfile, x, *oargs, pid=pid, **okwargs)``
 
-    kwarg : dict
+    kwargs : dict
         Dictionary with keyword arguments for `exe_wrapper`. Possible
         arguments are:
 
         * ``shell`` (bool)
-          If True, :any:`subprocess` opens shell for external executable
+          If True, :any:`subprocess` will open a shell to run the external
+          executable
         * ``debug`` (bool)
-          If True, model output is displayed while executable is running
+          If True, model output is displayed while the executable is running
         * ``pid`` (bool)
           If True, append '.RandomNumber' to *parameterfile* and
           *outputfile* for parallel calls of *func*
@@ -248,21 +212,21 @@ def exe_wrapper(func,
         * ``error`` (function)
           Function to call in case subprocess exists with error code > 0. The
           function should take one argument, which will be the random number if
-          `pid=True` or *None* otherwise. The return value will be used instead
-          of the result of *outputreader*.
+          *pid=True* or *None* otherwise. The return value of ``error`` will
+          then be used instead of the result of *outputreader*.
 
     Returns
     -------
     float
-        Output value calculated by the external executable *func* or via
-        the *outputreader*
+        Output value returned from *outputreader*
 
     Examples
     --------
     Imagine an external program *prog.exe* written in C or Fortan, for example,
     that reads in two parameters from the file *params.txt* and writes its
-    results to a file *out.txt*. The parameters can be written with
-    `standard_parameter_writer` and read with `standard_output_reader`.
+    results to a file *out.txt*. The parameters are written with
+    `standard_parameter_writer` and output is read in with
+    `standard_output_reader`.
 
     Then this external program can be wrapped as:
 
@@ -270,11 +234,13 @@ def exe_wrapper(func,
     >>> from partialwrap import exe_wrapper, standard_parameter_writer
     >>> from partialwrap import standard_output_reader
     >>> exe = 'prog.exe'
-    >>> parameterfile = 'params.txt'
-    >>> outputfile = 'out.txt'
+    >>> parameterfile   = 'params.txt'
+    >>> parameterwriter = standard_parameter_writer
+    >>> outputfile      = 'out.txt'
+    >>> outputreader    = standard_output_reader
     >>> exewrap = partial(exe_wrapper, exe,
-    ...                   parameterfile, standard_parameter_writer,
-    ...                   outputfile, standard_output_reader, {})
+    ...                   parameterfile, parameterwriter,
+    ...                   outputfile, outputreader, {})
 
     And is run as:
 
@@ -285,7 +251,7 @@ def exe_wrapper(func,
 
     Or one can find the minimum of the function in *prog.exe* with the global
     optimizer Differential Evolution (assuming here that *prog.exe* calculates
-    the Rastrigin function).
+    the Rastrigin function with the minimum 0 at the origin).
 
     >>> import scipy.optimize as opt
     >>> bounds = [(-5.12, 5.12)] * 2
@@ -300,10 +266,10 @@ def exe_wrapper(func,
     this cases that, for example, returns arbitrary large values.
 
     >>> def err(x):
-    ...     return 10000. + np.random.random() * 10000.
+    ...     return (1. + np.random.random()) * 10000.
     >>> exewrap = partial(exe_wrapper, exe,
-    ...                   parameterfile, standard_parameter_writer,
-    ...                   outputfile, standard_output_reader,
+    ...                   parameterfile, parameterwriter,
+    ...                   outputfile, outputreader,
     ...                   {'error': err})
     >>> res = opt.differential_evolution(exewrap, bounds)
 
@@ -311,19 +277,17 @@ def exe_wrapper(func,
     if sys.version_info < (3, 7):
         return exe_wrapper_v34(
             func, parameterfile, parameterwriter, outputfile, outputreader,
-            kwarg, x)
-    shell   = kwarg['shell'] if 'shell' in kwarg else False
-    debug   = kwarg['debug'] if 'debug' in kwarg else False
-    pid     = kwarg['pid'] if 'pid' in kwarg else False
-    pargs   = kwarg['pargs'] if 'pargs' in kwarg else []
-    pkwargs = kwarg['pkwargs'] if 'pkwargs' in kwarg else {}
-    keepparameterfile = (kwarg['keepparameterfile']
-                         if 'keepparameterfile' in kwarg else False)
-    oargs   = kwarg['oargs'] if 'oargs' in kwarg else []
-    okwargs = kwarg['okwargs'] if 'okwargs' in kwarg else {}
-    keepoutputfile = (kwarg['keepoutputfile']
-                      if 'keepoutputfile' in kwarg else False)
-    errorfunc = kwarg['error'] if 'error' in kwarg else ''
+            kwargs, x)
+    shell   = kwargs.get('shell', False)
+    debug   = kwargs.get('debug', False)
+    pid     = kwargs.get('pid', False)
+    pargs   = kwargs.get('pargs', [])
+    pkwargs = kwargs.get('pkwargs', {})
+    keepparameterfile = kwargs.get('keepparameterfile', False)
+    oargs   = kwargs.get('oargs', [])
+    okwargs = kwargs.get('okwargs', {})
+    keepoutputfile = kwargs.get('keepoutputfile', False)
+    errorfunc = kwargs.get('error', '')
     # For multiprocess but not MPI: pid = mp.current_process()._identity[0]
     # seed uses global variables so all processes will produce the same
     # random numbers
@@ -396,9 +360,9 @@ def exe_wrapper(func,
 
 def exe_mask_wrapper(func, x0, mask,
                      parameterfile, parameterwriter, outputfile, outputreader,
-                     kwarg, x):
+                     kwargs, x):
     """
-    Same as `exe_wrapper` incl./excl. parameters with mask.
+    Same as :any:`exe_wrapper` incl./excl. parameters with mask.
 
     Makes the transformation:
 
@@ -407,16 +371,95 @@ def exe_mask_wrapper(func, x0, mask,
        xx = np.copy(x0)
        xx[mask] = x
 
-    and calls `exe_wrapper` with *xx*.
+    and calls :any:`exe_wrapper` with *xx*.
 
-    See `exe_wrapper` for details.
+    Parameters
+    ----------
+    func : string or list of strings
+        External program to be launched by :any:`subprocess`.
+
+        External executables will be passed to
+        :any:`subprocess.run`. Due to `subprocess.run()`,
+        ``func`` is thus a string, e.g. ``func = './prog.exe -arg'``,
+        if *shell=True*, or it is a list, e.g.
+        ``func = ['./prog.exe', '-arg']``, if *shell=False*.
+        If the external program is simply an executable without any arguments,
+        pipes, or similar, ``func`` can simply be a string in all cases,
+        e.g. ``func = './prog.exe'``.
+
+    x0 : array_like
+        Initial values of all parameters. These will be used for parameters
+        where `mask` is set to False
+    mask : array_like
+        Use default values *x0* in parameterfile where `mask` is False
+    parameterfile : string or iterable
+        Filename(s) of parameter file(s)
+    parameterwriter : callable
+        Python function writing the *parameterfile*, called as:
+
+        ``parameterwriter(parameterfile, x, *pargs, **pkwargs)``
+
+        or if *pid==True* as:
+
+        ``parameterwriter(parameterfile, x, *pargs, pid=pid, **pkwargs)``
+
+    outputfile : string or iterable
+        Filename(s) of file(s) with output values written by the external
+        executable *func*
+    outputreader : callable
+        Python function for reading and processing output value(s) from
+        *outputfile*, called as:
+
+        ``outputreader(ouputfile, x, *oargs, **okwargs)``
+
+        or if *pid==True* as:
+
+        ``outputreader(ouputfile, x, *oargs, pid=pid, **okwargs)``
+
+    kwargs : dict
+        Dictionary with keyword arguments for `exe_wrapper`. Possible
+        arguments are:
+
+        * ``shell`` (bool)
+          If True, :any:`subprocess` will open a shell to run the external
+          executable
+        * ``debug`` (bool)
+          If True, model output is displayed while the executable is running
+        * ``pid`` (bool)
+          If True, append '.RandomNumber' to *parameterfile* and
+          *outputfile* for parallel calls of *func*
+        * ``pargs`` (iterable)
+          List of arguments of `parameterwriter`.
+        * ``pkwargs`` (dict)
+          Dictionary with keyword arguments of `parameterwriter`.
+        * ``keepparameterfile`` (bool)
+          If True, `parameterfile` produced with `parameterwriter` will
+          not be deleted after function call.
+        * ``oargs`` (iterable)
+          List of arguments of `outputreader`.
+        * ``okwargs`` (dict)
+          Dictionary with keyword arguments of `outputreader`.
+        * ``keepoutputfile`` (bool)
+          If True, `outputfile` produced by `func` will not be deleted
+          after function call.
+        * ``error`` (function)
+          Function to call in case subprocess exists with error code > 0. The
+          function should take one argument, which will be the random number if
+          *pid=True* or *None* otherwise. The return value of ``error`` will
+          then be used instead of the result of *outputreader*.
+
+    Returns
+    -------
+    float
+        Output value returned from *outputreader*
 
     Examples
     --------
     Imagine an external program *prog.exe* written in C or Fortan, for example,
     that reads in two parameters from the file *params.txt* and writes its
-    results to a file *out.txt*. The parameters can be written with
-    `standard_parameter_writer` and read with `standard_output_reader`.
+    results to a file *out.txt*. The parameters are written with
+    `standard_parameter_writer` and the output is read in with
+    `standard_output_reader`.
 
     Then this external program can be wrapped as:
 
@@ -424,11 +467,13 @@ def exe_mask_wrapper(func, x0, mask,
     >>> from partialwrap import exe_wrapper, standard_parameter_writer
     >>> from partialwrap import standard_output_reader
     >>> exe = 'prog.exe'
-    >>> parameterfile = 'params.txt'
-    >>> outputfile = 'out.txt'
+    >>> parameterfile   = 'params.txt'
+    >>> parameterwriter = standard_parameter_writer
+    >>> outputfile      = 'out.txt'
+    >>> outputreader    = standard_output_reader
     >>> exewrap = partial(exe_wrapper, exe,
-    ...                   parameterfile, standard_parameter_writer,
-    ...                   outputfile, standard_output_reader, {})
+    ...                   parameterfile, parameterwriter,
+    ...                   outputfile, outputreader, {})
 
     And is run as:
 
@@ -439,7 +484,7 @@ def exe_mask_wrapper(func, x0, mask,
 
     Or one can find the minimum of the function in *prog.exe* with the global
     optimizer Differential Evolution (assuming here that *prog.exe* calculates
-    the Rastrigin function).
+    the Rastrigin function with the minimum 0 at the origin).
 
     >>> import scipy.optimize as opt
     >>> bounds = [(-5.12, 5.12)] * 2
@@ -449,18 +494,23 @@ def exe_mask_wrapper(func, x0, mask,
     >>> res.fun
     0.0
 
-    If one wants to fix the second parameter during optimisation, for example
-    because the parameter is insensitive or one knows the parameter very well,
-    then this parameter can be excluded from the optimisation by using
-    `exe_mask_wrapper`, setting the mask to *False*, and providing *initial*
-    values of the parameters.
+    If one wants to fix the second parameter during optimization, for
+    example because the parameter is insensitive or one knows the
+    parameter very well, then this parameter can be excluded from the
+    optimization by using `exe_mask_wrapper`. One provides then
+    *initial* values for the parameters and sets a mask to *False* at
+    the positions of the parameters to exclude.
 
     >>> from partialwrap import exe_mask_wrapper
+    >>> x0   = np.array([1., 0.])
     >>> mask = np.array([True, False])
-    >>> x0 = np.array([1., 0.])
     >>> exemwrap = partial(exe_mask_wrapper, exe, x0, mask,
     ...                    parameterfile, standard_parameter_writer,
     ...                    outputfile, standard_output_reader, {})
+
+    In case of Differential Evolution, one also has to gives bounds
+    for all parameters. This would be the bounds of only the
+    non-masked parameters.
 
     >>> bounds = [ bb for ii, bb in enumerate(bounds) if mask[ii] ]
     >>> res = opt.differential_evolution(exemwrap, bounds)
@@ -469,7 +519,8 @@ def exe_mask_wrapper(func, x0, mask,
     >>> res.fun
     0.0
 
-    The final output parameters are then:
+    The output has only 1 value because only 1 value was optimized
+    by Differential Evolution. The final two output parameters are then:
 
     >>> xout = x0.copy()
     >>> xout[mask] = res.x
@@ -481,120 +532,31 @@ def exe_mask_wrapper(func, x0, mask,
     xx[mask] = x
     return exe_wrapper(func,
                        parameterfile, parameterwriter, outputfile,
-                       outputreader, kwarg, xx)
-
-
-def exe_wrapper_v34(func,
-                    parameterfile, parameterwriter, outputfile, outputreader,
-                    kwarg, x):
-    """
-    exe_wrapper for Python < v3.7 using subprocess.check_call and
-    subprocess.check_output
-
-    See `exe_wrapper` for details.
-
-    """
-    shell   = kwarg['shell'] if 'shell' in kwarg else False
-    debug   = kwarg['debug'] if 'debug' in kwarg else False
-    pid     = kwarg['pid'] if 'pid' in kwarg else False
-    pargs   = kwarg['pargs'] if 'pargs' in kwarg else []
-    pkwargs = kwarg['pkwargs'] if 'pkwargs' in kwarg else {}
-    keepparameterfile = (kwarg['keepparameterfile']
-                         if 'keepparameterfile' in kwarg else False)
-    oargs   = kwarg['oargs'] if 'oargs' in kwarg else []
-    okwargs = kwarg['okwargs'] if 'okwargs' in kwarg else {}
-    keepoutputfile = (kwarg['keepoutputfile']
-                      if 'keepoutputfile' in kwarg else False)
-    errorfunc = kwarg['error'] if 'error' in kwarg else ''
-    # For multiprocess but not MPI: pid = mp.current_process()._identity[0]
-    # seed uses global variables so all processes will produce same random
-    # numbers
-    # -> use np.random.RandomState() for each processes for individual seeds in
-    # each process
-    if pid:
-        randst = np.random.RandomState()
-        ipid   = str(randst.randint(2147483647))
-        pipid = '.' + ipid
-    else:
-        ipid = None
-        pipid = ''
-
-    if isinstance(func, (str, list)):
-        if pid:
-            parameterwriter(parameterfile, x, *pargs, pid=ipid, **pkwargs)
-            if isinstance(func, str):
-                if shell:
-                    func1 = func + ' ' + ipid
-                else:
-                    func1 = [func, ipid]
-            else:
-                func1 = func + [ipid]
-        else:
-            parameterwriter(parameterfile, x, *pargs, **pkwargs)
-            if shell and (not isinstance(func, str)):
-                func1 = ' '.join(func)
-            else:
-                func1 = func
-
-        try:
-            if debug:
-                err = sp.check_call(func1, stderr=sp.STDOUT,
-                                    shell=shell)
-            else:
-                err = sp.check_output(func1, stderr=sp.STDOUT,
-                                      shell=shell)
-            if pid:
-                obj = outputreader(outputfile, *oargs, pid=ipid, **okwargs)
-            else:
-                obj = outputreader(outputfile, *oargs, **okwargs)
-        except sp.CalledProcessError as e:
-            if errorfunc:
-                obj = errorfunc(ipid)
-            else:
-                print(e.cmd, 'returned with exit code', e.returncode)
-                raise ValueError('Subprocess error')
-
-        if not keepparameterfile:
-            for ff in _tolist(parameterfile):
-                if os.path.exists(ff + pipid):
-                    os.remove(ff + pipid)
-
-        if not keepoutputfile:
-            for ff in _tolist(outputfile):
-                if os.path.exists(ff + pipid):
-                    os.remove(ff + pipid)
-
-        return obj
-    else:
-        estr  = 'func must be string or list of strings for subprocess.'
-        estr += ' Use function_wrapper for Python functions.'
-        raise TypeError(estr)
+                       outputreader, kwargs, xx)
 
 
 # Python function wrappers
-def function_wrapper(func, arg, kwarg, x):
+def function_wrapper(func, args, kwargs, x):
     """
     Wrapper for Python functions.
 
-    To be used with partial:
+    To be used with :any:`functools.partial`:
 
-    ``obj = partial(function_wrapper, func, arg, kwarg)``
+    .. code-block:: python
 
-    This allows then calling obj with only the non-masked parameters:
+       obj = partial(function_wrapper, func, args, kwargs)
 
-    ``fx = obj(x)``
-
-    which translates to:
-
-    ``fx = func(x, *arg, **kwarg)``
+    This allows then calling *obj* simply with the parameters *x*:
+    `fx = obj(x)` by any python function such as the utilities in
+    :any:`scipy`.
 
     Parameters
     ----------
     func : callable
-        Python function to be called `func(x, *arg, **kwarg)`
-    arg : iterable
+        Python function to be called `func(x, *args, **kwargs)`
+    args : iterable
         Arguments passed to *func*
-    kwarg : dictionary
+    kwargs : dictionary
         Keyword arguments passed to *func*
 
     Returns
@@ -638,41 +600,34 @@ def function_wrapper(func, arg, kwarg, x):
     0.0
 
     """
-    return func(x, *arg, **kwarg)
+    return func(x, *args, **kwargs)
 
 
-def function_mask_wrapper(func, x0, mask, arg, kwarg, x):
+def function_mask_wrapper(func, x0, mask, args, kwargs, x):
     """
-    Wrapper function for Python function using a mask.
+    Same as :any:`function_wrapper` incl./excl. parameters with mask.
 
-    To be used with partial:
-
-    ``obj = partial(function_mask_wrapper, func, x0, mask, arg, kwarg)``
-
-    This allows then calling obj with only the non-masked parameters:
-
-    ``fx = obj(x)``
-
-    which translates to:
+    Makes the transformation:
 
     .. code-block:: python
 
        xx = np.copy(x0)
        xx[mask] = x
-       fx = func(xx, *arg, **kwarg)
+
+    and calls :any:`function_wrapper` with *xx*.
 
     Parameters
     ----------
     func : callable
-        Python function to be called `func(x, *arg, **kwarg)`
+        Python function to be called `func(x, *args, **kwargs)`
     x0 : array_like
-        Fixed values of masked parameters
+        Initial values of all parameters. These will be used for parameters
+        where `mask` is set to False
     mask : array_like
-        Mask to use *x0* values (`mask[i]=1`) or use new parameters
-        *x* (`ask[i]=0`) in call of the function
-    arg : iterable
+        Use default values *x0* in function call where `mask` is False
+    args : iterable
         Arguments passed to *func*
-    kwarg : dictionary
+    kwargs : dictionary
         Keyword arguments passed to *func*
 
     Returns
@@ -715,17 +670,22 @@ def function_mask_wrapper(func, x0, mask, arg, kwarg, x):
     >>> res.fun
     0.0
 
-    If one wants to fix the second parameter during optimisation, for example
+    If one wants to fix the second parameter during optimization, for example
     because the parameter is insensitive or one knows the parameter very well
     (very hypothetical in the example of rastrigin), then this parameter can be
-    excluded from the optimisation by using `function_mask_wrapper`, setting
-    the mask to *False*, and providing *initial* values of the parameters.
+    excluded from the optimization by using `function_mask_wrapper`.
+    One then provides *initial* values of the parameters and sets a
+    mask to *False* at the second index.
 
     >>> from partialwrap import function_mask_wrapper
+    >>> x0   = np.array([1., 0., 2., 3., 4.])
     >>> mask = np.array([True, False, True, True, True])
-    >>> x0 = np.array([1., 0., 2., 3., 4.])
     >>> rastram = partial(function_mask_wrapper, rastrigin, x0, mask,
     ...                   args, kwargs)
+
+    In case of Differential Evolution, one also has to gives bounds
+    for all parameters. This would be the bounds of only the
+    non-masked parameters.
 
     >>> bounds = [ bb for ii, bb in enumerate(bounds) if mask[ii] ]
     >>> res = opt.differential_evolution(rastram, bounds)
@@ -734,7 +694,8 @@ def function_mask_wrapper(func, x0, mask, arg, kwarg, x):
     >>> res.fun
     0.0
 
-    The final output parameters are then:
+    The output has only 4 values because only 4 values were optimized
+    by Differential Evolution. The final five output parameters are then:
 
     >>> xout = x0.copy()
     >>> xout[mask] = res.x
@@ -745,7 +706,7 @@ def function_mask_wrapper(func, x0, mask, arg, kwarg, x):
     """
     xx       = np.copy(x0)
     xx[mask] = x
-    return func(xx, *arg, **kwarg)
+    return func(xx, *args, **kwargs)
 
 
 if __name__ == '__main__':

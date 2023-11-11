@@ -88,22 +88,26 @@ present) with:
 
 The external program calculating the Rastrigin function could, of
 course, also be written in any compiled language such as C or
-Fortran. See the `userguide <userguide.html>`_ for details. The
+Fortran. See the `User Guide <userguide.html>`_ for details. The
 external program, here the Python version, can be used with Python's
 :py:func:`functools.partial` and the wrapper function
 :func:`~partialwrap.wrappers.exe_wrapper`:
 
 .. code-block:: python
 
+   import scipy.optimize as opt
    from functools import partial
-   from partialwrap import exe_wrapper, standard_parameter_writer, standard_output_reader
+   from partialwrap import exe_wrapper
+   from partialwrap import standard_parameter_writer, standard_output_reader
 
-   rastrigin_exe  = ['python3', 'rastrigin1.py']
-   parameterfile  = 'params.txt'
-   outputfile     = 'out.txt'
-   rastrigin_wrap = partial(exe_wrapper, rastrigin_exe,
-                            parameterfile, standard_parameter_writer,
-                            outputfile, standard_output_reader, {})
+   rastrigin_exe   = ['python3', 'rastrigin1.py']
+   parameterfile   = 'params.txt'
+   parameterwriter = standard_parameter_writer
+   outputfile      = 'out.txt'
+   outputreader    = standard_output_reader
+   rastrigin_wrap  = partial(exe_wrapper, rastrigin_exe,
+                             parameterfile, parameterwriter,
+                             outputfile, outputreader, {})
 
    x0  = [0.1, 0.2, 0.3]
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
@@ -116,11 +120,10 @@ file `parameterfile = 'params.txt'`. It then calls `rastrigin_exe =
 :func:`~partialwrap.std_io.standard_parameter_writer` are convenience
 functions that read and write one parameter per line in a file without
 a header. The empty dictionary at the end is explained in the
-`userguide <userguide.html>`_.
+`User Guide <userguide.html>`_.
 
-More elaborate input/output of the external program can simply be
-dealt with by replacing
-:func:`~partialwrap.std_io.standard_parameter_reader` and
+More elaborate input/output of the external program can simply be done
+by replacing :func:`~partialwrap.std_io.standard_parameter_reader` and
 :func:`~partialwrap.std_io.standard_parameter_writer` with appropriate
 functions, while the rest stays pretty much the same.
 

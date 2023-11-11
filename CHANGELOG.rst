@@ -2,6 +2,9 @@ Changelog
 ---------
 
 v2.0 (??? 2023)
+    * Removed exe_wrapper_v34 and hence support for < Python 3.7.
+    * Use dict.get() function for keywords in wrappers.
+    * Improved docstrings.
     * Use sphinx_book_theme.
     * Move documentation from ReadTheDocs to Github Pages.
     * README and documentation from Markdown to reStructuredText.

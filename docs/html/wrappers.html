@@ -370,29 +370,20 @@ document.write(`
   <section id="module-partialwrap.wrappers">
 <span id="partialwrap-wrappers"></span><h1>partialwrap.wrappers<a class="headerlink" href="#module-partialwrap.wrappers" title="Permalink to this heading">#</a></h1>
 <p>Wrappers to partialize functions so that they can simply be called as func(x).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
-    <span class="n">obj</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span>
-                  <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
-                  <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
-                  <span class="p">{</span><span class="s1">&#39;shell&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="s1">&#39;debug&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
-                   <span class="s1">&#39;pargs&#39;</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="s1">&#39;pkwargs&#39;</span><span class="p">:</span><span class="nb">dict</span><span class="p">,</span> <span class="s1">&#39;keepparameterfile&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
-                   <span class="s1">&#39;oargs&#39;</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="s1">&#39;okwargs&#39;</span><span class="p">:</span><span class="nb">dict</span><span class="p">,</span> <span class="s1">&#39;keepoutputfile&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">})</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">obj</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">function_wrapper</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">kwarg</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obj</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span>
+              <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
+              <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
+              <span class="p">{</span><span class="s1">&#39;shell&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="s1">&#39;debug&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+               <span class="s1">&#39;pargs&#39;</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="s1">&#39;pkwargs&#39;</span><span class="p">:</span><span class="nb">dict</span><span class="p">,</span> <span class="s1">&#39;keepparameterfile&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+               <span class="s1">&#39;oargs&#39;</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="s1">&#39;okwargs&#39;</span><span class="p">:</span><span class="nb">dict</span><span class="p">,</span> <span class="s1">&#39;keepoutputfile&#39;</span><span class="p">:</span><span class="nb">bool</span><span class="p">})</span>
 <span class="n">fx</span> <span class="o">=</span> <span class="n">obj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><cite>func</cite> can hence be an external executable or a Python function using
-<cite>exe_wrapper</cite> or <cite>function_wrapper</cite>, respectively. External executables
-will be passed to <cite>subprocess.run(func)</cite>. Due to <cite>subprocess.run()</cite>, <cite>func</cite> is
-thus a string (e.g. ‘./prog -arg’) if <cite>shell=True</cite> or a list
-(e.g. [‘./prog’, ‘-arg’]) if <cite>shell=False</cite> (default). <cite>func</cite> without any
-arguments, pipes, or similar can simply be strings in both cases
-(e.g. ‘./prog’).</p>
-<p>This module was written by Matthias Cuntz while at Institut National de
-Recherche pour l’Agriculture, l’Alimentation et l’Environnement (INRAE), Nancy,
-France.</p>
+<cite>exe_wrapper</cite> or <cite>function_wrapper</cite>, respectively.</p>
+<p>This module was written by Matthias Cuntz while at Institut National
+de Recherche pour l’Agriculture, l’Alimentation et l’Environnement
+(INRAE), Nancy, France.</p>
 <p>Copyright (c) 2016-2023 Matthias Cuntz - mc (at) macu (dot) de</p>
 <p>Released under the MIT License; see LICENSE file for details.</p>
 <p>The following wrappers are provided:</p>
@@ -402,13 +393,13 @@ France.</p>
 <td><p>Wrapper function for external programs</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.wrappers.exe_mask_wrapper" title="partialwrap.wrappers.exe_mask_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exe_mask_wrapper</span></code></a>(func, x0, mask, ...)</p></td>
-<td><p>Same as <cite>exe_wrapper</cite> incl./excl.</p></td>
+<td><p>Same as <a class="reference internal" href="#partialwrap.wrappers.exe_wrapper" title="partialwrap.wrappers.exe_wrapper"><code class="xref any py py-func docutils literal notranslate"><span class="pre">exe_wrapper</span></code></a> incl./excl.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.wrappers.function_wrapper" title="partialwrap.wrappers.function_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">function_wrapper</span></code></a>(func, arg, kwarg, x)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.wrappers.function_wrapper" title="partialwrap.wrappers.function_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">function_wrapper</span></code></a>(func, args, kwargs, x)</p></td>
 <td><p>Wrapper for Python functions.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.wrappers.function_mask_wrapper" title="partialwrap.wrappers.function_mask_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">function_mask_wrapper</span></code></a>(func, x0, mask, arg, ...)</p></td>
-<td><p>Wrapper function for Python function using a mask.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.wrappers.function_mask_wrapper" title="partialwrap.wrappers.function_mask_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">function_mask_wrapper</span></code></a>(func, x0, mask, args, ...)</p></td>
+<td><p>Same as <a class="reference internal" href="#partialwrap.wrappers.function_wrapper" title="partialwrap.wrappers.function_wrapper"><code class="xref any py py-func docutils literal notranslate"><span class="pre">function_wrapper</span></code></a> incl./excl.</p></td>
 </tr>
 </tbody>
 </table>
@@ -453,135 +444,40 @@ May 2021, Matthias Cuntz</p></li>
 <li><p>Added examples and reformatted docstrings, Aug 2022, Matthias Cuntz</p></li>
 <li><p>Added error function as fallback option in case subprocess exits with
 error code &gt; 0, Aug 2022, Matthias Cuntz</p></li>
+<li><p>Rename arg to args and kwarg to kwargs, Nov 2023, Matthias Cuntz</p></li>
+<li><p>Use dict.get() function for keywords, Nov 2023, Matthias Cuntz</p></li>
+<li><p>Improved docstrings, Nov 2023, Matthias Cuntz</p></li>
+<li><p>Removed exe_wrapper_v34 and hence support for &lt; Python 3.7,
+Nov 2023, Matthias Cuntz</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.wrappers.exe_mask_wrapper">
-<span class="sig-name descname"><span class="pre">exe_mask_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameterfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameterwriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputreader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwarg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/wrappers.html#exe_mask_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.wrappers.exe_mask_wrapper" title="Permalink to this definition">#</a></dt>
-<dd><p>Same as <cite>exe_wrapper</cite> incl./excl. parameters with mask.</p>
+<span class="sig-name descname"><span class="pre">exe_mask_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameterfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameterwriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputreader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/wrappers.html#exe_mask_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.wrappers.exe_mask_wrapper" title="Permalink to this definition">#</a></dt>
+<dd><p>Same as <a class="reference internal" href="#partialwrap.wrappers.exe_wrapper" title="partialwrap.wrappers.exe_wrapper"><code class="xref any py py-func docutils literal notranslate"><span class="pre">exe_wrapper</span></code></a> incl./excl. parameters with mask.</p>
 <p>Makes the transformation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
 <span class="n">xx</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
 </pre></div>
 </div>
-<p>and calls <cite>exe_wrapper</cite> with <em>xx</em>.</p>
-<p>See <cite>exe_wrapper</cite> for details.</p>
-<p class="rubric">Examples</p>
-<p>Imagine an external program <em>prog.exe</em> written in C or Fortan, for example,
-that reads in two parameters from the file <em>params.txt</em> and writes its
-results to a file <em>out.txt</em>. The parameters can be written with
-<cite>standard_parameter_writer</cite> and read with <cite>standard_output_reader</cite>.</p>
-<p>Then this external program can be wrapped as:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">standard_parameter_writer</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">standard_output_reader</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exe</span> <span class="o">=</span> <span class="s1">&#39;prog.exe&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parameterfile</span> <span class="o">=</span> <span class="s1">&#39;params.txt&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">outputfile</span> <span class="o">=</span> <span class="s1">&#39;out.txt&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exewrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">exe</span><span class="p">,</span>
-<span class="gp">... </span>                  <span class="n">parameterfile</span><span class="p">,</span> <span class="n">standard_parameter_writer</span><span class="p">,</span>
-<span class="gp">... </span>                  <span class="n">outputfile</span><span class="p">,</span> <span class="n">standard_output_reader</span><span class="p">,</span> <span class="p">{})</span>
-</pre></div>
-</div>
-<p>And is run as:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">exewrap</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><em>res</em> then holds the output of <em>prog.exe</em>.</p>
-<p>Or one can find the minimum of the function in <em>prog.exe</em> with the global
-optimizer Differential Evolution (assuming here that <em>prog.exe</em> calculates
-the Rastrigin function).</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mf">5.12</span><span class="p">,</span> <span class="mf">5.12</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">differential_evolution</span><span class="p">(</span><span class="n">exewrap</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">x</span>
-<span class="go">array([-7.32336275e-09,  6.00261842e-09])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">fun</span>
-<span class="go">0.0</span>
-</pre></div>
-</div>
-<p>If one wants to fix the second parameter during optimisation, for example
-because the parameter is insensitive or one knows the parameter very well,
-then this parameter can be excluded from the optimisation by using
-<cite>exe_mask_wrapper</cite>, setting the mask to <em>False</em>, and providing <em>initial</em>
-values of the parameters.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">exe_mask_wrapper</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exemwrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_mask_wrapper</span><span class="p">,</span> <span class="n">exe</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
-<span class="gp">... </span>                   <span class="n">parameterfile</span><span class="p">,</span> <span class="n">standard_parameter_writer</span><span class="p">,</span>
-<span class="gp">... </span>                   <span class="n">outputfile</span><span class="p">,</span> <span class="n">standard_output_reader</span><span class="p">,</span> <span class="p">{})</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span> <span class="n">bb</span> <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">bb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span> <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">differential_evolution</span><span class="p">(</span><span class="n">exemwrap</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">x</span>
-<span class="go">array([-7.32336275e-09])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">fun</span>
-<span class="go">0.0</span>
-</pre></div>
-</div>
-<p>The final output parameters are then:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xout</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">xout</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">xout</span>
-<span class="go">array([-7.32336275e-09,  0.00000000e+00])</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="partialwrap.wrappers.exe_wrapper">
-<span class="sig-name descname"><span class="pre">exe_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameterfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameterwriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputreader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwarg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/wrappers.html#exe_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.wrappers.exe_wrapper" title="Permalink to this definition">#</a></dt>
-<dd><p>Wrapper function for external programs</p>
-<p>Uses a <em>parameterwriter</em> and <em>outputreader</em> with the interfaces:</p>
-<p><code class="docutils literal notranslate"><span class="pre">parameterwriter(parameterfile,</span> <span class="pre">x,</span> <span class="pre">*pargs,</span> <span class="pre">**pkwargs)</span></code></p>
-<p>and</p>
-<p><code class="docutils literal notranslate"><span class="pre">outputreader(outputfile,</span> <span class="pre">*oargs,</span> <span class="pre">**okwargs)</span></code></p>
-<p>or if <em>pid==True</em>:</p>
-<p><code class="docutils literal notranslate"><span class="pre">parameterwriter(parameterfile,</span> <span class="pre">x,</span> <span class="pre">*pargs,</span> <span class="pre">pid=pid,</span> <span class="pre">**pkwargs)</span></code></p>
-<p>and</p>
-<p><code class="docutils literal notranslate"><span class="pre">outputreader(outputfile,</span> <span class="pre">*oargs,</span> <span class="pre">pid=pid,</span> <span class="pre">**okwargs)</span></code></p>
-<p>Examples of <em>parameterwriter</em> with <em>pid==True</em> are
-<a class="reference internal" href="std_io.html#partialwrap.std_io.standard_parameter_writer" title="partialwrap.std_io.standard_parameter_writer"><code class="xref any py py-func docutils literal notranslate"><span class="pre">standard_parameter_writer</span></code></a> and <a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_ja" title="partialwrap.std_io.sub_params_ja"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sub_params_ja</span></code></a>.</p>
-<p>An example of <em>outputreader</em> with or without <em>pid</em> is
-<a class="reference internal" href="std_io.html#partialwrap.std_io.standard_output_reader" title="partialwrap.std_io.standard_output_reader"><code class="xref any py py-func docutils literal notranslate"><span class="pre">standard_output_reader</span></code></a>.</p>
-<p>To be used with <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">functools.partial</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obj</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span>
-              <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
-              <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
-              <span class="p">{</span><span class="s1">&#39;shell&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="s1">&#39;debug&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-               <span class="s1">&#39;pargs&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="s1">&#39;pkwargs&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-               <span class="s1">&#39;keepparameterfile&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-               <span class="s1">&#39;oargs&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="s1">&#39;okwargs&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-               <span class="s1">&#39;keepoutputfile&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">})</span>
-</pre></div>
-</div>
-<p>This allows then calling <em>obj</em> simply with the parameters <em>x</em>:
-<code class="docutils literal notranslate"><span class="pre">fx</span> <span class="pre">=</span> <span class="pre">obj(x)</span></code></p>
-<p>which translates to:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameterwriter</span><span class="p">(</span><span class="n">parameterfile</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">pargs</span><span class="p">,</span> <span class="o">**</span><span class="n">pkwargs</span><span class="p">)</span>
-<span class="n">err</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-<span class="n">obj</span> <span class="o">=</span> <span class="n">outputreader</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="o">*</span><span class="n">oargs</span><span class="p">,</span> <span class="o">**</span><span class="n">okwargs</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>or if <em>pid==True</em> to:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameterwriter</span><span class="p">(</span><span class="n">parameterfile</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">pargs</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="n">pid</span><span class="p">,</span> <span class="o">**</span><span class="n">pkwargs</span><span class="p">)</span>
-<span class="n">err</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-<span class="n">obj</span> <span class="o">=</span> <span class="n">outputreader</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="o">*</span><span class="n">oargs</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="n">pid</span><span class="p">,</span> <span class="o">**</span><span class="n">okwargs</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Note if <em>pid==True</em>, it is assumed that <em>parameterwriter</em> produces
-files in the form <cite>parameterfile + ‘.’ + processid</cite>,
-which will be removed after the function call.
-Also files in the form <cite>outputfile + ‘.’ + processid</cite>
-will be removed automatically.</p>
+<p>and calls <a class="reference internal" href="#partialwrap.wrappers.exe_wrapper" title="partialwrap.wrappers.exe_wrapper"><code class="xref any py py-func docutils literal notranslate"><span class="pre">exe_wrapper</span></code></a> with <em>xx</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> (<em>string</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><em>strings</em>) – External program to launch by <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#module-subprocess" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">subprocess</span></code></a></p></li>
+<li><p><strong>func</strong> (<em>string</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><em>strings</em>) – <p>External program to be launched by <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#module-subprocess" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">subprocess</span></code></a>.</p>
+<p>External executables will be passed to
+<a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.run" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">subprocess.run</span></code></a>. Due to <cite>subprocess.run()</cite>,
+<code class="docutils literal notranslate"><span class="pre">func</span></code> is thus a string, e.g. <code class="docutils literal notranslate"><span class="pre">func</span> <span class="pre">=</span> <span class="pre">'./prog.exe</span> <span class="pre">-arg'</span></code>,
+if <em>shell=True</em>, or it is a list, e.g.
+<code class="docutils literal notranslate"><span class="pre">func</span> <span class="pre">=</span> <span class="pre">['./prog.exe',</span> <span class="pre">'-arg']</span></code>, if <em>shell=False</em>.
+If the external program is simply an executable without any arguments,
+pipes, or similar, <code class="docutils literal notranslate"><span class="pre">func</span></code> can simply be a string in all cases,
+e.g. <code class="docutils literal notranslate"><span class="pre">func</span> <span class="pre">=</span> <span class="pre">'./prog.exe'</span></code>.</p>
+</p></li>
+<li><p><strong>x0</strong> (<em>array_like</em>) – Initial values of all parameters. These will be used for parameters
+where <cite>mask</cite> is set to False</p></li>
+<li><p><strong>mask</strong> (<em>array_like</em>) – Use default values <em>x0</em> in parameterfile where <cite>mask</cite> is False</p></li>
 <li><p><strong>parameterfile</strong> (<em>string</em><em> or </em><em>iterable</em>) – Filename(s) of parameter file(s)</p></li>
 <li><p><strong>parameterwriter</strong> (<em>callable</em>) – <p>Python function writing the <em>parameterfile</em>, called as:</p>
 <p><code class="docutils literal notranslate"><span class="pre">parameterwriter(parameterfile,</span> <span class="pre">x,</span> <span class="pre">*pargs,</span> <span class="pre">**pkwargs)</span></code></p>
@@ -596,13 +492,14 @@ executable <em>func</em></p></li>
 <p>or if <em>pid==True</em> as:</p>
 <p><code class="docutils literal notranslate"><span class="pre">outputreader(ouputfile,</span> <span class="pre">x,</span> <span class="pre">*oargs,</span> <span class="pre">pid=pid,</span> <span class="pre">**okwargs)</span></code></p>
 </p></li>
-<li><p><strong>kwarg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – <p>Dictionary with keyword arguments for <cite>exe_wrapper</cite>. Possible
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – <p>Dictionary with keyword arguments for <cite>exe_wrapper</cite>. Possible
 arguments are:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">shell</span></code> (bool)
-If True, <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#module-subprocess" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">subprocess</span></code></a> opens shell for external executable</p></li>
+If True, <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#module-subprocess" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">subprocess</span></code></a> will open a shell to run the external
+executable</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">debug</span></code> (bool)
-If True, model output is displayed while executable is running</p></li>
+If True, model output is displayed while the executable is running</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pid</span></code> (bool)
 If True, append ‘.RandomNumber’ to <em>parameterfile</em> and
 <em>outputfile</em> for parallel calls of <em>func</em></p></li>
@@ -623,15 +520,14 @@ after function call.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">error</span></code> (function)
 Function to call in case subprocess exists with error code &gt; 0. The
 function should take one argument, which will be the random number if
-<cite>pid=True</cite> or <em>None</em> otherwise. The return value will be used instead
-of the result of <em>outputreader</em>.</p></li>
+<em>pid=True</em> or <em>None</em> otherwise. The return value of <code class="docutils literal notranslate"><span class="pre">error</span></code> will
+then be used instead of the result of <em>outputreader</em>.</p></li>
 </ul>
 </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Output value calculated by the external executable <em>func</em> or via
-the <em>outputreader</em></p>
+<dd class="field-even"><p>Output value returned from <em>outputreader</em></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
@@ -640,18 +536,21 @@ the <em>outputreader</em></p>
 <p class="rubric">Examples</p>
 <p>Imagine an external program <em>prog.exe</em> written in C or Fortan, for example,
 that reads in two parameters from the file <em>params.txt</em> and writes its
-results to a file <em>out.txt</em>. The parameters can be written with
-<cite>standard_parameter_writer</cite> and read with <cite>standard_output_reader</cite>.</p>
+results to a file <em>out.txt</em>. The parameters are written with
+<cite>standard_parameter_writer</cite> and the output is read in with
+<cite>standard_output_reader</cite>.</p>
 <p>Then this external program can be wrapped as:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">standard_parameter_writer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">standard_output_reader</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exe</span> <span class="o">=</span> <span class="s1">&#39;prog.exe&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parameterfile</span> <span class="o">=</span> <span class="s1">&#39;params.txt&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">outputfile</span> <span class="o">=</span> <span class="s1">&#39;out.txt&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parameterfile</span>   <span class="o">=</span> <span class="s1">&#39;params.txt&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parameterwriter</span> <span class="o">=</span> <span class="n">standard_parameter_writer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outputfile</span>      <span class="o">=</span> <span class="s1">&#39;out.txt&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outputreader</span>    <span class="o">=</span> <span class="n">standard_output_reader</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exewrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">exe</span><span class="p">,</span>
-<span class="gp">... </span>                  <span class="n">parameterfile</span><span class="p">,</span> <span class="n">standard_parameter_writer</span><span class="p">,</span>
-<span class="gp">... </span>                  <span class="n">outputfile</span><span class="p">,</span> <span class="n">standard_output_reader</span><span class="p">,</span> <span class="p">{})</span>
+<span class="gp">... </span>                  <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span> <span class="p">{})</span>
 </pre></div>
 </div>
 <p>And is run as:</p>
@@ -662,7 +561,166 @@ results to a file <em>out.txt</em>. The parameters can be written with
 <p><em>res</em> then holds the output of <em>prog.exe</em>.</p>
 <p>Or one can find the minimum of the function in <em>prog.exe</em> with the global
 optimizer Differential Evolution (assuming here that <em>prog.exe</em> calculates
-the Rastrigin function).</p>
+the Rastrigin function with the minimum 0 at the origin).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mf">5.12</span><span class="p">,</span> <span class="mf">5.12</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">differential_evolution</span><span class="p">(</span><span class="n">exewrap</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">x</span>
+<span class="go">array([-7.32336275e-09,  6.00261842e-09])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">fun</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<p>If one wants to fix the second parameter during optimization, for
+example because the parameter is insensitive or one knows the
+parameter very well, then this parameter can be excluded from the
+optimization by using <cite>exe_mask_wrapper</cite>. One provides then
+<em>initial</em> values for the parameters and sets a mask to <em>False</em> at
+the positions of the parameters to exclude.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">exe_mask_wrapper</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exemwrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_mask_wrapper</span><span class="p">,</span> <span class="n">exe</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
+<span class="gp">... </span>                   <span class="n">parameterfile</span><span class="p">,</span> <span class="n">standard_parameter_writer</span><span class="p">,</span>
+<span class="gp">... </span>                   <span class="n">outputfile</span><span class="p">,</span> <span class="n">standard_output_reader</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+</div>
+<p>In case of Differential Evolution, one also has to gives bounds
+for all parameters. This would be the bounds of only the
+non-masked parameters.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span> <span class="n">bb</span> <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">bb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span> <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">differential_evolution</span><span class="p">(</span><span class="n">exemwrap</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">x</span>
+<span class="go">array([-7.32336275e-09])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">fun</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<p>The output has only 1 value because only 1 value was optimized
+by Differential Evolution. The final two output parameters are then:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xout</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xout</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xout</span>
+<span class="go">array([-7.32336275e-09,  0.00000000e+00])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="partialwrap.wrappers.exe_wrapper">
+<span class="sig-name descname"><span class="pre">exe_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameterfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameterwriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputreader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/wrappers.html#exe_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.wrappers.exe_wrapper" title="Permalink to this definition">#</a></dt>
+<dd><p>Wrapper function for external programs</p>
+<p>To be used with <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">functools.partial</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obj</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span>
+              <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
+              <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
+              <span class="p">{</span><span class="s1">&#39;shell&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="s1">&#39;debug&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+               <span class="s1">&#39;pargs&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="s1">&#39;pkwargs&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+               <span class="s1">&#39;keepparameterfile&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+               <span class="s1">&#39;oargs&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="s1">&#39;okwargs&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+               <span class="s1">&#39;keepoutputfile&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>This allows then calling <em>obj</em> simply with the parameters <em>x</em>:
+<cite>fx = obj(x)</cite> by any python function such as the utilities in
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/index.html#module-scipy" title="(in SciPy v1.11.3)"><code class="xref any docutils literal notranslate"><span class="pre">scipy</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>string</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><em>strings</em>) – <p>External program to be launched by <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#module-subprocess" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">subprocess</span></code></a>.</p>
+<p>External executables will be passed to
+<a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.run" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">subprocess.run</span></code></a>. Due to <cite>subprocess.run()</cite>,
+<code class="docutils literal notranslate"><span class="pre">func</span></code> is thus a string, e.g. <code class="docutils literal notranslate"><span class="pre">func</span> <span class="pre">=</span> <span class="pre">'./prog.exe</span> <span class="pre">-arg'</span></code>,
+if <em>shell=True</em>, or it is a list, e.g.
+<code class="docutils literal notranslate"><span class="pre">func</span> <span class="pre">=</span> <span class="pre">['./prog.exe',</span> <span class="pre">'-arg']</span></code>, if <em>shell=False</em>.
+If the external program is simply an executable without any arguments,
+pipes, or similar, <code class="docutils literal notranslate"><span class="pre">func</span></code> can simply be a string in all cases,
+e.g. <code class="docutils literal notranslate"><span class="pre">func</span> <span class="pre">=</span> <span class="pre">'./prog.exe'</span></code>.</p>
+</p></li>
+<li><p><strong>parameterfile</strong> (<em>string</em><em> or </em><em>iterable</em>) – Filename(s) of parameter file(s)</p></li>
+<li><p><strong>parameterwriter</strong> (<em>callable</em>) – <p>Python function writing the <em>parameterfile</em>, called as:</p>
+<p><code class="docutils literal notranslate"><span class="pre">parameterwriter(parameterfile,</span> <span class="pre">x,</span> <span class="pre">*pargs,</span> <span class="pre">**pkwargs)</span></code></p>
+<p>or if <em>pid==True</em> as:</p>
+<p><code class="docutils literal notranslate"><span class="pre">parameterwriter(parameterfile,</span> <span class="pre">x,</span> <span class="pre">*pargs,</span> <span class="pre">pid=pid,</span> <span class="pre">**pkwargs)</span></code></p>
+</p></li>
+<li><p><strong>outputfile</strong> (<em>string</em><em> or </em><em>iterable</em>) – Filename(s) of file(s) with output values written by the external
+executable <em>func</em></p></li>
+<li><p><strong>outputreader</strong> (<em>callable</em>) – <p>Python function for reading and processing output value(s) from
+<em>outputfile</em>, called as:</p>
+<p><code class="docutils literal notranslate"><span class="pre">outputreader(ouputfile,</span> <span class="pre">x,</span> <span class="pre">*oargs,</span> <span class="pre">**okwargs)</span></code></p>
+<p>or if <em>pid==True</em> as:</p>
+<p><code class="docutils literal notranslate"><span class="pre">outputreader(ouputfile,</span> <span class="pre">x,</span> <span class="pre">*oargs,</span> <span class="pre">pid=pid,</span> <span class="pre">**okwargs)</span></code></p>
+</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – <p>Dictionary with keyword arguments for <cite>exe_wrapper</cite>. Possible
+arguments are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">shell</span></code> (bool)
+If True, <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#module-subprocess" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">subprocess</span></code></a> will open a shell to run the external
+executable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">debug</span></code> (bool)
+If True, model output is displayed while the executable is running</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pid</span></code> (bool)
+If True, append ‘.RandomNumber’ to <em>parameterfile</em> and
+<em>outputfile</em> for parallel calls of <em>func</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pargs</span></code> (iterable)
+List of arguments of <cite>parameterwriter</cite>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pkwargs</span></code> (dict)
+Dictionary with keyword arguments of <cite>parameterwriter</cite>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">keepparameterfile</span></code> (bool)
+If True, <cite>parameterfile</cite> produced with <cite>parameterwriter</cite> will
+not be deleted after function call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">oargs</span></code> (iterable)
+List of arguments of <cite>outputreader</cite>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">okwargs</span></code> (dict)
+Dictionary with keyword arguments of <cite>outputreader</cite>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">keepoutputfile</span></code> (bool)
+If True, <cite>outputfile</cite> produced by <cite>func</cite> will not be deleted
+after function call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">error</span></code> (function)
+Function to call in case subprocess exists with error code &gt; 0. The
+function should take one argument, which will be the random number if
+<em>pid=True</em> or <em>None</em> otherwise. The return value of <code class="docutils literal notranslate"><span class="pre">error</span></code> will
+then be used instead of the result of <em>outputreader</em>.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output value returned from <em>outputreader</em></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Imagine an external program <em>prog.exe</em> written in C or Fortan, for example,
+that reads in two parameters from the file <em>params.txt</em> and writes its
+results to a file <em>out.txt</em>. The parameters are written with
+<cite>standard_parameter_writer</cite> and output is read in with
+<cite>standard_output_reader</cite>.</p>
+<p>Then this external program can be wrapped as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">standard_parameter_writer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">standard_output_reader</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exe</span> <span class="o">=</span> <span class="s1">&#39;prog.exe&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parameterfile</span>   <span class="o">=</span> <span class="s1">&#39;params.txt&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parameterwriter</span> <span class="o">=</span> <span class="n">standard_parameter_writer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outputfile</span>      <span class="o">=</span> <span class="s1">&#39;out.txt&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outputreader</span>    <span class="o">=</span> <span class="n">standard_output_reader</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exewrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">exe</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+</div>
+<p>And is run as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">exewrap</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>res</em> then holds the output of <em>prog.exe</em>.</p>
+<p>Or one can find the minimum of the function in <em>prog.exe</em> with the global
+optimizer Differential Evolution (assuming here that <em>prog.exe</em> calculates
+the Rastrigin function with the minimum 0 at the origin).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mf">5.12</span><span class="p">,</span> <span class="mf">5.12</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">differential_evolution</span><span class="p">(</span><span class="n">exewrap</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
@@ -676,10 +734,10 @@ the Rastrigin function).</p>
 Differential Evolution algorithm, then one can give a fallback function for
 this cases that, for example, returns arbitrary large values.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">err</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="mf">10000.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mf">10000.</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span> <span class="o">*</span> <span class="mf">10000.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exewrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">exe</span><span class="p">,</span>
-<span class="gp">... </span>                  <span class="n">parameterfile</span><span class="p">,</span> <span class="n">standard_parameter_writer</span><span class="p">,</span>
-<span class="gp">... </span>                  <span class="n">outputfile</span><span class="p">,</span> <span class="n">standard_output_reader</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
 <span class="gp">... </span>                  <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="n">err</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">differential_evolution</span><span class="p">(</span><span class="n">exewrap</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
 </pre></div>
@@ -688,27 +746,23 @@ this cases that, for example, returns arbitrary large values.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.wrappers.function_mask_wrapper">
-<span class="sig-name descname"><span class="pre">function_mask_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwarg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/wrappers.html#function_mask_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.wrappers.function_mask_wrapper" title="Permalink to this definition">#</a></dt>
-<dd><p>Wrapper function for Python function using a mask.</p>
-<p>To be used with partial:</p>
-<p><code class="docutils literal notranslate"><span class="pre">obj</span> <span class="pre">=</span> <span class="pre">partial(function_mask_wrapper,</span> <span class="pre">func,</span> <span class="pre">x0,</span> <span class="pre">mask,</span> <span class="pre">arg,</span> <span class="pre">kwarg)</span></code></p>
-<p>This allows then calling obj with only the non-masked parameters:</p>
-<p><code class="docutils literal notranslate"><span class="pre">fx</span> <span class="pre">=</span> <span class="pre">obj(x)</span></code></p>
-<p>which translates to:</p>
+<span class="sig-name descname"><span class="pre">function_mask_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/wrappers.html#function_mask_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.wrappers.function_mask_wrapper" title="Permalink to this definition">#</a></dt>
+<dd><p>Same as <a class="reference internal" href="#partialwrap.wrappers.function_wrapper" title="partialwrap.wrappers.function_wrapper"><code class="xref any py py-func docutils literal notranslate"><span class="pre">function_wrapper</span></code></a> incl./excl. parameters with mask.</p>
+<p>Makes the transformation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
 <span class="n">xx</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
-<span class="n">fx</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>and calls <a class="reference internal" href="#partialwrap.wrappers.function_wrapper" title="partialwrap.wrappers.function_wrapper"><code class="xref any py py-func docutils literal notranslate"><span class="pre">function_wrapper</span></code></a> with <em>xx</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> (<em>callable</em>) – Python function to be called <cite>func(x, *arg, **kwarg)</cite></p></li>
-<li><p><strong>x0</strong> (<em>array_like</em>) – Fixed values of masked parameters</p></li>
-<li><p><strong>mask</strong> (<em>array_like</em>) – Mask to use <em>x0</em> values (<cite>mask[i]=1</cite>) or use new parameters
-<em>x</em> (<cite>ask[i]=0</cite>) in call of the function</p></li>
-<li><p><strong>arg</strong> (<em>iterable</em>) – Arguments passed to <em>func</em></p></li>
-<li><p><strong>kwarg</strong> (<em>dictionary</em>) – Keyword arguments passed to <em>func</em></p></li>
+<li><p><strong>func</strong> (<em>callable</em>) – Python function to be called <cite>func(x, *args, **kwargs)</cite></p></li>
+<li><p><strong>x0</strong> (<em>array_like</em>) – Initial values of all parameters. These will be used for parameters
+where <cite>mask</cite> is set to False</p></li>
+<li><p><strong>mask</strong> (<em>array_like</em>) – Use default values <em>x0</em> in function call where <cite>mask</cite> is False</p></li>
+<li><p><strong>args</strong> (<em>iterable</em>) – Arguments passed to <em>func</em></p></li>
+<li><p><strong>kwargs</strong> (<em>dictionary</em>) – Keyword arguments passed to <em>func</em></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -752,18 +806,22 @@ allow passing keyword arguments such <cite>b=np.pi</cite>.</p>
 <span class="go">0.0</span>
 </pre></div>
 </div>
-<p>If one wants to fix the second parameter during optimisation, for example
+<p>If one wants to fix the second parameter during optimization, for example
 because the parameter is insensitive or one knows the parameter very well
 (very hypothetical in the example of rastrigin), then this parameter can be
-excluded from the optimisation by using <cite>function_mask_wrapper</cite>, setting
-the mask to <em>False</em>, and providing <em>initial</em> values of the parameters.</p>
+excluded from the optimization by using <cite>function_mask_wrapper</cite>.
+One then provides <em>initial</em> values of the parameters and sets a
+mask to <em>False</em> at the second index.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">function_mask_wrapper</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rastram</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">function_mask_wrapper</span><span class="p">,</span> <span class="n">rastrigin</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
 <span class="gp">... </span>                  <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>In case of Differential Evolution, one also has to gives bounds
+for all parameters. This would be the bounds of only the
+non-masked parameters.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span> <span class="n">bb</span> <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">bb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span> <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">differential_evolution</span><span class="p">(</span><span class="n">rastram</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">x</span>
@@ -772,7 +830,8 @@ the mask to <em>False</em>, and providing <em>initial</em> values of the paramet
 <span class="go">0.0</span>
 </pre></div>
 </div>
-<p>The final output parameters are then:</p>
+<p>The output has only 4 values because only 4 values were optimized
+by Differential Evolution. The final five output parameters are then:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xout</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xout</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xout</span>
@@ -784,20 +843,21 @@ the mask to <em>False</em>, and providing <em>initial</em> values of the paramet
 
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.wrappers.function_wrapper">
-<span class="sig-name descname"><span class="pre">function_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwarg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/wrappers.html#function_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.wrappers.function_wrapper" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">function_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/wrappers.html#function_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.wrappers.function_wrapper" title="Permalink to this definition">#</a></dt>
 <dd><p>Wrapper for Python functions.</p>
-<p>To be used with partial:</p>
-<p><code class="docutils literal notranslate"><span class="pre">obj</span> <span class="pre">=</span> <span class="pre">partial(function_wrapper,</span> <span class="pre">func,</span> <span class="pre">arg,</span> <span class="pre">kwarg)</span></code></p>
-<p>This allows then calling obj with only the non-masked parameters:</p>
-<p><code class="docutils literal notranslate"><span class="pre">fx</span> <span class="pre">=</span> <span class="pre">obj(x)</span></code></p>
-<p>which translates to:</p>
-<p><code class="docutils literal notranslate"><span class="pre">fx</span> <span class="pre">=</span> <span class="pre">func(x,</span> <span class="pre">*arg,</span> <span class="pre">**kwarg)</span></code></p>
+<p>To be used with <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">functools.partial</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obj</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">function_wrapper</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This allows then calling <em>obj</em> simply with the parameters <em>x</em>:
+<cite>fx = obj(x)</cite> by any python function such as the utilities in
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/index.html#module-scipy" title="(in SciPy v1.11.3)"><code class="xref any docutils literal notranslate"><span class="pre">scipy</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> (<em>callable</em>) – Python function to be called <cite>func(x, *arg, **kwarg)</cite></p></li>
-<li><p><strong>arg</strong> (<em>iterable</em>) – Arguments passed to <em>func</em></p></li>
-<li><p><strong>kwarg</strong> (<em>dictionary</em>) – Keyword arguments passed to <em>func</em></p></li>
+<li><p><strong>func</strong> (<em>callable</em>) – Python function to be called <cite>func(x, *args, **kwargs)</cite></p></li>
+<li><p><strong>args</strong> (<em>iterable</em>) – Arguments passed to <em>func</em></p></li>
+<li><p><strong>kwargs</strong> (<em>dictionary</em>) – Keyword arguments passed to <em>func</em></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
