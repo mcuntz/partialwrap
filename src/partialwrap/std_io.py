@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 """
-Standard parameter reader and writer functions as well as output reader
-functions, including substitution of tags #JA????# or names in files.
+Parameter writer and output reader functions
 
-This module was written by Matthias Cuntz while at Institut National de
-Recherche pour l'Agriculture, l'Alimentation et l'Environnement (INRAE), Nancy,
-France.
+This module was written by Matthias Cuntz while at Institut National
+de Recherche pour l'Agriculture, l'Alimentation et l'Environnement
+(INRAE), Nancy, France.
 
-Copyright (c) 2016-2022 Matthias Cuntz - mc (at) macu (dot) de
+Copyright (c) 2016-2023 Matthias Cuntz - mc (at) macu (dot) de
 
 Released under the MIT License; see LICENSE file for details.
 
@@ -77,6 +76,7 @@ History
     * Helper function for constructing dict for `_msub`,
       Nov 2021, Matthias Cuntz
     * Added examples and reformatted docstrings, Aug 2022, Matthias Cuntz
+    * Use formatted strings where appropriate, Nov 2023, Matthias Cuntz
 
 """
 import re
@@ -98,7 +98,7 @@ __all__ = ['sub_params_ja',
 
 def _dict4msub(names, params):
     """
-    Helper function for constructing dict for `_msub`.
+    Helper function for constructing the dict for `_msub`.
 
     pattern/replacement are given as dictionary: d[pattern] = replacement
 
@@ -111,7 +111,7 @@ def _dict4msub(names, params):
         sign.
         Variable in *names[0]* will be assigned value in *params[0]*.
         Variable in *names[1]* will be assigned value in *params[1]*.
-        Etc.
+        etc.
 
     Returns
     -------
@@ -127,10 +127,9 @@ def _dict4msub(names, params):
             p1 = p.replace('\\', '\\\\')
             repl = r"\g<1>\g<2>=\g<3>{}".format(p1)
         nep = r"(" + names[i] + r"\s*)=([ \t\f\v]*).*"  # name = value
-        k = r"^(\s*)" + nep                      # beginning of line
-        dd[k] = repl                             # replacement using
-                                                 # substitutions \\1, \\2, ...
-        k = r"(\n+\s*)" + nep                    # after newline
+        k = r"^(\s*)" + nep     # beginning of line
+        dd[k] = repl            # replacement using substitutions \\1, \\2, ...
+        k = r"(\n+\s*)" + nep   # after newline
         dd[k] = repl
 
     return dd
@@ -161,7 +160,7 @@ def _msub(dic, text, flags=0):
 
     Notes
     -----
-    Compiled version as in
+    Compiled versions as in
         http://code.activestate.com/recipes/81330-single-pass-multiple-replace/
     and
         https://www.safaribooksonline.com/library/view/python-cookbook-2nd/0596007973/ch01s19.h
@@ -179,7 +178,8 @@ def _msub(dic, text, flags=0):
 
 def _msub_files(files, dic, pid=None, flags=0):
     """
-    Helper function for applying replacement dictionary on several files.
+    Helper function for applying replacement dictionary on several files
+
     pattern/replacement are given as dictionary: d[pattern] = replacement
 
     Parameters
@@ -212,7 +212,7 @@ def _msub_files(files, dic, pid=None, flags=0):
             tt = fi.read()
         tt = _msub(dic, tt, flags=flags)
         if pid:
-            fname = f + '.' + str(pid)
+            fname = f'{f}.{pid}'
         else:
             fname = f
         with open(fname, 'w') as ff:
@@ -226,7 +226,9 @@ def _msub_files(files, dic, pid=None, flags=0):
 
 def sub_params_ja(files, params, pid=None):
     """
-    Substitute #JA????# with parameter value in several files, i.e.
+    Substitute #JA????# with parameter values in several files
+
+    This means replacing
 
        | #JA0000# with params[0]
        | #JA0001# with params[1]
@@ -290,7 +292,9 @@ def sub_params_ja(files, params, pid=None):
 
 def sub_params_names_case(files, params, names, pid=None):
     """
-    Substitute `name = .*` with `name = parameter` value in several files, i.e.
+    Substitute `name = .*` with `name = parameter` value in several files
+
+    This means writing `for i in range(len(params))`:
 
        `names[i] = params[i]`
 
@@ -326,6 +330,7 @@ def sub_params_names_case(files, params, names, pid=None):
     `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`
     with `param4 = 3` in the two input files 'file1.txt' and 'file2.txt',
     writing the two output files 'file1.txt.1234' and 'file2.txt.1234'.
+
     This version is case sensitive so it does not replace `PARAM1 = ...`
     with `PARAM1 = 0`, for example.
 
@@ -349,9 +354,11 @@ def sub_params_names_case(files, params, names, pid=None):
 
 def sub_params_names_ignorecase(files, params, names, pid=None):
     """
-    Substitute `name = .*` with `name = parameter` value in several files, i.e.
+    Substitute `name = .*` with `name = parameter` value in several files
 
-        `names[i] = params[i]`
+    This means writing `for i in range(len(params))`:
+
+       `names[i] = params[i]`
 
     Note, *names* are case insensitive.
 
@@ -385,6 +392,7 @@ def sub_params_names_ignorecase(files, params, names, pid=None):
     `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`
     with `param4 = 3` in the two input files 'file1.txt' and 'file2.txt',
     writing the two output files 'file1.txt.1234' and 'file2.txt.1234'.
+
     This version is case insensitive so it replaces also `PARAM1 = ...`,
     `Param1 = ...`, or `ParAm1 = ...` with `PARAM1 = 0`, `Param1 = 0`, or
     `ParAm1 = 0`, for example.
@@ -417,6 +425,7 @@ def sub_params_names(*args, **kwargs):
     `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`
     with `param4 = 3` in the two input files 'file1.txt' and 'file2.txt',
     writing the two output files 'file1.txt.1234' and 'file2.txt.1234'.
+
     This version is case insensitive so it replaces also `PARAM1 = ...`,
     `Param1 = ...`, or `ParAm1 = ...` with `PARAM1 = 0`, `Param1 = 0`, or
     `ParAm1 = 0`, for example.
@@ -434,10 +443,10 @@ def sub_params_names(*args, **kwargs):
 
 def standard_output_reader(filename, pid=None):
     """
-    Standard output reader.
+    Reader of simple output files
 
     The standard output reader reads a single value from a file without header,
-    comment line or similar. That means for example:
+    comment lines or similar. That means for example:
 
         0.0123456789e-02
 
@@ -471,7 +480,7 @@ def standard_output_reader(filename, pid=None):
     """
     # read output value
     if pid:
-        fname = filename + '.' + str(pid)
+        fname = f'{filename}.{pid}'
     else:
         fname = filename
     with open(fname, 'r') as ff:
@@ -486,7 +495,7 @@ def standard_output_reader(filename, pid=None):
 
 def standard_parameter_reader(filename, pid=None):
     """
-    Read standard parameter file.
+    Reader of simple parameter files
 
     The standard parameter file is a file containing
     1 line per parameter with the parameter value.
@@ -515,14 +524,14 @@ def standard_parameter_reader(filename, pid=None):
 
     Examples
     --------
-    A most simple parameter file *paramfile* with one line per parameter can be
-    read with:
+    A most simple parameter file *paramfile* with one line per parameter value
+    can be read with:
 
     >>> params = standard_parameter_reader(paramfile)
 
     """
     if pid:
-        fname = filename + '.' + str(pid)
+        fname = f'{filename}.{pid}'
     else:
         fname = filename
     params = []
@@ -540,7 +549,7 @@ def standard_parameter_reader(filename, pid=None):
 
 def standard_parameter_writer(filename, params, pid=None):
     """
-    Standard parameter writer.
+    Writer of simple parameter files
 
     The standard parameter writer writes a file containing
     1 line per parameter with the parameter value.
@@ -574,13 +583,14 @@ def standard_parameter_writer(filename, params, pid=None):
     the imaginary function *sample_parameters*) to file 'parameters.txt.1234'
 
     >>> pid = 1234
-    >>> params = sample_parameter(bounds)
+    >>> bounds = [(-5.12, 5.12)] * 5
+    >>> params = sample_parameters(bounds)
     >>> standard_parameter_writer('parameters.txt', params, pid)
 
     """
     # Existing file will be overwritten
     if pid:
-        ofile = filename + '.' + str(pid)
+        ofile = f'{filename}.{pid}'
     else:
         ofile = filename
     with open(ofile, 'w') as ff:
@@ -600,13 +610,13 @@ def standard_parameter_writer(filename, params, pid=None):
 
 def standard_parameter_reader_bounds_mask(filename, pid=None):
     """
-    Read standard parameter file with parameter bounds and mask.
+    Read a parameter file with parameter bounds and a mask
 
-    The standard parameter file is a space separated file containing
-    1 line per parameter with the following columns:
+    The standard parameter reader reads from a space-separated file
+    containing 1 line per parameter with the following columns:
 
     identifier, current parameter value, minimum parameter value,
-    maximum parameter value, parameter mask (1: include, 0: exclude).
+    maximum parameter value, parameter mask (e.g., 1: include, 0: exclude).
 
     Lines starting with # will be excluded.
 
@@ -641,7 +651,7 @@ def standard_parameter_reader_bounds_mask(filename, pid=None):
     Examples
     --------
     Read identifiers, parameter values, lower and upper bounds, as well as
-    masks from the parameter file *paramfile*:
+    the mask from the parameter file *paramfile*:
 
     >>> ids, params, pmin, pmax, pmask = (
     ...     standard_parameter_reader_bounds_mask(paramfile) )
@@ -653,7 +663,7 @@ def standard_parameter_reader_bounds_mask(filename, pid=None):
     pmax   = []
     pmask  = []
     if pid:
-        pfile = filename + '.' + str(pid)
+        pfile = f'{filename}.{pid}'
     else:
         pfile = filename
     with open(pfile, 'r') as ff:
@@ -683,19 +693,19 @@ def standard_parameter_reader_bounds_mask(filename, pid=None):
 def standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask,
                                           pid=None):
     """
-    Standard parameter writer with parameter bounds and mask.
+    Standard parameter writer with parameter bounds and a mask
 
-    The standard parameter writer writes a space separated file containing
+    The standard parameter writer writes a space-separated file containing
     1 header line (# value min max mask) plus 1 line per parameter with the
     following columns:
 
     consecutive parameter number, current parameter value,
     minimum parameter value, maximum parameter value,
-    parameter mask (1: include, 0: exclude)
+    parameter mask (e.g., 1: include, 0: exclude)
 
     All values will be written in IEEE double precision: {:.14e}.
 
-    That means:
+    That means for example:
 
        | # value min max mask
        | 1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1
@@ -731,26 +741,30 @@ def standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask,
     *pmax* (with the imaginary function *sample_parameters*) to file
     'parameters.txt.1234'
 
-    >>> pid = 1234
-    >>> params = sample_parameter(p0, pmin, pmax, pmask)
+    >>> pid   = 1234
+    >>> p0    = np.zeros(5)
+    >>> pmin  = np.full(5, -1.)
+    >>> pmax  = np.full(5, 1.)
+    >>> pmask = np.ones(5, dtype=int)
+    >>> params = sample_parameters(p0, pmin, pmax, pmask)
     >>> standard_parameter_writer_bounds_mask(
     ...     'parameters.txt', params, pmin, pmax, pmask, pid)
 
     """
     # Assert correct call
-    astr = 'Parameter and minima do not have the same length.'
-    assert len(params) == len(pmin), astr
-    astr = 'Parameter and maxima do not have the same length.'
-    assert len(params) == len(pmax), astr
-    astr = 'Parameter and mask do not have the same length.'
-    assert len(params) == len(mask), astr
+    assert len(params) == len(pmin), (
+        'Parameter and minima do not have the same length.')
+    assert len(params) == len(pmax), (
+        'Parameter and maxima do not have the same length.')
+    assert len(params) == len(mask), (
+        'Parameter and mask do not have the same length.')
 
     # Convert mask to integer if boolean
     pmask = [ int(i) for i in mask ]
 
     # Existing file will be overwritten
     if pid:
-        fname = filename + '.' + str(pid)
+        fname = f'{filename}.{pid}'
     else:
         fname = filename
     with open(fname, 'w') as ff:
@@ -771,10 +785,12 @@ def standard_parameter_writer_bounds_mask(filename, params, pmin, pmax, mask,
 
 def standard_time_series_reader(filename, pid=None):
     """
-    Standard reader for time series.
+    Simple reader of time series without datetime
 
     The standard time series reader gets a time series of arbitrary length
-    from a file without header, comment line or similar.
+    from a file without header, comment line or similar. The time series is
+    given without any datetime information.
+
     That means for example:
 
        | 0.0123456789e-02
@@ -813,7 +829,7 @@ def standard_time_series_reader(filename, pid=None):
 
     """
     if pid:
-        fname = filename + '.' + str(pid)
+        fname = f'{filename}.{pid}'
     else:
         fname = filename
     # read output value

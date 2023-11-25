@@ -1,8 +1,9 @@
-# Rastrigin function a=10, b=2*pi
+# File: rastrigin_config.py
 import numpy as np
-def rastrigin1(x):
-    return 10.*len(x) + np.sum(x**2 - 10.*np.cos(2.*np.pi*x))
 
+# Rastrigin function a=10, b=2*pi
+def rastrigin(x):
+    return 10. * len(x) + np.sum(x**2 - 10. * np.cos(2. * np.pi * x))
 
 # read parameters
 with open('params.txt', 'r') as fi:
@@ -15,7 +16,7 @@ with open('params.txt', 'r') as fi:
 x = np.array([ pdict[kk] for kk in sorted(pdict.keys()) ])
 
 # calc function
-y = rastrigin1(x)
+y = rastrigin(x)
 
 # write output file
 with open('out.txt', 'w') as ff:

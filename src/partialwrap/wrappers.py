@@ -301,7 +301,7 @@ def exe_wrapper(func,
         ipid = None
         pipid = ''
 
-    if isinstance(func, (str, list)):
+    if isinstance(func, (str, list, tuple)):
         if pid:
             parameterwriter(parameterfile, x, *pargs, pid=ipid, **pkwargs)
             if isinstance(func, str):

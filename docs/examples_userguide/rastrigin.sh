@@ -1,11 +1,10 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 set -e
 
 # get pid
 pid=${1}
 
-exe=rastrigin1.py
+exe=rastrigin.py
 pfile=params.txt
 ofile=out.txt
 

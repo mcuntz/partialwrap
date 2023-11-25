@@ -376,48 +376,47 @@ document.write(`
                   
   <section id="module-partialwrap.std_io">
 <span id="partialwrap-std-io"></span><h1>partialwrap.std_io<a class="headerlink" href="#module-partialwrap.std_io" title="Permalink to this heading">#</a></h1>
-<p>Standard parameter reader and writer functions as well as output reader
-functions, including substitution of tags #JA????# or names in files.</p>
-<p>This module was written by Matthias Cuntz while at Institut National de
-Recherche pour l’Agriculture, l’Alimentation et l’Environnement (INRAE), Nancy,
-France.</p>
-<p>Copyright (c) 2016-2022 Matthias Cuntz - mc (at) macu (dot) de</p>
+<p>Parameter writer and output reader functions</p>
+<p>This module was written by Matthias Cuntz while at Institut National
+de Recherche pour l’Agriculture, l’Alimentation et l’Environnement
+(INRAE), Nancy, France.</p>
+<p>Copyright (c) 2016-2023 Matthias Cuntz - mc (at) macu (dot) de</p>
 <p>Released under the MIT License; see LICENSE file for details.</p>
 <p>The following functions are provided:</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.sub_params_ja" title="partialwrap.std_io.sub_params_ja"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_params_ja</span></code></a>(files, params[, pid])</p></td>
-<td><p>Substitute #JA????# with parameter value in several files, i.e.</p></td>
+<td><p>Substitute #JA????# with parameter values in several files</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.sub_params_names" title="partialwrap.std_io.sub_params_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_params_names</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Wrapper for <a class="reference internal" href="#partialwrap.std_io.sub_params_names_ignorecase" title="partialwrap.std_io.sub_params_names_ignorecase"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sub_params_names_ignorecase</span></code></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.sub_params_names_case" title="partialwrap.std_io.sub_params_names_case"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_params_names_case</span></code></a>(files, params, names)</p></td>
-<td><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files, i.e.</p></td>
+<td><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.sub_params_names_ignorecase" title="partialwrap.std_io.sub_params_names_ignorecase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_params_names_ignorecase</span></code></a>(files, params, names)</p></td>
-<td><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files, i.e.</p></td>
+<td><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_output_reader" title="partialwrap.std_io.standard_output_reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_output_reader</span></code></a>(filename[, pid])</p></td>
-<td><p>Standard output reader.</p></td>
+<td><p>Reader of simple output files</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_parameter_reader" title="partialwrap.std_io.standard_parameter_reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_parameter_reader</span></code></a>(filename[, pid])</p></td>
-<td><p>Read standard parameter file.</p></td>
+<td><p>Reader of simple parameter files</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_parameter_writer" title="partialwrap.std_io.standard_parameter_writer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_parameter_writer</span></code></a>(filename, params)</p></td>
-<td><p>Standard parameter writer.</p></td>
+<td><p>Writer of simple parameter files</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_parameter_reader_bounds_mask" title="partialwrap.std_io.standard_parameter_reader_bounds_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_parameter_reader_bounds_mask</span></code></a>(filename)</p></td>
-<td><p>Read standard parameter file with parameter bounds and mask.</p></td>
+<td><p>Read a parameter file with parameter bounds and a mask</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_parameter_writer_bounds_mask" title="partialwrap.std_io.standard_parameter_writer_bounds_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_parameter_writer_bounds_mask</span></code></a>(...[, pid])</p></td>
-<td><p>Standard parameter writer with parameter bounds and mask.</p></td>
+<td><p>Standard parameter writer with parameter bounds and a mask</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_timeseries_reader" title="partialwrap.std_io.standard_timeseries_reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_timeseries_reader</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Wrapper for <a class="reference internal" href="#partialwrap.std_io.standard_time_series_reader" title="partialwrap.std_io.standard_time_series_reader"><code class="xref any py py-func docutils literal notranslate"><span class="pre">standard_time_series_reader</span></code></a></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#partialwrap.std_io.standard_time_series_reader" title="partialwrap.std_io.standard_time_series_reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_time_series_reader</span></code></a>(filename[, pid])</p></td>
-<td><p>Standard reader for time series.</p></td>
+<td><p>Simple reader of time series without datetime</p></td>
 </tr>
 </tbody>
 </table>
@@ -471,15 +470,16 @@ Nov 2021, Matthias Cuntz</p></li>
 <li><p>Helper function for constructing dict for <cite>_msub</cite>,
 Nov 2021, Matthias Cuntz</p></li>
 <li><p>Added examples and reformatted docstrings, Aug 2022, Matthias Cuntz</p></li>
+<li><p>Use formatted strings where appropriate, Nov 2023, Matthias Cuntz</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.std_io.standard_output_reader">
 <span class="sig-name descname"><span class="pre">standard_output_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_output_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_output_reader" title="Permalink to this definition">#</a></dt>
-<dd><p>Standard output reader.</p>
+<dd><p>Reader of simple output files</p>
 <p>The standard output reader reads a single value from a file without header,
-comment line or similar. That means for example:</p>
+comment lines or similar. That means for example:</p>
 <blockquote>
 <div><p>0.0123456789e-02</p>
 </div></blockquote>
@@ -516,7 +516,7 @@ and writes out its result in <em>output.txt.pid</em></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.std_io.standard_parameter_reader">
 <span class="sig-name descname"><span class="pre">standard_parameter_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_parameter_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_parameter_reader" title="Permalink to this definition">#</a></dt>
-<dd><p>Read standard parameter file.</p>
+<dd><p>Reader of simple parameter files</p>
 <p>The standard parameter file is a file containing
 1 line per parameter with the parameter value.
 Lines starting with ‘#’ will be excluded.
@@ -547,8 +547,8 @@ i.e. the file <em>filename.pid</em> will be read.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>A most simple parameter file <em>paramfile</em> with one line per parameter can be
-read with:</p>
+<p>A most simple parameter file <em>paramfile</em> with one line per parameter value
+can be read with:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">standard_parameter_reader</span><span class="p">(</span><span class="n">paramfile</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -557,11 +557,11 @@ read with:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.std_io.standard_parameter_reader_bounds_mask">
 <span class="sig-name descname"><span class="pre">standard_parameter_reader_bounds_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_parameter_reader_bounds_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_parameter_reader_bounds_mask" title="Permalink to this definition">#</a></dt>
-<dd><p>Read standard parameter file with parameter bounds and mask.</p>
-<p>The standard parameter file is a space separated file containing
-1 line per parameter with the following columns:</p>
+<dd><p>Read a parameter file with parameter bounds and a mask</p>
+<p>The standard parameter reader reads from a space-separated file
+containing 1 line per parameter with the following columns:</p>
 <p>identifier, current parameter value, minimum parameter value,
-maximum parameter value, parameter mask (1: include, 0: exclude).</p>
+maximum parameter value, parameter mask (e.g., 1: include, 0: exclude).</p>
 <p>Lines starting with # will be excluded.</p>
 <p>That means a standard parameter file with bounds and mask might look like:</p>
 <blockquote>
@@ -601,7 +601,7 @@ i.e. the file <em>filename.pid</em> will be read.</p></li>
 </dl>
 <p class="rubric">Examples</p>
 <p>Read identifiers, parameter values, lower and upper bounds, as well as
-masks from the parameter file <em>paramfile</em>:</p>
+the mask from the parameter file <em>paramfile</em>:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ids</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmask</span> <span class="o">=</span> <span class="p">(</span>
 <span class="gp">... </span>    <span class="n">standard_parameter_reader_bounds_mask</span><span class="p">(</span><span class="n">paramfile</span><span class="p">)</span> <span class="p">)</span>
 </pre></div>
@@ -611,7 +611,7 @@ masks from the parameter file <em>paramfile</em>:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.std_io.standard_parameter_writer">
 <span class="sig-name descname"><span class="pre">standard_parameter_writer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_parameter_writer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_parameter_writer" title="Permalink to this definition">#</a></dt>
-<dd><p>Standard parameter writer.</p>
+<dd><p>Writer of simple parameter files</p>
 <p>The standard parameter writer writes a file containing
 1 line per parameter with the parameter value.
 All values will be written in IEEE double precision: {:.14e}.
@@ -645,7 +645,8 @@ i.e. the file <em>filename.pid</em> will be written.</p></li>
 <p>Writes the parameters <em>params</em> that were sampled between <em>bounds</em> (with
 the imaginary function <em>sample_parameters</em>) to file ‘parameters.txt.1234’</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span> <span class="o">=</span> <span class="mi">1234</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">sample_parameter</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mf">5.12</span><span class="p">,</span> <span class="mf">5.12</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">sample_parameters</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">standard_parameter_writer</span><span class="p">(</span><span class="s1">&#39;parameters.txt&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -654,15 +655,15 @@ the imaginary function <em>sample_parameters</em>) to file ‘parameters.txt.123
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.std_io.standard_parameter_writer_bounds_mask">
 <span class="sig-name descname"><span class="pre">standard_parameter_writer_bounds_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_parameter_writer_bounds_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_parameter_writer_bounds_mask" title="Permalink to this definition">#</a></dt>
-<dd><p>Standard parameter writer with parameter bounds and mask.</p>
-<p>The standard parameter writer writes a space separated file containing
+<dd><p>Standard parameter writer with parameter bounds and a mask</p>
+<p>The standard parameter writer writes a space-separated file containing
 1 header line (# value min max mask) plus 1 line per parameter with the
 following columns:</p>
 <p>consecutive parameter number, current parameter value,
 minimum parameter value, maximum parameter value,
-parameter mask (1: include, 0: exclude)</p>
+parameter mask (e.g., 1: include, 0: exclude)</p>
 <p>All values will be written in IEEE double precision: {:.14e}.</p>
-<p>That means:</p>
+<p>That means for example:</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line"># value min max mask</div>
@@ -696,8 +697,12 @@ i.e. the file <em>filename.pid</em> will be written.</p></li>
 <p>Writes the parameters <em>params</em> that were sampled between <em>pmin</em> and
 <em>pmax</em> (with the imaginary function <em>sample_parameters</em>) to file
 ‘parameters.txt.1234’</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span> <span class="o">=</span> <span class="mi">1234</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">sample_parameter</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmask</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span>   <span class="o">=</span> <span class="mi">1234</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p0</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pmin</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pmax</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">sample_parameters</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmask</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">standard_parameter_writer_bounds_mask</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="s1">&#39;parameters.txt&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmask</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
 </pre></div>
@@ -707,10 +712,11 @@ i.e. the file <em>filename.pid</em> will be written.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.std_io.standard_time_series_reader">
 <span class="sig-name descname"><span class="pre">standard_time_series_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#standard_time_series_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.standard_time_series_reader" title="Permalink to this definition">#</a></dt>
-<dd><p>Standard reader for time series.</p>
+<dd><p>Simple reader of time series without datetime</p>
 <p>The standard time series reader gets a time series of arbitrary length
-from a file without header, comment line or similar.
-That means for example:</p>
+from a file without header, comment line or similar. The time series is
+given without any datetime information.</p>
+<p>That means for example:</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">0.0123456789e-02</div>
@@ -773,7 +779,8 @@ and writes out a result time series in <em>output.txt.pid</em></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.std_io.sub_params_ja">
 <span class="sig-name descname"><span class="pre">sub_params_ja</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#sub_params_ja"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.sub_params_ja" title="Permalink to this definition">#</a></dt>
-<dd><p>Substitute #JA????# with parameter value in several files, i.e.</p>
+<dd><p>Substitute #JA????# with parameter values in several files</p>
+<p>This means replacing</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">#JA0000# with params[0]</div>
@@ -825,8 +832,8 @@ writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’:</p>
 <p>Replaces <cite>param1 = …</cite> with <cite>param1 = 0</cite>, <cite>param2 = …</cite> with
 <cite>param2 = 1</cite>, <cite>param3 = …</cite> with <cite>param3 = 2</cite>, and <cite>param4 = …</cite>
 with <cite>param4 = 3</cite> in the two input files ‘file1.txt’ and ‘file2.txt’,
-writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’.
-This version is case insensitive so it replaces also <cite>PARAM1 = …</cite>,
+writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’.</p>
+<p>This version is case insensitive so it replaces also <cite>PARAM1 = …</cite>,
 <cite>Param1 = …</cite>, or <cite>ParAm1 = …</cite> with <cite>PARAM1 = 0</cite>, <cite>Param1 = 0</cite>, or
 <cite>ParAm1 = 0</cite>, for example.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sub_params_names</span><span class="p">([</span><span class="s1">&#39;file1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;file1.txt&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
@@ -839,7 +846,8 @@ This version is case insensitive so it replaces also <cite>PARAM1 = …</cite>,
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.std_io.sub_params_names_case">
 <span class="sig-name descname"><span class="pre">sub_params_names_case</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#sub_params_names_case"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.sub_params_names_case" title="Permalink to this definition">#</a></dt>
-<dd><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files, i.e.</p>
+<dd><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files</p>
+<p>This means writing <cite>for i in range(len(params))</cite>:</p>
 <blockquote>
 <div><p><cite>names[i] = params[i]</cite></p>
 </div></blockquote>
@@ -875,8 +883,8 @@ given in <em>names</em> are assigned the values given in <em>params</em>.</p>
 <p>Replaces <cite>param1 = …</cite> with <cite>param1 = 0</cite>, <cite>param2 = …</cite> with
 <cite>param2 = 1</cite>, <cite>param3 = …</cite> with <cite>param3 = 2</cite>, and <cite>param4 = …</cite>
 with <cite>param4 = 3</cite> in the two input files ‘file1.txt’ and ‘file2.txt’,
-writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’.
-This version is case sensitive so it does not replace <cite>PARAM1 = …</cite>
+writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’.</p>
+<p>This version is case sensitive so it does not replace <cite>PARAM1 = …</cite>
 with <cite>PARAM1 = 0</cite>, for example.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sub_params_names_case</span><span class="p">([</span><span class="s1">&#39;file1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;file1.txt&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
 <span class="gp">... </span>                      <span class="p">[</span><span class="s1">&#39;param1&#39;</span><span class="p">,</span> <span class="s1">&#39;param2&#39;</span><span class="p">,</span> <span class="s1">&#39;param3&#39;</span><span class="p">,</span> <span class="s1">&#39;param4&#39;</span><span class="p">],</span>
@@ -888,7 +896,8 @@ with <cite>PARAM1 = 0</cite>, for example.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="partialwrap.std_io.sub_params_names_ignorecase">
 <span class="sig-name descname"><span class="pre">sub_params_names_ignorecase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/partialwrap/std_io.html#sub_params_names_ignorecase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#partialwrap.std_io.sub_params_names_ignorecase" title="Permalink to this definition">#</a></dt>
-<dd><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files, i.e.</p>
+<dd><p>Substitute <cite>name = .*</cite> with <cite>name = parameter</cite> value in several files</p>
+<p>This means writing <cite>for i in range(len(params))</cite>:</p>
 <blockquote>
 <div><p><cite>names[i] = params[i]</cite></p>
 </div></blockquote>
@@ -924,8 +933,8 @@ given in <em>names</em> are assigned the values given in <em>params</em>.</p>
 <p>Replaces <cite>param1 = …</cite> with <cite>param1 = 0</cite>, <cite>param2 = …</cite> with
 <cite>param2 = 1</cite>, <cite>param3 = …</cite> with <cite>param3 = 2</cite>, and <cite>param4 = …</cite>
 with <cite>param4 = 3</cite> in the two input files ‘file1.txt’ and ‘file2.txt’,
-writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’.
-This version is case insensitive so it replaces also <cite>PARAM1 = …</cite>,
+writing the two output files ‘file1.txt.1234’ and ‘file2.txt.1234’.</p>
+<p>This version is case insensitive so it replaces also <cite>PARAM1 = …</cite>,
 <cite>Param1 = …</cite>, or <cite>ParAm1 = …</cite> with <cite>PARAM1 = 0</cite>, <cite>Param1 = 0</cite>, or
 <cite>ParAm1 = 0</cite>, for example.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sub_params_names_ignorecase</span><span class="p">([</span><span class="s1">&#39;file1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;file1.txt&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>

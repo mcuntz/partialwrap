@@ -289,14 +289,13 @@ document.write(`
   <h1>Source code for partialwrap.std_io</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Standard parameter reader and writer functions as well as output reader</span>
-<span class="sd">functions, including substitution of tags #JA????# or names in files.</span>
+<span class="sd">Parameter writer and output reader functions</span>
 
-<span class="sd">This module was written by Matthias Cuntz while at Institut National de</span>
-<span class="sd">Recherche pour l&#39;Agriculture, l&#39;Alimentation et l&#39;Environnement (INRAE), Nancy,</span>
-<span class="sd">France.</span>
+<span class="sd">This module was written by Matthias Cuntz while at Institut National</span>
+<span class="sd">de Recherche pour l&#39;Agriculture, l&#39;Alimentation et l&#39;Environnement</span>
+<span class="sd">(INRAE), Nancy, France.</span>
 
-<span class="sd">Copyright (c) 2016-2022 Matthias Cuntz - mc (at) macu (dot) de</span>
+<span class="sd">Copyright (c) 2016-2023 Matthias Cuntz - mc (at) macu (dot) de</span>
 
 <span class="sd">Released under the MIT License; see LICENSE file for details.</span>
 
@@ -366,6 +365,7 @@ document.write(`
 <span class="sd">    * Helper function for constructing dict for `_msub`,</span>
 <span class="sd">      Nov 2021, Matthias Cuntz</span>
 <span class="sd">    * Added examples and reformatted docstrings, Aug 2022, Matthias Cuntz</span>
+<span class="sd">    * Use formatted strings where appropriate, Nov 2023, Matthias Cuntz</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -387,7 +387,7 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">_dict4msub</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Helper function for constructing dict for `_msub`.</span>
+<span class="sd">    Helper function for constructing the dict for `_msub`.</span>
 
 <span class="sd">    pattern/replacement are given as dictionary: d[pattern] = replacement</span>
 
@@ -400,7 +400,7 @@ document.write(`
 <span class="sd">        sign.</span>
 <span class="sd">        Variable in *names[0]* will be assigned value in *params[0]*.</span>
 <span class="sd">        Variable in *names[1]* will be assigned value in *params[1]*.</span>
-<span class="sd">        Etc.</span>
+<span class="sd">        etc.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -416,10 +416,9 @@ document.write(`
             <span class="n">p1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\\</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">repl</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\g&lt;1&gt;\g&lt;2&gt;=\g&lt;3&gt;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
         <span class="n">nep</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;\s*)=([ \t\f\v]*).*&quot;</span>  <span class="c1"># name = value</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^(\s*)&quot;</span> <span class="o">+</span> <span class="n">nep</span>                      <span class="c1"># beginning of line</span>
-        <span class="n">dd</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">repl</span>                             <span class="c1"># replacement using</span>
-                                                 <span class="c1"># substitutions \\1, \\2, ...</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(\n+\s*)&quot;</span> <span class="o">+</span> <span class="n">nep</span>                    <span class="c1"># after newline</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^(\s*)&quot;</span> <span class="o">+</span> <span class="n">nep</span>     <span class="c1"># beginning of line</span>
+        <span class="n">dd</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">repl</span>            <span class="c1"># replacement using substitutions \\1, \\2, ...</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(\n+\s*)&quot;</span> <span class="o">+</span> <span class="n">nep</span>   <span class="c1"># after newline</span>
         <span class="n">dd</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">repl</span>
 
     <span class="k">return</span> <span class="n">dd</span>
@@ -450,7 +449,7 @@ document.write(`
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    Compiled version as in</span>
+<span class="sd">    Compiled versions as in</span>
 <span class="sd">        http://code.activestate.com/recipes/81330-single-pass-multiple-replace/</span>
 <span class="sd">    and</span>
 <span class="sd">        https://www.safaribooksonline.com/library/view/python-cookbook-2nd/0596007973/ch01s19.h</span>
@@ -468,7 +467,8 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">_msub_files</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Helper function for applying replacement dictionary on several files.</span>
+<span class="sd">    Helper function for applying replacement dictionary on several files</span>
+
 <span class="sd">    pattern/replacement are given as dictionary: d[pattern] = replacement</span>
 
 <span class="sd">    Parameters</span>
@@ -501,7 +501,7 @@ document.write(`
             <span class="n">tt</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="n">tt</span> <span class="o">=</span> <span class="n">_msub</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-            <span class="n">fname</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fname</span> <span class="o">=</span> <span class="n">f</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
@@ -515,7 +515,9 @@ document.write(`
 
 <div class="viewcode-block" id="sub_params_ja"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.sub_params_ja">[docs]</a><span class="k">def</span> <span class="nf">sub_params_ja</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Substitute #JA????# with parameter value in several files, i.e.</span>
+<span class="sd">    Substitute #JA????# with parameter values in several files</span>
+
+<span class="sd">    This means replacing</span>
 
 <span class="sd">       | #JA0000# with params[0]</span>
 <span class="sd">       | #JA0001# with params[1]</span>
@@ -579,7 +581,9 @@ document.write(`
 
 <div class="viewcode-block" id="sub_params_names_case"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.sub_params_names_case">[docs]</a><span class="k">def</span> <span class="nf">sub_params_names_case</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Substitute `name = .*` with `name = parameter` value in several files, i.e.</span>
+<span class="sd">    Substitute `name = .*` with `name = parameter` value in several files</span>
+
+<span class="sd">    This means writing `for i in range(len(params))`:</span>
 
 <span class="sd">       `names[i] = params[i]`</span>
 
@@ -615,6 +619,7 @@ document.write(`
 <span class="sd">    `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`</span>
 <span class="sd">    with `param4 = 3` in the two input files &#39;file1.txt&#39; and &#39;file2.txt&#39;,</span>
 <span class="sd">    writing the two output files &#39;file1.txt.1234&#39; and &#39;file2.txt.1234&#39;.</span>
+
 <span class="sd">    This version is case sensitive so it does not replace `PARAM1 = ...`</span>
 <span class="sd">    with `PARAM1 = 0`, for example.</span>
 
@@ -638,9 +643,11 @@ document.write(`
 
 <div class="viewcode-block" id="sub_params_names_ignorecase"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.sub_params_names_ignorecase">[docs]</a><span class="k">def</span> <span class="nf">sub_params_names_ignorecase</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Substitute `name = .*` with `name = parameter` value in several files, i.e.</span>
+<span class="sd">    Substitute `name = .*` with `name = parameter` value in several files</span>
 
-<span class="sd">        `names[i] = params[i]`</span>
+<span class="sd">    This means writing `for i in range(len(params))`:</span>
+
+<span class="sd">       `names[i] = params[i]`</span>
 
 <span class="sd">    Note, *names* are case insensitive.</span>
 
@@ -674,6 +681,7 @@ document.write(`
 <span class="sd">    `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`</span>
 <span class="sd">    with `param4 = 3` in the two input files &#39;file1.txt&#39; and &#39;file2.txt&#39;,</span>
 <span class="sd">    writing the two output files &#39;file1.txt.1234&#39; and &#39;file2.txt.1234&#39;.</span>
+
 <span class="sd">    This version is case insensitive so it replaces also `PARAM1 = ...`,</span>
 <span class="sd">    `Param1 = ...`, or `ParAm1 = ...` with `PARAM1 = 0`, `Param1 = 0`, or</span>
 <span class="sd">    `ParAm1 = 0`, for example.</span>
@@ -706,6 +714,7 @@ document.write(`
 <span class="sd">    `param2 = 1`, `param3 = ...` with `param3 = 2`, and `param4 = ...`</span>
 <span class="sd">    with `param4 = 3` in the two input files &#39;file1.txt&#39; and &#39;file2.txt&#39;,</span>
 <span class="sd">    writing the two output files &#39;file1.txt.1234&#39; and &#39;file2.txt.1234&#39;.</span>
+
 <span class="sd">    This version is case insensitive so it replaces also `PARAM1 = ...`,</span>
 <span class="sd">    `Param1 = ...`, or `ParAm1 = ...` with `PARAM1 = 0`, `Param1 = 0`, or</span>
 <span class="sd">    `ParAm1 = 0`, for example.</span>
@@ -723,10 +732,10 @@ document.write(`
 
 <div class="viewcode-block" id="standard_output_reader"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_output_reader">[docs]</a><span class="k">def</span> <span class="nf">standard_output_reader</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Standard output reader.</span>
+<span class="sd">    Reader of simple output files</span>
 
 <span class="sd">    The standard output reader reads a single value from a file without header,</span>
-<span class="sd">    comment line or similar. That means for example:</span>
+<span class="sd">    comment lines or similar. That means for example:</span>
 
 <span class="sd">        0.0123456789e-02</span>
 
@@ -760,7 +769,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># read output value</span>
     <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
@@ -775,7 +784,7 @@ document.write(`
 
 <div class="viewcode-block" id="standard_parameter_reader"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_parameter_reader">[docs]</a><span class="k">def</span> <span class="nf">standard_parameter_reader</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Read standard parameter file.</span>
+<span class="sd">    Reader of simple parameter files</span>
 
 <span class="sd">    The standard parameter file is a file containing</span>
 <span class="sd">    1 line per parameter with the parameter value.</span>
@@ -804,14 +813,14 @@ document.write(`
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    A most simple parameter file *paramfile* with one line per parameter can be</span>
-<span class="sd">    read with:</span>
+<span class="sd">    A most simple parameter file *paramfile* with one line per parameter value</span>
+<span class="sd">    can be read with:</span>
 
 <span class="sd">    &gt;&gt;&gt; params = standard_parameter_reader(paramfile)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
@@ -829,7 +838,7 @@ document.write(`
 
 <div class="viewcode-block" id="standard_parameter_writer"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_parameter_writer">[docs]</a><span class="k">def</span> <span class="nf">standard_parameter_writer</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Standard parameter writer.</span>
+<span class="sd">    Writer of simple parameter files</span>
 
 <span class="sd">    The standard parameter writer writes a file containing</span>
 <span class="sd">    1 line per parameter with the parameter value.</span>
@@ -863,13 +872,14 @@ document.write(`
 <span class="sd">    the imaginary function *sample_parameters*) to file &#39;parameters.txt.1234&#39;</span>
 
 <span class="sd">    &gt;&gt;&gt; pid = 1234</span>
-<span class="sd">    &gt;&gt;&gt; params = sample_parameter(bounds)</span>
+<span class="sd">    &gt;&gt;&gt; bounds = [(-5.12, 5.12)] * 5</span>
+<span class="sd">    &gt;&gt;&gt; params = sample_parameters(bounds)</span>
 <span class="sd">    &gt;&gt;&gt; standard_parameter_writer(&#39;parameters.txt&#39;, params, pid)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Existing file will be overwritten</span>
     <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-        <span class="n">ofile</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="n">ofile</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ofile</span> <span class="o">=</span> <span class="n">filename</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
@@ -889,13 +899,13 @@ document.write(`
 
 <div class="viewcode-block" id="standard_parameter_reader_bounds_mask"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_parameter_reader_bounds_mask">[docs]</a><span class="k">def</span> <span class="nf">standard_parameter_reader_bounds_mask</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Read standard parameter file with parameter bounds and mask.</span>
+<span class="sd">    Read a parameter file with parameter bounds and a mask</span>
 
-<span class="sd">    The standard parameter file is a space separated file containing</span>
-<span class="sd">    1 line per parameter with the following columns:</span>
+<span class="sd">    The standard parameter reader reads from a space-separated file</span>
+<span class="sd">    containing 1 line per parameter with the following columns:</span>
 
 <span class="sd">    identifier, current parameter value, minimum parameter value,</span>
-<span class="sd">    maximum parameter value, parameter mask (1: include, 0: exclude).</span>
+<span class="sd">    maximum parameter value, parameter mask (e.g., 1: include, 0: exclude).</span>
 
 <span class="sd">    Lines starting with # will be excluded.</span>
 
@@ -930,7 +940,7 @@ document.write(`
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    Read identifiers, parameter values, lower and upper bounds, as well as</span>
-<span class="sd">    masks from the parameter file *paramfile*:</span>
+<span class="sd">    the mask from the parameter file *paramfile*:</span>
 
 <span class="sd">    &gt;&gt;&gt; ids, params, pmin, pmax, pmask = (</span>
 <span class="sd">    ...     standard_parameter_reader_bounds_mask(paramfile) )</span>
@@ -942,7 +952,7 @@ document.write(`
     <span class="n">pmax</span>   <span class="o">=</span> <span class="p">[]</span>
     <span class="n">pmask</span>  <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-        <span class="n">pfile</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="n">pfile</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">pfile</span> <span class="o">=</span> <span class="n">filename</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pfile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
@@ -972,19 +982,19 @@ document.write(`
 <div class="viewcode-block" id="standard_parameter_writer_bounds_mask"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_parameter_writer_bounds_mask">[docs]</a><span class="k">def</span> <span class="nf">standard_parameter_writer_bounds_mask</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
                                           <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Standard parameter writer with parameter bounds and mask.</span>
+<span class="sd">    Standard parameter writer with parameter bounds and a mask</span>
 
-<span class="sd">    The standard parameter writer writes a space separated file containing</span>
+<span class="sd">    The standard parameter writer writes a space-separated file containing</span>
 <span class="sd">    1 header line (# value min max mask) plus 1 line per parameter with the</span>
 <span class="sd">    following columns:</span>
 
 <span class="sd">    consecutive parameter number, current parameter value,</span>
 <span class="sd">    minimum parameter value, maximum parameter value,</span>
-<span class="sd">    parameter mask (1: include, 0: exclude)</span>
+<span class="sd">    parameter mask (e.g., 1: include, 0: exclude)</span>
 
 <span class="sd">    All values will be written in IEEE double precision: {:.14e}.</span>
 
-<span class="sd">    That means:</span>
+<span class="sd">    That means for example:</span>
 
 <span class="sd">       | # value min max mask</span>
 <span class="sd">       | 1 3.000000000000000e-01 0.000000000000000e+00 1.000000000000000e+00 1</span>
@@ -1020,26 +1030,30 @@ document.write(`
 <span class="sd">    *pmax* (with the imaginary function *sample_parameters*) to file</span>
 <span class="sd">    &#39;parameters.txt.1234&#39;</span>
 
-<span class="sd">    &gt;&gt;&gt; pid = 1234</span>
-<span class="sd">    &gt;&gt;&gt; params = sample_parameter(p0, pmin, pmax, pmask)</span>
+<span class="sd">    &gt;&gt;&gt; pid   = 1234</span>
+<span class="sd">    &gt;&gt;&gt; p0    = np.zeros(5)</span>
+<span class="sd">    &gt;&gt;&gt; pmin  = np.full(5, -1.)</span>
+<span class="sd">    &gt;&gt;&gt; pmax  = np.full(5, 1.)</span>
+<span class="sd">    &gt;&gt;&gt; pmask = np.ones(5, dtype=int)</span>
+<span class="sd">    &gt;&gt;&gt; params = sample_parameters(p0, pmin, pmax, pmask)</span>
 <span class="sd">    &gt;&gt;&gt; standard_parameter_writer_bounds_mask(</span>
 <span class="sd">    ...     &#39;parameters.txt&#39;, params, pmin, pmax, pmask, pid)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Assert correct call</span>
-    <span class="n">astr</span> <span class="o">=</span> <span class="s1">&#39;Parameter and minima do not have the same length.&#39;</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pmin</span><span class="p">),</span> <span class="n">astr</span>
-    <span class="n">astr</span> <span class="o">=</span> <span class="s1">&#39;Parameter and maxima do not have the same length.&#39;</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pmax</span><span class="p">),</span> <span class="n">astr</span>
-    <span class="n">astr</span> <span class="o">=</span> <span class="s1">&#39;Parameter and mask do not have the same length.&#39;</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span> <span class="n">astr</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pmin</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s1">&#39;Parameter and minima do not have the same length.&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pmax</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s1">&#39;Parameter and maxima do not have the same length.&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s1">&#39;Parameter and mask do not have the same length.&#39;</span><span class="p">)</span>
 
     <span class="c1"># Convert mask to integer if boolean</span>
     <span class="n">pmask</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mask</span> <span class="p">]</span>
 
     <span class="c1"># Existing file will be overwritten</span>
     <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
@@ -1060,10 +1074,12 @@ document.write(`
 
 <div class="viewcode-block" id="standard_time_series_reader"><a class="viewcode-back" href="../../std_io.html#partialwrap.std_io.standard_time_series_reader">[docs]</a><span class="k">def</span> <span class="nf">standard_time_series_reader</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Standard reader for time series.</span>
+<span class="sd">    Simple reader of time series without datetime</span>
 
 <span class="sd">    The standard time series reader gets a time series of arbitrary length</span>
-<span class="sd">    from a file without header, comment line or similar.</span>
+<span class="sd">    from a file without header, comment line or similar. The time series is</span>
+<span class="sd">    given without any datetime information.</span>
+
 <span class="sd">    That means for example:</span>
 
 <span class="sd">       | 0.0123456789e-02</span>
@@ -1102,7 +1118,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span>
     <span class="c1"># read output value</span>

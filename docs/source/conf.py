@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# partialwrap documentation build configuration file, created by
+# configuration file to build documentation of partialwrap, created by
 # sphinx-quickstart on Fri Jan  5 14:20:43 2018.
 #
 import datetime
@@ -218,7 +218,7 @@ texinfo_documents = [
     (
         master_doc,
         "partialwrap",
-        "partialwrap Documentation",
+        "Documentation of partialwrap",
         author,
         "partialwrap",
         "A small Python library providing wrappers for external executables and Python functions to be used easily with Python’s functools.partial.",

@@ -1,28 +1,28 @@
-# File: logli1.py
+# File: rastrigin_pid.py
+import sys
 import numpy as np
+from partialwrap import standard_parameter_reader
+
+# Rastrigin function a=10, b=2*pi
+def rastrigin(x):
+    return 10. * len(x) + np.sum(x**2 - 10. * np.cos(2. * np.pi * x))
 
 # get pid
-import sys
 if len(sys.argv) > 1:
     pid = int(sys.argv[1])
 else:
     pid = None
 
-# log-likelihood
-def log_prob(theta):
-    return -0.5 * np.sum(theta**2)
-
 # read parameters
-from partialwrap import standard_parameter_reader
 x = standard_parameter_reader('params.txt', pid=pid)
 
 # calc function
-y = log_prob(x)
+y = rastrigin(x)
 
 # write output file
-if pid:
-    fname = 'out.txt'+'.'+str(pid)
-else:
+if pid is None:
     fname = 'out.txt'
+else:
+    fname = f'out.txt.{pid}'
 with open(fname, 'w') as ff:
     print(y, file=ff)

@@ -383,7 +383,7 @@ to use with Python’s <a class="reference external" href="https://docs.python.o
 mechanism allows to use even very complex functions with many
 arguments and keyword arguments with routines that need functions in
 the simple form <cite>func(x)</cite>. This includes Python’s <a class="reference external" href="https://docs.python.org/3/library/functions.html#map" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">map()</span></code></a>
-function, the minimizers in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.11.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, and plenty of
+function, the minimizers in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.11.4)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, and plenty of
 third-party modules such as <a class="reference external" href="https://emcee.readthedocs.io/en/latest/">emcee</a> or <a class="reference external" href="https://pyeee.readthedocs.io/en/latest/package.html#module-pyeee" title="(in pyeee v3.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyeee</span></code></a>. <code class="docutils literal notranslate"><span class="pre">partialwrap</span></code>
 allows to use any external executable as well as any Python function
 with arbitrary arguments and keywords to be used with
@@ -468,7 +468,7 @@ external program, here the Python version, can be used with Python’s
 <span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">rastrigin_wrap</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.11.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v1.11.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a>
+<p>The <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.11.4)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v1.11.4)"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a>
 passes its sampled parameters to <cite>exe_wrapper</cite>, which writes it to the
 file <cite>parameterfile = ‘params.txt’</cite>. It then calls <cite>rastrigin_exe =
 ‘python3 rastrigin1.py’</cite> and reads its <cite>outputfile = ‘out.txt’</cite>.
