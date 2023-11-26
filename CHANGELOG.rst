@@ -1,7 +1,8 @@
 Changelog
 ---------
 
-v2.0 (??? 2023)
+v2.0 (Nov 2023)
+    * Rewrote Quickstart and User Guide.
     * Use formatted strings where appropriate in std_io.
     * Removed exe_wrapper_v34 and hence support for < Python 3.7.
     * Use dict.get() function for keywords in wrappers.

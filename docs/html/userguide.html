@@ -741,7 +741,7 @@ during optimization so should not be deleted by
 <span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">rastrigin_wrap</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Note the list in <cite>‘pargs’: [names]</cite>, which gives <cite>‘pargs’:
+<p>Note <cite>pargs</cite> is given a list <cite>‘pargs’: [names]</cite>, which gives <cite>‘pargs’:
 [[‘param01’, ‘param02’, ‘param03’]]</cite>. If one would simply put
 <cite>‘pargs’: names</cite>, than the <cite>*args</cite> mechanism would expand the list
 <cite>names</cite> to three individual arguments for <cite>sub_params_names</cite>, so that
@@ -993,19 +993,24 @@ on Windows platforms as well:</p>
 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
     <span class="n">pid</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;This scripts needs a process identifier (pid) as&#39;</span>
-                  <span class="s1">&#39; command line argument.&#39;</span><span class="p">)</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="n">exe</span>   <span class="o">=</span> <span class="s1">&#39;rastrigin.py&#39;</span>
 <span class="n">pfile</span> <span class="o">=</span> <span class="s1">&#39;params.txt&#39;</span>
 <span class="n">ofile</span> <span class="o">=</span> <span class="s1">&#39;out.txt&#39;</span>
 
 <span class="c1"># make individual run directory</span>
-<span class="n">rundir</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;tmp.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">rundir</span> <span class="o">=</span> <span class="s1">&#39;tmp&#39;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">rundir</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;tmp.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
 <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">rundir</span><span class="p">)</span>
 
 <span class="c1"># copy individual parameter file</span>
-<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rundir</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rundir</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rundir</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="c1"># run in individual directory</span>
 <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">exe</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rundir</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">exe</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -1014,7 +1019,10 @@ on Windows platforms as well:</p>
                               <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
 
 <span class="c1"># make output available to exe_wrapper</span>
-<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;../</span><span class="si">{</span><span class="n">ofile</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;../</span><span class="si">{</span><span class="n">ofile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;../</span><span class="si">{</span><span class="n">ofile</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="c1"># clean up</span>
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
@@ -1167,13 +1175,13 @@ standard <a class="reference external" href="https://docs.python.org/3/library/c
 </div>
 </div></blockquote>
 <p><strong>sub_params_ja</strong> <a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_ja" title="partialwrap.std_io.sub_params_ja"><code class="xref py py-func docutils literal notranslate"><span class="pre">sub_params_ja()</span></code></a>
-substitutes the strings #JA0000#, #JA0001#, … in the input file(s)
-with the parameter values. It searches for the tags #JA0000#,
-#JA0001#, … in the input file(s) and replaces them with the values
-of the first parameter, the second parameter, and so on. The file must
-be prepared in advance and the parameters can then be anywhere in the
-file(s), appear several times on the same line or on different lines,
-etc. For example:</p>
+substitutes the strings <em>#JA0000#</em>, <em>#JA0001#</em>, … in the input
+file(s) with the parameter values. It searches for the tags
+<em>#JA0000#</em>, <em>#JA0001#</em>, … in the input file(s) and replaces them
+with the values of the first parameter, the second parameter, and so
+on. The file must be prepared in advance and the parameters can then
+be anywhere in the file(s), appear several times on the same line or
+on different lines, etc. For example:</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">&amp;parameters</div>
@@ -1194,10 +1202,10 @@ file(s). <a class="reference internal" href="wrappers.html#partialwrap.wrappers.
 use by default. The best way to use the substitution functions is
 hence with <cite>‘keepparameterfile’: True</cite> or <cite>‘pid’: True</cite>. The last
 function <a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_ja" title="partialwrap.std_io.sub_params_ja"><code class="xref py py-func docutils literal notranslate"><span class="pre">sub_params_ja()</span></code></a> substitutes the
-tags #JA0000#, #JA0001#, … in the input file(s). Once substituted,
-the tags would not be in the input files anymore. Hence this does not
-work with <cite>‘keepparameterfile’: True</cite> but rather works with only with
-<cite>‘pid’: True</cite>.</p>
+tags <em>#JA0000#</em>, <em>#JA0001#</em>, … in the input file(s). Once
+substituted, the tags would not be in the input files anymore. Hence
+this does not work with <cite>‘keepparameterfile’: True</cite> but rather works
+with only with <cite>‘pid’: True</cite>.</p>
 </section>
 <section id="python-functions">
 <h2>Python functions<a class="headerlink" href="#python-functions" title="Permalink to this heading">#</a></h2>
@@ -1288,7 +1296,240 @@ to a default value of 0.0001 changes the above to:</p>
 </section>
 <section id="a-real-life-example">
 <h2>A real life example<a class="headerlink" href="#a-real-life-example" title="Permalink to this heading">#</a></h2>
-<p><strong>ToDo</strong></p>
+<p>We use the ecosystem model <a class="reference external" href="https://ecofun.ispa.bordeaux.inrae.fr/index.php/musica-model/">MuSICA</a> in our research. The model is
+written in Fortran and uses so-called namelists for configuration,
+which look like this:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">&amp;namelist_01</div>
+<div class="line-block">
+<div class="line">parameter01 = 3.141592653589793</div>
+<div class="line">parameter02 = 1, 1, 2, 3, 5, 8, 13</div>
+</div>
+<div class="line">/</div>
+<div class="line"><br /></div>
+<div class="line">&amp;namelist_02</div>
+<div class="line-block">
+<div class="line">another_parameter01 = 2.718281828459045</div>
+<div class="line">another_parameter02 = ‘equilibrium’</div>
+</div>
+<div class="line">/</div>
+</div>
+</div></blockquote>
+<p>The namelists are organized in three files: <em>musica.nml</em>,
+<em>musica_soil.nml</em>, and one file for each tree species modelled, for
+example, <em>fagus_sylvatica.nml</em>. There are about 50 parameters in the
+namelists that influence the model output.</p>
+<p><a class="reference external" href="https://ecofun.ispa.bordeaux.inrae.fr/index.php/musica-model/">MuSICA</a> calculates energy, water, and carbon fluxes in an ecosystem
+such as a forest. One primary output is so-called Net Ecosystem
+Exchange (NEE). One might want to adapt a few parameters, which were
+not measured, for a specific forest stand by optimizing model output
+against observed NEE. Below is a documented Python program that
+optimizes three parameters for the description of stomatal conductance
+in MuSICA: <em>gs_slope</em>, <em>gs_hx_half</em>, and <em>gs_hx_shape</em>. The first one
+is the empirical slope in the description of stomatal conductance <em>gs</em>
+(Ball-Berry <em>m</em> or Medlyn <em>g1</em>, for example) and the other two
+variables are the parameters of a logistic function that links
+stomatal conductance <em>gs</em> with the water potential in the xylem <em>hx</em>
+(Tuzet model). Here I prepared the namelist file fagus_sylvatica.nml
+and put tags <em>#JA0000#</em>, <em>#JA0001#</em>, and <em>#JA0002#</em> instead of values
+on the right-hand-side of the equal sign and will then use the
+substitution function <a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_ja" title="partialwrap.std_io.sub_params_ja"><code class="xref py py-func docutils literal notranslate"><span class="pre">sub_params_ja()</span></code></a>:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">&amp;leaflevelctl</div>
+<div class="line">…</div>
+<div class="line">! slope of stomata model</div>
+<div class="line">GS_SLOPE = #JA0000#</div>
+<div class="line">! intercept of stomata model</div>
+<div class="line">GS_INTERCEPT = 1.e-3</div>
+<div class="line">! minimum stomatal conductance</div>
+<div class="line">GS_MIN = 1.e-3  ! check influence on very dry sites</div>
+<div class="line">! Tuzet parameters</div>
+<div class="line">GS_HX_HALF = #JA0001#</div>
+<div class="line">GS_HX_SHAPE = #JA0002#</div>
+<div class="line">…</div>
+<div class="line">/</div>
+</div>
+</div></blockquote>
+<p>The Python program for optimizing <em>gs_slope</em>, <em>gs_hx_half</em>, and
+<em>gs_hx_shape</em> uses the Root Mean Square Error (RMSE) between modelled
+and observed NEE:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># File: optimize_musica.py</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
+<span class="kn">import</span> <span class="nn">netCDF4</span> <span class="k">as</span> <span class="nn">nc</span>
+<span class="kn">from</span> <span class="nn">partialwrap</span> <span class="kn">import</span> <span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">sub_params_ja</span>
+
+<span class="c1">#</span>
+<span class="c1"># Functions</span>
+<span class="c1">#</span>
+
+<span class="c1"># Read NEE from MuSICA&#39;s netCDF output</span>
+<span class="k">def</span> <span class="nf">read_model_nee</span><span class="p">(</span><span class="n">ofile</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">nc</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+        <span class="n">nee</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;nee&#39;</span><span class="p">][:]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">nee</span>
+
+<span class="c1"># The objective: RMSE(obs, mod)</span>
+<span class="k">def</span> <span class="nf">rmse</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">obs</span> <span class="o">-</span> <span class="n">mod</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="c1"># RMSE given the output file and the observations</span>
+<span class="k">def</span> <span class="nf">calc_rmse</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+    <span class="n">mod</span> <span class="o">=</span> <span class="n">read_model_nee</span><span class="p">(</span><span class="n">ofile</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rmse</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span>
+
+<span class="c1"># Read NEE observations</span>
+<span class="c1"># Assume a csv file such as submitted to europe-fluxdata.org</span>
+<span class="c1">#   TIMESTAMP_END,H_1_1_1,LE_1_1_1,FC_1_1_1,FC_SSITC_TEST_1_1_1,TA_1_1_1,...</span>
+<span class="c1">#   201601010030,-20.4583,-1.8627,1.9019,0,5.5533,...</span>
+<span class="c1">#   ...</span>
+<span class="c1"># Assume that timestamps are the same as MuSICA output file</span>
+<span class="k">def</span> <span class="nf">read_obs_nee</span><span class="p">(</span><span class="n">ofile</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">iivar</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;FC_1_1_1&#39;</span><span class="p">)</span>
+    <span class="n">iiflag</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;FC_SSITC_TEST_1_1_1&#39;</span><span class="p">)</span>
+    <span class="n">dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">nee</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dat</span><span class="p">[:,</span> <span class="n">iivar</span><span class="p">],</span> <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">dat</span><span class="p">[:,</span> <span class="n">iiflag</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">nee</span>
+
+<span class="c1"># RMSE is around 1-10 (umol m-2 s-1).</span>
+<span class="c1"># Use a large random number in case of model error because of</span>
+<span class="c1"># odd parameter combinations.</span>
+<span class="k">def</span> <span class="nf">err</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span> <span class="o">*</span> <span class="mf">1000.</span>
+
+<span class="c1">#</span>
+<span class="c1"># Setup</span>
+<span class="c1">#</span>
+
+<span class="c1"># namelist files</span>
+<span class="n">nfiles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;musica.nml&#39;</span><span class="p">,</span> <span class="s1">&#39;musica_soil.nml&#39;</span><span class="p">,</span> <span class="s1">&#39;fagus_sylvatica.nml&#39;</span><span class="p">]</span>
+<span class="c1"># parameter names (not used, only for info)</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GS_SLOPE&#39;</span><span class="p">,</span> <span class="s1">&#39;GS_HX_HALF&#39;</span><span class="p">,</span> <span class="s1">&#39;GS_HX_SHAPE&#39;</span><span class="p">]</span>
+<span class="c1"># lower bounds</span>
+<span class="n">lb</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]</span>
+<span class="c1"># upper bounds</span>
+<span class="n">ub</span> <span class="o">=</span> <span class="p">[</span><span class="mf">13.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">20.</span><span class="p">]</span>
+
+<span class="c1"># observations</span>
+<span class="n">obsfile</span> <span class="o">=</span> <span class="s1">&#39;FR-Hes_europe-fluxdata_2017.txt&#39;</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">read_obs_nee</span><span class="p">(</span><span class="n">obsfile</span><span class="p">)</span>
+
+<span class="c1"># Use a Python wrapper to run musica.exe, which deals with pid</span>
+<span class="c1"># and works on all operating systems</span>
+<span class="n">exe</span>             <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;python3&#39;</span><span class="p">,</span> <span class="s1">&#39;run_musica.py&#39;</span><span class="p">]</span>
+<span class="n">parameterfile</span>   <span class="o">=</span> <span class="n">nfiles</span>
+<span class="n">parameterwriter</span> <span class="o">=</span> <span class="n">sub_params_ja</span>
+<span class="n">outputfile</span>   <span class="o">=</span> <span class="s1">&#39;musica_out.nc&#39;</span>
+<span class="n">outputreader</span> <span class="o">=</span> <span class="n">calc_rmse</span>
+<span class="n">oargs</span>        <span class="o">=</span> <span class="p">[</span><span class="n">obs</span><span class="p">]</span>  <span class="c1"># additional outputreader arguments</span>
+<span class="c1"># use exe_wrapper for run_musica.py</span>
+<span class="n">wrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">exe</span><span class="p">,</span>
+               <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
+               <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
+               <span class="p">{</span><span class="s1">&#39;oargs&#39;</span><span class="p">:</span> <span class="n">oargs</span><span class="p">,</span>
+                <span class="s1">&#39;pid&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="n">err</span><span class="p">})</span>
+
+<span class="c1">#</span>
+<span class="c1"># Optimize</span>
+<span class="c1">#</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Start optimization&#39;</span><span class="p">)</span>
+<span class="n">ncpu</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">))</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">differential_evolution</span><span class="p">(</span><span class="n">wrap</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">ncpu</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best parameters:&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39; with objective:&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">fun</span><span class="p">)</span>
+
+<span class="c1"># write parameter files with optimized parameters and suffix .opt</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Write parameter files with optimized parameters&#39;</span><span class="p">)</span>
+<span class="n">sub_params_ja</span><span class="p">(</span><span class="s1">&#39;fagus_sylvatica.nml&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="s1">&#39;opt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here we could have also used
+<a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_names" title="partialwrap.std_io.sub_params_names"><code class="xref py py-func docutils literal notranslate"><span class="pre">sub_params_names()</span></code></a> instead of
+<a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_ja" title="partialwrap.std_io.sub_params_ja"><code class="xref py py-func docutils literal notranslate"><span class="pre">sub_params_ja()</span></code></a> to replace the parameters in
+the namelists. This would have changed the setup of <em>partial</em>
+slightly to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">exe</span>             <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;python3&#39;</span><span class="p">,</span> <span class="s1">&#39;run_musica.py&#39;</span><span class="p">]</span>
+<span class="n">parameterfile</span>   <span class="o">=</span> <span class="n">nfiles</span>
+<span class="n">parameterwriter</span> <span class="o">=</span> <span class="n">sub_params_names</span>
+<span class="n">pargs</span>        <span class="o">=</span> <span class="p">[</span><span class="n">names</span><span class="p">]</span>  <span class="c1"># additional parameterwriter arguments</span>
+<span class="n">outputfile</span>   <span class="o">=</span> <span class="s1">&#39;musica_out.nc&#39;</span>
+<span class="n">outputreader</span> <span class="o">=</span> <span class="n">calc_rmse</span>
+<span class="n">oargs</span>        <span class="o">=</span> <span class="p">[</span><span class="n">obs</span><span class="p">]</span>  <span class="c1"># additional outputreader arguments</span>
+<span class="c1"># use exe_wrapper for run_musica.py</span>
+<span class="n">wrap</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">exe_wrapper</span><span class="p">,</span> <span class="n">exe</span><span class="p">,</span>
+               <span class="n">parameterfile</span><span class="p">,</span> <span class="n">parameterwriter</span><span class="p">,</span>
+               <span class="n">outputfile</span><span class="p">,</span> <span class="n">outputreader</span><span class="p">,</span>
+               <span class="p">{</span><span class="s1">&#39;pargs&#39;</span><span class="p">:</span> <span class="n">pargs</span><span class="p">,</span> <span class="s1">&#39;oargs&#39;</span><span class="p">:</span> <span class="n">oargs</span><span class="p">,</span>
+                <span class="s1">&#39;pid&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="n">err</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Only the <cite>parameterwriter</cite> changed and the <em>names</em> go into <cite>pargs</cite>,
+additional arguments passed to the
+<cite>parameterwriter = sub_params_names</cite>. We did not use it here because
+<a class="reference external" href="https://ecofun.ispa.bordeaux.inrae.fr/index.php/musica-model/">MuSICA</a> can simulate several tree species in the same forest having
+one namelist file per species with the same parameters,
+e.g. <em>fagus_sylvatica.nml</em> and <em>picea_abeis.nml</em>.
+<a class="reference internal" href="std_io.html#partialwrap.std_io.sub_params_names" title="partialwrap.std_io.sub_params_names"><code class="xref py py-func docutils literal notranslate"><span class="pre">sub_params_names()</span></code></a> would
+replace the same value into both species files, while I can prepare
+separate tags such as <em>#JA0000#</em> for <em>gs_slope</em> in
+<em>fagus_sylvatica.nml</em> and <em>#JA0003#</em> for <em>gs_slope</em> in
+<em>picea_abies.nml</em>.</p>
+<p>We use almost the same Python wrapper as <cite>run_rastrigin.py</cite> in section
+<a class="reference internal" href="#using-launch-scripts">Using launch scripts</a> to deal with <cite>pid</cite>. We only have to deal with
+several parameter files instead of just one file here:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># File: run_musica.py</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># get pid</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">exe</span>    <span class="o">=</span> <span class="s1">&#39;./musica.exe&#39;</span>
+<span class="n">pfiles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;musica.nml&#39;</span><span class="p">,</span> <span class="s1">&#39;musica_soil.nml&#39;</span><span class="p">,</span> <span class="s1">&#39;fagus_sylvatica.nml&#39;</span><span class="p">]</span>
+<span class="n">ofile</span>  <span class="o">=</span> <span class="s1">&#39;musica_out.nc&#39;</span>
+
+<span class="c1"># make individual run directory</span>
+<span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">rundir</span> <span class="o">=</span> <span class="s1">&#39;tmp&#39;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">rundir</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;tmp.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">rundir</span><span class="p">)</span>
+
+<span class="c1"># copy individual parameter files</span>
+<span class="k">for</span> <span class="n">pfile</span> <span class="ow">in</span> <span class="n">pfiles</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rundir</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rundir</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># run in individual directory</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">exe</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rundir</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">exe</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">rundir</span><span class="p">)</span>
+<span class="n">err</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="n">exe</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+
+<span class="c1"># make output available to exe_wrapper</span>
+<span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;../</span><span class="si">{</span><span class="n">ofile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;../</span><span class="si">{</span><span class="n">ofile</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># clean up</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">rundir</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>That’s all Folks!</p>
 </section>
 </section>

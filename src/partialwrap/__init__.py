@@ -34,6 +34,9 @@ History
     * v1.5, Allow empty right-hand sides in files, such as `name1 =`,
       Nov 2021, Matthias Cuntz
     * v1.6, Use subprocess.run for Python > v3.6, Aug 2022, Matthias Cuntz
+    * v1.7, Added error function in `exe_wrapper`, Aug 2022, Matthias Cuntz
+    * v2.0, Major update of documentation and docstrings,
+      Nov 2023, Matthias Cuntz
 
 """
 # version, author

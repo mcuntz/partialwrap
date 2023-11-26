@@ -98,7 +98,7 @@ functions that reads parameters from a file, one per line returning a
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
    from partialwrap import standard_parameter_writer, standard_output_reader
-	
+        
    rastrigin_exe   = ['python3', 'rastrigin.py']
    parameterfile   = 'params.txt'
    parameterwriter = standard_parameter_writer
@@ -180,7 +180,7 @@ and used in Python:
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
    from partialwrap import standard_parameter_writer, standard_output_reader
-	
+        
    rastrigin_exe   = ['./rastrigin.exe']
    parameterfile   = 'params.txt'
    parameterwriter = standard_parameter_writer
@@ -223,14 +223,14 @@ value of 0.0001 changes the above program to:
    import scipy.optimize as opt
    from partialwrap import exe_mask_wrapper
    from partialwrap import standard_parameter_writer, standard_output_reader
-	
+        
    rastrigin_exe   = ['./rastrigin.exe']
    parameterfile   = 'params.txt'
    parameterwriter = standard_parameter_writer
    outputfile      = 'out.txt'
    outputreader    = standard_output_reader
-   x0   	   = np.array([0.1, 0.0001, 0.2])
-   mask 	   = [True, False, True]
+   x0              = np.array([0.1, 0.0001, 0.2])
+   mask            = [True, False, True]
    rastrigin_wrap  = partial(exe_mask_wrapper, rastrigin_exe, x0, mask,
                              parameterfile, parameterwriter,
                              outputfile, outputreader, {})
@@ -290,7 +290,7 @@ debugged as:
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
    from partialwrap import standard_parameter_writer, standard_output_reader
-	
+        
    rastrigin_exe   = 'python3 rastrigin.py'
    parameterfile   = 'params.txt'
    parameterwriter = standard_parameter_writer
@@ -399,7 +399,7 @@ during optimization so should not be deleted by
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
    from partialwrap import sub_params_names, standard_output_reader
-	
+        
    rastrigin_exe   = ['python3', 'rastrigin_config.py']
    parameterfile   = 'params.txt'
    parameterwriter = sub_params_names
@@ -413,7 +413,7 @@ during optimization so should not be deleted by
                              {'pargs': [names], 'keepparameterfile': True})
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
 
-Note the list in `'pargs': [names]`, which gives `'pargs':
+Note `pargs` is given a list `'pargs': [names]`, which gives `'pargs':
 [['param01', 'param02', 'param03']]`. If one would simply put
 `'pargs': names`, than the `*args` mechanism would expand the list
 `names` to three individual arguments for `sub_params_names`, so that
@@ -460,7 +460,7 @@ function. One would naively do:
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
    from partialwrap import standard_parameter_writer, standard_output_reader
-	
+        
    rastrigin_exe   = ['python3', 'rastrigin.py']
    parameterfile   = 'params.txt'
    parameterwriter = standard_parameter_writer
@@ -522,7 +522,7 @@ such as `params.txt.158398716` rather than from `params.txt`. Then simply the `p
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
    from partialwrap import standard_parameter_writer, standard_output_reader
-	
+        
    rastrigin_exe   = ['python3', 'rastrigin_pid.py']
    parameterfile   = 'params.txt'
    parameterwriter = standard_parameter_writer
@@ -663,7 +663,7 @@ in exactly the same way as above:
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
    from partialwrap import standard_parameter_writer, standard_output_reader
-	
+        
    rastrigin_exe   = ['rastrigin.sh']
    parameterfile   = 'params.txt'
    parameterwriter = standard_parameter_writer
@@ -691,19 +691,24 @@ on Windows platforms as well:
    if len(sys.argv) > 1:
        pid = sys.argv[1]
    else:
-       raise IOError('This scripts needs a process identifier (pid) as'
-                     ' command line argument.')
+       pid = None
 
    exe   = 'rastrigin.py'
    pfile = 'params.txt'
    ofile = 'out.txt'
 
    # make individual run directory
-   rundir = f'tmp.{pid}'
+   if pid is None:
+       rundir = 'tmp'
+   else:
+       rundir = f'tmp.{pid}'
    os.mkdir(rundir)
 
    # copy individual parameter file
-   os.rename(f'{pfile}.{pid}', f'{rundir}/{pfile}')
+   if pid is None:
+       os.rename(f'{pfile}', f'{rundir}/{pfile}')
+   else:
+       os.rename(f'{pfile}.{pid}', f'{rundir}/{pfile}')
 
    # run in individual directory
    shutil.copyfile(exe, f'{rundir}/{exe}')
@@ -712,7 +717,10 @@ on Windows platforms as well:
                                  stderr=subprocess.STDOUT)
 
    # make output available to exe_wrapper
-   os.rename(ofile, f'../{ofile}.{pid}')
+   if pid is None:
+       os.rename(ofile, f'../{ofile}')
+   else:
+       os.rename(ofile, f'../{ofile}.{pid}')
 
    # clean up
    os.chdir('..')
@@ -726,7 +734,7 @@ This Python script could be used exactly as the shell script above:
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
    from partialwrap import standard_parameter_writer, standard_output_reader
-	
+        
    rastrigin_exe   = ['python3', 'run_rastrigin.py']
    parameterfile   = 'params.txt'
    parameterwriter = standard_parameter_writer
@@ -844,13 +852,13 @@ standard :mod:`configparser`. For example:
     |  PaRaM02 = 0.2
 
 **sub_params_ja** :func:`~partialwrap.std_io.sub_params_ja`
-substitutes the strings #JA0000#, #JA0001#, ... in the input file(s)
-with the parameter values. It searches for the tags #JA0000#,
-#JA0001#, ... in the input file(s) and replaces them with the values
-of the first parameter, the second parameter, and so on. The file must
-be prepared in advance and the parameters can then be anywhere in the
-file(s), appear several times on the same line or on different lines,
-etc. For example:
+substitutes the strings *#JA0000#*, *#JA0001#*, ... in the input
+file(s) with the parameter values. It searches for the tags
+*#JA0000#*, *#JA0001#*, ... in the input file(s) and replaces them
+with the values of the first parameter, the second parameter, and so
+on. The file must be prepared in advance and the parameters can then
+be anywhere in the file(s), appear several times on the same line or
+on different lines, etc. For example:
 
     | &parameters
     |  param01 = #JA0000#
@@ -867,10 +875,10 @@ file(s). :func:`~partialwrap.wrappers.exe_wrapper` deletes files after
 use by default. The best way to use the substitution functions is
 hence with `'keepparameterfile': True` or `'pid': True`. The last
 function :func:`~partialwrap.std_io.sub_params_ja` substitutes the
-tags #JA0000#, #JA0001#, ... in the input file(s). Once substituted,
-the tags would not be in the input files anymore. Hence this does not
-work with `'keepparameterfile': True` but rather works with only with
-`'pid': True`.
+tags *#JA0000#*, *#JA0001#*, ... in the input file(s). Once
+substituted, the tags would not be in the input files anymore. Hence
+this does not work with `'keepparameterfile': True` but rather works
+with only with `'pid': True`.
 
 
 Python functions
@@ -976,10 +984,243 @@ to a default value of 0.0001 changes the above to:
 A real life example
 ===================
 
-**ToDo**
+We use the ecosystem model `MuSICA`_ in our research. The model is
+written in Fortran and uses so-called namelists for configuration,
+which look like this:
+
+    | &namelist_01
+    |  parameter01 = 3.141592653589793
+    |  parameter02 = 1, 1, 2, 3, 5, 8, 13
+    | /
+    |
+    | &namelist_02
+    |  another_parameter01 = 2.718281828459045
+    |  another_parameter02 = 'equilibrium'
+    | /
+
+The namelists are organized in three files: *musica.nml*,
+*musica_soil.nml*, and one file for each tree species modelled, for
+example, *fagus_sylvatica.nml*. There are about 50 parameters in the
+namelists that influence the model output.
+
+`MuSICA`_ calculates energy, water, and carbon fluxes in an ecosystem
+such as a forest. One primary output is so-called Net Ecosystem
+Exchange (NEE). One might want to adapt a few parameters, which were
+not measured, for a specific forest stand by optimizing model output
+against observed NEE. Below is a documented Python program that
+optimizes three parameters for the description of stomatal conductance
+in MuSICA: *gs_slope*, *gs_hx_half*, and *gs_hx_shape*. The first one
+is the empirical slope in the description of stomatal conductance *gs*
+(Ball-Berry *m* or Medlyn *g1*, for example) and the other two
+variables are the parameters of a logistic function that links
+stomatal conductance *gs* with the water potential in the xylem *hx*
+(Tuzet model). Here I prepared the namelist file fagus_sylvatica.nml
+and put tags *#JA0000#*, *#JA0001#*, and *#JA0002#* instead of values
+on the right-hand-side of the equal sign and will then use the
+substitution function :func:`~partialwrap.std_io.sub_params_ja`:
+
+    | &leaflevelctl
+    | ...
+    | ! slope of stomata model
+    | GS_SLOPE = #JA0000#
+    | ! intercept of stomata model
+    | GS_INTERCEPT = 1.e-3
+    | ! minimum stomatal conductance
+    | GS_MIN = 1.e-3  ! check influence on very dry sites
+    | ! Tuzet parameters
+    | GS_HX_HALF = #JA0001#
+    | GS_HX_SHAPE = #JA0002#
+    | ...
+    | /
+    
+The Python program for optimizing *gs_slope*, *gs_hx_half*, and
+*gs_hx_shape* uses the Root Mean Square Error (RMSE) between modelled
+and observed NEE:
+
+.. code-block:: python
+
+   # File: optimize_musica.py
+   import sys
+   from functools import partial
+   import numpy as np
+   import scipy.optimize as opt
+   import netCDF4 as nc
+   from partialwrap import exe_wrapper, sub_params_ja
+
+   #
+   # Functions
+   #
+
+   # Read NEE from MuSICA's netCDF output
+   def read_model_nee(ofile):
+       with nc.Dataset(ofile, 'r') as fi:
+           nee = fi.variables['nee'][:].squeeze()
+       return nee
+
+   # The objective: RMSE(obs, mod)
+   def rmse(obs, mod):
+       return np.sqrt(((obs - mod)**2).mean())
+
+   # RMSE given the output file and the observations
+   def calc_rmse(ofile, obs):
+       mod = read_model_nee(ofile)
+       return rmse(obs, mod)
+
+   # Read NEE observations
+   # Assume a csv file such as submitted to europe-fluxdata.org
+   #   TIMESTAMP_END,H_1_1_1,LE_1_1_1,FC_1_1_1,FC_SSITC_TEST_1_1_1,TA_1_1_1,...
+   #   201601010030,-20.4583,-1.8627,1.9019,0,5.5533,...
+   #   ...
+   # Assume that timestamps are the same as MuSICA output file
+   def read_obs_nee(ofile):
+       with open(ofile, 'r') as fi:
+           head = fi.readline().strip().split(',')
+       iivar = head.index('FC_1_1_1')
+       iiflag = head.index('FC_SSITC_TEST_1_1_1')
+       dat = np.loadtxt(ofile, delimiter=',', skiprows=1)
+       nee = np.ma.array(dat[:, iivar], mask=(dat[:, iiflag] > 0))
+       return nee
+
+   # RMSE is around 1-10 (umol m-2 s-1).
+   # Use a large random number in case of model error because of
+   # odd parameter combinations.
+   def err(x):
+       return (1. + np.random.random()) * 1000.
+
+   #
+   # Setup
+   #
+   
+   # namelist files
+   nfiles = ['musica.nml', 'musica_soil.nml', 'fagus_sylvatica.nml']
+   # parameter names (not used, only for info)
+   names = ['GS_SLOPE', 'GS_HX_HALF', 'GS_HX_SHAPE']
+   # lower bounds
+   lb = [1.0, -4.5, 2.0]
+   # upper bounds
+   ub = [13.0, -1.0, 20.]
+
+   # observations
+   obsfile = 'FR-Hes_europe-fluxdata_2017.txt'
+   obs = read_obs_nee(obsfile)
+
+   # Use a Python wrapper to run musica.exe, which deals with pid
+   # and works on all operating systems
+   exe             = ['python3', 'run_musica.py']
+   parameterfile   = nfiles
+   parameterwriter = sub_params_ja
+   outputfile   = 'musica_out.nc'
+   outputreader = calc_rmse
+   oargs        = [obs]  # additional outputreader arguments
+   # use exe_wrapper for run_musica.py
+   wrap = partial(exe_wrapper, exe,
+                  parameterfile, parameterwriter,
+                  outputfile, outputreader,
+                  {'oargs': oargs,
+                   'pid': True, 'error': err})
+
+   #
+   # Optimize
+   #
+
+   print('Start optimization')
+   ncpu = 4
+   bounds = list(zip(lb, ub))
+   res = opt.differential_evolution(wrap, bounds, workers=ncpu)
+   print('Best parameters:', res.x, ' with objective:', res.fun)
+
+   # write parameter files with optimized parameters and suffix .opt
+   print('Write parameter files with optimized parameters')
+   sub_params_ja('fagus_sylvatica.nml', res.x, pid='opt')
+
+Here we could have also used
+:func:`~partialwrap.std_io.sub_params_names` instead of
+:func:`~partialwrap.std_io.sub_params_ja` to replace the parameters in
+the namelists. This would have changed the setup of *partial*
+slightly to:
+
+.. code-block:: python
+   
+   exe             = ['python3', 'run_musica.py']
+   parameterfile   = nfiles
+   parameterwriter = sub_params_names
+   pargs        = [names]  # additional parameterwriter arguments
+   outputfile   = 'musica_out.nc'
+   outputreader = calc_rmse
+   oargs        = [obs]  # additional outputreader arguments
+   # use exe_wrapper for run_musica.py
+   wrap = partial(exe_wrapper, exe,
+                  parameterfile, parameterwriter,
+                  outputfile, outputreader,
+                  {'pargs': pargs, 'oargs': oargs,
+                   'pid': True, 'error': err})
+
+Only the `parameterwriter` changed and the *names* go into `pargs`,
+additional arguments passed to the
+`parameterwriter = sub_params_names`. We did not use it here because
+`MuSICA`_ can simulate several tree species in the same forest having
+one namelist file per species with the same parameters,
+e.g. *fagus_sylvatica.nml* and *picea_abeis.nml*.
+:func:`~partialwrap.std_io.sub_params_names` would
+replace the same value into both species files, while I can prepare
+separate tags such as *#JA0000#* for *gs_slope* in
+*fagus_sylvatica.nml* and *#JA0003#* for *gs_slope* in
+*picea_abies.nml*.
+
+We use almost the same Python wrapper as `run_rastrigin.py` in section
+`Using launch scripts`_ to deal with `pid`. We only have to deal with
+several parameter files instead of just one file here:
+
+.. code-block:: python
+
+   # File: run_musica.py
+   import os
+   import shutil
+   import subprocess
+   import sys
+
+   # get pid
+   if len(sys.argv) > 1:
+       pid = sys.argv[1]
+   else:
+       pid = None
+
+   exe    = './musica.exe'
+   pfiles = ['musica.nml', 'musica_soil.nml', 'fagus_sylvatica.nml']
+   ofile  = 'musica_out.nc'
+
+   # make individual run directory
+   if pid is None:
+       rundir = 'tmp'
+   else:
+       rundir = f'tmp.{pid}'
+   os.mkdir(rundir)
+
+   # copy individual parameter files
+   for pfile in pfiles:
+       if pid is None:
+           os.rename(f'{pfile}', f'{rundir}/{pfile}')
+       else:
+           os.rename(f'{pfile}.{pid}', f'{rundir}/{pfile}')
+
+   # run in individual directory
+   shutil.copyfile(exe, f'{rundir}/{exe}')
+   os.chdir(rundir)
+   err = subprocess.check_output([exe], stderr=subprocess.STDOUT)
+
+   # make output available to exe_wrapper
+   if pid is None:
+       os.rename(ofile, f'../{ofile}')
+   else:
+       os.rename(ofile, f'../{ofile}.{pid}')
+
+   # clean up
+   os.chdir('..')
+   shutil.rmtree(rundir)
 
 That's all Folks!
 
 .. _emcee: https://emcee.readthedocs.io/en/latest/
 .. _Cython: https://cython.readthedocs.io/
 .. _masked arrays: https://numpy.org/doc/stable/reference/maskedarray.html
+.. _MuSICA: https://ecofun.ispa.bordeaux.inrae.fr/index.php/musica-model/

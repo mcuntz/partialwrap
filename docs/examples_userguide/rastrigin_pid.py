@@ -1,11 +1,12 @@
-# File: rastrigin_pid.py
 import sys
 import numpy as np
 from partialwrap import standard_parameter_reader
 
+
 # Rastrigin function a=10, b=2*pi
 def rastrigin(x):
     return 10. * len(x) + np.sum(x**2 - 10. * np.cos(2. * np.pi * x))
+
 
 # get pid
 if len(sys.argv) > 1:

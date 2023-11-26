@@ -1,11 +1,12 @@
-# File: logli.py
 import sys
 import numpy as np
 from partialwrap import standard_parameter_reader
 
+
 # log-likelihood
 def log_prob(theta):
     return -0.5 * np.sum(theta**2)
+
 
 # get pid
 if len(sys.argv) > 1:
