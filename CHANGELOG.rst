@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+v2.1 (??? 2024)
+    * Updated Github actions.
+    * Corrected bugs in README.rst and MANIFEST.in.
+
 v2.0 (Nov 2023)
     * Rewrote Quickstart and User Guide.
     * Use formatted strings where appropriate in std_io.

@@ -149,8 +149,8 @@ or via `conda`:
    conda install -c conda-forge partialwrap
 
 
-Requirements:
--------------
+Requirements
+------------
 
 -  `NumPy <https://www.numpy.org>`__
 
@@ -174,21 +174,21 @@ The project structure is based on a `template`_ provided by `Sebastian Müller`_
    :target: https://anaconda.org/conda-forge/partialwrap
 .. |License| image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
    :target: https://github.com/mcuntz/partialwrap/blob/master/LICENSE
-.. |Build Status| image:: https://github.com/mcuntz/partialwrap/workflows/Continuous%20Integration/badge.svg?branch=main
+.. |Build Status| image:: https://github.com/mcuntz/partialwrap/workflows/Continuous%20Integration/badge.svg?branch=master
    :target: https://github.com/mcuntz/partialwrap/actions
 .. |Coverage Status| image:: https://coveralls.io/repos/github/mcuntz/partialwrap/badge.svg?branch=master
    :target: https://coveralls.io/github/mcuntz/partialwrap?branch=master
 
-.. _functools.partial: https://docs.python.org/3/library/functools.html#functools.partial
-.. _scipy.optimize: https://docs.scipy.org/doc/scipy/reference/tutorial/optimize.html
-.. _emcee: https://github.com/dfm/emcee
-.. _pyeee: https://github.com/mcuntz/pyeee
-.. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
+.. _LICENSE: https://github.com/mcuntz/partialwrap/LICENSE
 .. _MPI: https://bitbucket.org/mpi4py/mpi4py
 .. _Rastrigin function: https://en.wikipedia.org/wiki/Rastrigin_function
-.. _partial: https://docs.python.org/3/library/functools.html#functools.partial
-.. _functools: https://docs.python.org/3/library/functools.html
-.. _userguide: https://mcuntz.github.io/partialwrap/html/userguide.html
-.. _LICENSE: https://github.com/mcuntz/partialwrap/LICENSE
-.. _template: https://github.com/MuellerSeb/template
 .. _Sebastian Müller: https://github.com/MuellerSeb
+.. _emcee: https://github.com/dfm/emcee
+.. _functools: https://docs.python.org/3/library/functools.html
+.. _functools.partial: https://docs.python.org/3/library/functools.html#functools.partial
+.. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
+.. _partial: https://docs.python.org/3/library/functools.html#functools.partial
+.. _pyeee: https://github.com/mcuntz/pyeee
+.. _scipy.optimize: https://docs.scipy.org/doc/scipy/reference/tutorial/optimize.html
+.. _template: https://github.com/MuellerSeb/template
+.. _userguide: https://mcuntz.github.io/partialwrap/html/userguide.html

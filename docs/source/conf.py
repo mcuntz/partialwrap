@@ -236,7 +236,7 @@ intersphinx_mapping = {
     "Python":      ("https://docs.python.org/3/",                    None),
     "NumPy":       ("https://numpy.org/doc/stable/",                 None),
     "SciPy":       ("https://docs.scipy.org/doc/scipy/reference/",   None),
-    "matplotlib":  ("https://matplotlib.org/",                       None),
+    "matplotlib":  ("https://matplotlib.org/stable/",                None),
     "Pandas":      ("https://pandas.pydata.org/docs/",               None),
     "Cython":      ("https://cython.readthedocs.io/en/latest/",      None),
     "cftime":      ("https://unidata.github.io/cftime/",             None),
@@ -246,5 +246,5 @@ intersphinx_mapping = {
     "schwimmbad":  ("https://schwimmbad.readthedocs.io/en/latest/",  None),
     "mpi4py":      ("https://mpi4py.readthedocs.io/en/latest/",      None),
     "emcee":       ("https://emcee.readthedocs.io/en/latest/",       None),
-    "pyeee":       ("https://pyeee.readthedocs.io/en/latest/",       None),
+    "pyeee":       ("https://mcuntz.github.io/pyeee/html/",          None),
 }

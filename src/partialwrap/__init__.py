@@ -6,14 +6,14 @@ Purpose
 partialwrap provides wrappers for Python functions and external executables so
 that they can easily be partialised with functools.partial.
 
-:copyright: Copyright 2016-2022 Matthias Cuntz, see AUTHORS.md for details.
+:copyright: Copyright 2016-2024 Matthias Cuntz; see AUTHORS.rst for details.
 :license: MIT License, see LICENSE for details.
 
 Subpackages
 ===========
 .. autosummary::
-    wrappers
-    std_io
+   wrappers
+   std_io
 
 History
     * Written Mar 2020 by Matthias Cuntz (mc (at) macu (dot) de)
