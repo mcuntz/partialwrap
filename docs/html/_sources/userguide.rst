@@ -31,18 +31,21 @@ executables: :func:`~partialwrap.wrappers.exe_wrapper` and
 :func:`~partialwrap.wrappers.exe_mask_wrapper`. The two wrappers
 basically launch an external executable `exe` using Python's
 :mod:`subprocess` module, while providing functionality to write
-parameter files and read in model output. The wrappers write a
-parameter set into file(s) `parameterfile` that are needed by the
-external program `exe`. The external program `exe` should write its
-result(s) to (a) file(s) `outputfile`, which will then be read by the
-wrappers in return. This means that the two wrappers need to know a
-function `parameterwriter` that writes the parameters in the file(s)
-`parameterfile` suitable for the external model `exe`. The wrappers
-also need to know a function `outputreader` that reads the model
-output(s) from the file(s) `outputfile`, and possibly calculating an
-objective value or just passing back the output value(s).
+parameter files and read in model output.
 
-Consider the *Rastrigin function*
+The wrappers of ``partialwrap`` write parameters into (a) parameter
+file(s) read by the external program `exe`. The external program `exe`
+writes results into (an) output file(s), which will then be read by
+the wrappers of ``partialwrap`` in return.
+
+This means that the two wrappers of ``partialwrap`` need a function
+`parameterwriter` that writes the parameters in the parameter file(s)
+`parameterfile`. The wrappers also need to read model output from
+`outputfile` with the function `outputreader`. The latter can also do
+further calculations such as calculating an objective function from
+the model output.
+
+As an example, take the *Rastrigin function*
 (https://en.wikipedia.org/wiki/Rastrigin_function), which is a popular
 function for performance testing of optimization algorithms:
 :math:`y = a \cdot n + \sum_i^n (x_i^2 - a \cos(b \cdot x_i))`:
@@ -70,51 +73,44 @@ a Python program first (e.g. `rastrigin.py`):
 
    # File: rastrigin.py
    import numpy as np
-   from partialwrap import standard_parameter_reader
 
    # Rastrigin function a=10, b=2*pi
    def rastrigin(x):
        return 10. * len(x) + np.sum(x**2 - 10. * np.cos(2. * np.pi * x))
 
    # read parameters
-   x = standard_parameter_reader('params.txt')
+   x = np.loadtxt('params.txt')
 
    # calc function
    y = rastrigin(x)
 
    # write output file
-   with open('out.txt', 'w') as ff:
-       print(y, file=ff)
+   np.savetxt('out.txt', y)
 
-:func:`~partialwrap.std_io.standard_parameter_reader` is a convenience
-functions that reads parameters from a file, one per line returning a
-:class:`numpy.ndarray`. The external program, which is in full
-`python3 rastrigin.py`, can be used with the wrapper function
+The external program, which is in full `python3 rastrigin.py`, can be
+used with the wrapper function
 :func:`~partialwrap.wrappers.exe_wrapper` of ``partialwrap``:
 
 .. code-block:: python
 
    from functools import partial
+   import numpy as np
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
-   from partialwrap import standard_parameter_writer, standard_output_reader
         
    rastrigin_exe   = ['python3', 'rastrigin.py']
    parameterfile   = 'params.txt'
-   parameterwriter = standard_parameter_writer
+   parameterwriter = np.savetxt
    outputfile      = 'out.txt'
-   outputreader    = standard_output_reader
+   outputreader    = np.loadtxt
    rastrigin_wrap  = partial(exe_wrapper, rastrigin_exe,
                              parameterfile, parameterwriter,
                              outputfile, outputreader, {})
    x0  = [0.1, 0.2, 0.3]
    res = opt.minimize(rastrigin_wrap, x0, method='BFGS')
 
-:func:`~partialwrap.std_io.standard_parameter_writer` is another
-convenience function that writes parameters into a file, one per
-line. The function :func:`~partialwrap.std_io.standard_output_reader`
-simply reads one value from a file. The empty dictionary at the end of
-the partial statement is explained below.
+The empty dictionary at the end of the partial statement is explained
+below.
 
 One can see that the external Rastrigin program could have been
 written in a compiled language such as C, Fortran or similar, and then
@@ -177,15 +173,15 @@ and used in Python:
 .. code-block:: python
 
    from functools import partial
+   import numpy as np
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
-   from partialwrap import standard_parameter_writer, standard_output_reader
         
    rastrigin_exe   = ['./rastrigin.exe']
    parameterfile   = 'params.txt'
-   parameterwriter = standard_parameter_writer
+   parameterwriter = np.savetxt
    outputfile      = 'out.txt'
-   outputreader    = standard_output_reader
+   outputreader    = np.loadtxt
    rastrigin_wrap  = partial(exe_wrapper, rastrigin_exe,
                              parameterfile, parameterwriter,
                              outputfile, outputreader, {})
@@ -222,13 +218,12 @@ value of 0.0001 changes the above program to:
    import numpy as np
    import scipy.optimize as opt
    from partialwrap import exe_mask_wrapper
-   from partialwrap import standard_parameter_writer, standard_output_reader
         
    rastrigin_exe   = ['./rastrigin.exe']
    parameterfile   = 'params.txt'
-   parameterwriter = standard_parameter_writer
+   parameterwriter = np.savetxt
    outputfile      = 'out.txt'
-   outputreader    = standard_output_reader
+   outputreader    = np.loadtxt
    x0              = np.array([0.1, 0.0001, 0.2])
    mask            = [True, False, True]
    rastrigin_wrap  = partial(exe_mask_wrapper, rastrigin_exe, x0, mask,
@@ -287,15 +282,15 @@ debugged as:
 .. code-block:: python
 
    from functools import partial
+   import numpy as np
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
-   from partialwrap import standard_parameter_writer, standard_output_reader
         
    rastrigin_exe   = 'python3 rastrigin.py'
    parameterfile   = 'params.txt'
-   parameterwriter = standard_parameter_writer
+   parameterwriter = np.savetxt
    outputfile      = 'out.txt'
-   outputreader    = standard_output_reader
+   outputreader    = np.loadtxt
    rastrigin_wrap  = partial(exe_wrapper, rastrigin_exe,
                              parameterfile, parameterwriter,
                              outputfile, outputreader,
@@ -382,8 +377,7 @@ will be ignored but will be preserved in the changed parameter file.
    y = rastrigin(x)
 
    # write output file
-   with open('out.txt', 'w') as ff:
-       print(y, file=ff)
+   np.savetxt('out.txt', y)
 
 The parameterwriter :func:`~partialwrap.std_io.sub_params_names` will
 take the `parameterfile = 'params.txt'`, searches for the lines that
@@ -396,15 +390,16 @@ during optimization so should not be deleted by
 .. code-block:: python
 
    from functools import partial
+   import numpy as np
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
-   from partialwrap import sub_params_names, standard_output_reader
+   from partialwrap import sub_params_names
         
    rastrigin_exe   = ['python3', 'rastrigin_config.py']
    parameterfile   = 'params.txt'
    parameterwriter = sub_params_names
    outputfile      = 'out.txt'
-   outputreader    = standard_output_reader
+   outputreader    = np.loadtxt
    x0              = [0.1, 0.2, 0.3]
    names           = ['param01', 'param02', 'param03']
    rastrigin_wrap  = partial(exe_wrapper, rastrigin_exe,
@@ -457,15 +452,15 @@ function. One would naively do:
 .. code-block:: python
 
    from functools import partial
+   import numpy as np
    import scipy.optimize as opt
    from partialwrap import exe_wrapper
-   from partialwrap import standard_parameter_writer, standard_output_reader
         
    rastrigin_exe   = ['python3', 'rastrigin.py']
    parameterfile   = 'params.txt'
-   parameterwriter = standard_parameter_writer
+   parameterwriter = np.savetxt
    outputfile      = 'out.txt'
-   outputreader    = standard_output_reader
+   outputreader    = np.loadtxt
    rastrigin_wrap  = partial(exe_wrapper, rastrigin_exe,
                              parameterfile, parameterwriter,
                              outputfile, outputreader, {})
@@ -477,7 +472,10 @@ This subdivides the population into 4 worker sections and evaluates
 them in parallel (using :func:`multiprocessing.Pool`). This means
 `rastrigin.py` will be launched 4 times in parallel, each writing a
 `parameterfile` *params.txt*, hence overwriting each other all the
-time. Here the `pid` keyword comes in handy. Each invocation of `rastrigin.py` would have its own random number `pid` associated, writing `parameterfile.pid` and reading `outfile.pid`. The rastrigin program would need to be changed to:
+time. Here the `pid` keyword comes in handy. Each invocation of
+`rastrigin.py` would have its own random number `pid` associated,
+writing `parameterfile.pid` and reading `outfile.pid`. The rastrigin
+program would need to be changed to:
 
 .. code-block:: python
 
@@ -507,14 +505,19 @@ time. Here the `pid` keyword comes in handy. Each invocation of `rastrigin.py` w
        fname = 'out.txt'
    else:
        fname = f'out.txt.{pid}'
-   with open(fname, 'w') as ff:
-       print(y, file=ff)
+   np.savetxt(fname, y)
 
 All input/output routines provided by ``partialwrap`` take a keyword
 `pid` and, if present, read or write `file.pid` rather than `file`
-with *pid* being a unique random number. So here
+with *pid* being a unique random number.
+:func:`~partialwrap.std_io.standard_parameter_reader` is a convenience
+functions that reads parameters from a file, one per line returning a
+:class:`numpy.ndarray` just like :func:`numpy.loadtxt`. The difference
+is that :func:`~partialwrap.std_io.standard_parameter_reader` supports
+the `pid` keyword. If `True`,
 :func:`~partialwrap.std_io.standard_parameter_reader` reads from files
-such as `params.txt.158398716` rather than from `params.txt`. Then simply the `pid` keyword has to be set to *True* in the call of `partial`:
+such as `params.txt.158398716` rather than from `params.txt`. So the
+`pid` keyword simply has to be set to *True* in the call of `partial`:
 
 .. code-block:: python
 
@@ -534,7 +537,13 @@ such as `params.txt.158398716` rather than from `params.txt`. Then simply the `p
    ndim = 3
    bounds = [(-5.12, 5.12),] * ndim
    res = opt.differential_evolution(rastrigin_wrap, bounds, workers=4)
-   
+
+:func:`~partialwrap.std_io.standard_parameter_writer` is another
+convenience function that writes parameters into a file, one per line
+just as :func:`numpy.loadtxt` but supports the `pid` keyword. And the
+function :func:`~partialwrap.std_io.standard_output_reader` simply
+reads one value from a file, also suppporting the `pid` keyword.
+
 Another example could use the popular `emcee`_ library to calculate
 parameter uncertainties with the Markov chain Monte Carlo (MCMC)
 method. We take the example from the section on parallelization of the
@@ -570,8 +579,7 @@ the log-likelihood function as an external Python program:
        fname = 'out.txt'
    else:
        fname = f'out.txt.{pid}'
-   with open(fname, 'w') as ff:
-       print(y, file=ff)
+   np.savetxt(fname, y)
 
 Partialize it and sample the log-likelihood with `emcee`_ using a single processor:
 
