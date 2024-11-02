@@ -174,8 +174,8 @@ The project structure is based on a `template`_ provided by `Sebastian Müller`_
    :target: https://anaconda.org/conda-forge/partialwrap
 .. |License| image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
    :target: https://github.com/mcuntz/partialwrap/blob/master/LICENSE
-.. |Build Status| image:: https://github.com/mcuntz/partialwrap/workflows/Continuous%20Integration/badge.svg?branch=master
-   :target: https://github.com/mcuntz/partialwrap/actions
+.. |Build Status| image:: https://github.com/mcuntz/partialwrap/actions/workflows/master.yml/badge.svg
+   :target: https://github.com/mcuntz/partialwrap/actions/workflows/master.yml
 .. |Coverage Status| image:: https://coveralls.io/repos/github/mcuntz/partialwrap/badge.svg?branch=master
    :target: https://coveralls.io/github/mcuntz/partialwrap?branch=master
 

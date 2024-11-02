@@ -2,6 +2,7 @@ Changelog
 ---------
 
 v2.1 (??? 2024)
+    * Changed build status.
     * Simplified beginning of User Guide.
     * Updated Github actions.
     * Corrected bugs in README.rst and MANIFEST.in.
