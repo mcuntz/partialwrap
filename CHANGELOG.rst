@@ -1,7 +1,8 @@
 Changelog
 ---------
 
-v2.1 (??? 2024)
+v2.1 (??? 2026)
+    * Updated Github actions and trusted publisher on pypi.
     * Changed build status.
     * Simplified beginning of User Guide.
     * Updated Github actions.
